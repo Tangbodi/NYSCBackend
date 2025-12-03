@@ -1,7 +1,7 @@
 package com.example.demo.Service.UsersInfo;
 
 import com.example.demo.Model.DTO.StaffInfoDTO;
-import com.example.demo.Model.Entity.StaffInfo;
+import com.example.demo.Model.Entity.StaffsInfo;
 import com.example.demo.Repository.StaffInfoRepository;
 import com.example.demo.Repository.StaffLoginRepository;
 import com.example.demo.Model.DTO.StaffRegisterDTO;
@@ -25,13 +25,13 @@ public class StaffInfoService {
     @Autowired
     private StaffLoginRepository staffLoginRepository;
 
-    public StaffInfo CheckUsernameExists(String username) {
+    public StaffsInfo CheckUsernameExists(String username) {
         logger.info("Checking if username exists: {}", username);
         try {
-            StaffInfo staffInfo = staffInfoRepository.findByUsername(username).orElse(null);
-            if (staffInfo != null) {
-                logger.info("Username: {}" + staffInfo.getUsername());
-                return staffInfo;
+            StaffsInfo staffsInfo = staffInfoRepository.findByUsername(username).orElse(null);
+            if (staffsInfo != null) {
+                logger.info("Username: {}" + staffsInfo.getUsername());
+                return staffsInfo;
             } else {
                 logger.info("Username does not exist: {}");
                 return null;
@@ -42,13 +42,13 @@ public class StaffInfoService {
         return null;
     }
 
-    public StaffInfo CheckEmailExists(String email) {
+    public StaffsInfo CheckEmailExists(String email) {
         logger.info("Checking if email exists: {}", email);
         try {
-            StaffInfo staffInfo = staffInfoRepository.findByEmail(email).orElse(null);
-            if (staffInfo != null) {
-                logger.info("Email: {}" + staffInfo.getEmail());
-                return staffInfo;
+            StaffsInfo staffsInfo = staffInfoRepository.findByEmail(email).orElse(null);
+            if (staffsInfo != null) {
+                logger.info("Email: {}" + staffsInfo.getEmail());
+                return staffsInfo;
             } else {
                 logger.info("Email does not exist: {}");
                 return null;
@@ -64,22 +64,22 @@ public class StaffInfoService {
     public void SaveUserInfo(StaffRegisterDTO staffRegisterDTO) {
         logger.info("Saving StaffInfo: {}" + staffRegisterDTO.getStaffId());
         try {
-            StaffInfo staffInfo = new StaffInfo();
-            staffInfo.setId(staffRegisterDTO.getStaffId());
-            staffInfo.setUsername(staffRegisterDTO.getUsername());
-            staffInfo.setEmail(staffRegisterDTO.getEmail());
-            staffInfo.setEmployeeType(staffRegisterDTO.getEmployeeType());
-            staffInfo.setFirstName(staffRegisterDTO.getFirstName());
-            staffInfo.setLastName(staffRegisterDTO.getLastName());
-            staffInfo.setMiddleName(staffRegisterDTO.getMiddleName());
-            staffInfo.setStatus(staffRegisterDTO.getStatus() == 1);
-            staffInfo.setPhone(staffRegisterDTO.getPhone());
-            staffInfo.setSupervisor(staffRegisterDTO.getSupervisor());
-            staffInfo.setTitle(staffRegisterDTO.getTitle());
-            staffInfo.setCreatedAt(staffRegisterDTO.getCreatedAt());
-            staffInfo.setModifiedAt(staffRegisterDTO.getCreatedAt());
+            StaffsInfo staffsInfo = new StaffsInfo();
+            staffsInfo.setId(staffRegisterDTO.getStaffId());
+            staffsInfo.setUsername(staffRegisterDTO.getUsername());
+            staffsInfo.setEmail(staffRegisterDTO.getEmail());
+            staffsInfo.setEmployeeType(staffRegisterDTO.getEmployeeType());
+            staffsInfo.setFirstName(staffRegisterDTO.getFirstName());
+            staffsInfo.setLastName(staffRegisterDTO.getLastName());
+            staffsInfo.setMiddleName(staffRegisterDTO.getMiddleName());
+            staffsInfo.setStatus(staffRegisterDTO.getStatus() == 1);
+            staffsInfo.setPhone(staffRegisterDTO.getPhone());
+            staffsInfo.setSupervisor(staffRegisterDTO.getSupervisor());
+            staffsInfo.setTitle(staffRegisterDTO.getTitle());
+            staffsInfo.setCreatedAt(staffRegisterDTO.getCreatedAt());
+            staffsInfo.setModifiedAt(staffRegisterDTO.getCreatedAt());
 
-            staffInfoRepository.save(staffInfo);
+            staffInfoRepository.save(staffsInfo);
             logger.info("StaffInfo saved successfully");
 
         } catch (Exception e) {
@@ -91,29 +91,29 @@ public class StaffInfoService {
     public StaffInfoVO GetUserInfo(Long userId, HttpServletRequest request) {
         logger.info("Getting StaffInfo: {}" + userId);
         try {
-            StaffInfo staffInfo = staffInfoRepository.findById(userId).orElse(null);
-            if (staffInfo != null) {
-                logger.info("Found staffInfo: {}" + staffInfo.getUsername());
+            StaffsInfo staffsInfo = staffInfoRepository.findById(userId).orElse(null);
+            if (staffsInfo != null) {
+                logger.info("Found staffInfo: {}" + staffsInfo.getUsername());
                 StaffInfoVO staffInfoVO = new StaffInfoVO();
-                staffInfoVO.setLongUid(staffInfo.getId());
-                staffInfoVO.setStaffId(staffInfo.getId().toString());
+                staffInfoVO.setLongUid(staffsInfo.getId());
+                staffInfoVO.setStaffId(staffsInfo.getId().toString());
                 staffInfoVO.setJSESSIONID(request.getSession().getId());
 //                logger.info("Session userId: {}", request.getSession().getAttribute("userId"));
 //                logger.info("Session userName: {}", request.getSession().getAttribute("userName"));
 //                logger.info("JSESSIONID: {}", request.getSession().getId());
 
-                staffInfoVO.setUsername(staffInfo.getUsername());
-                staffInfoVO.setFirstName(staffInfo.getFirstName());
-                staffInfoVO.setMiddleName(staffInfo.getMiddleName());
-                staffInfoVO.setLastName(staffInfo.getLastName());
-                staffInfoVO.setPhone(staffInfo.getPhone());
-                staffInfoVO.setTitle(staffInfo.getTitle());
-                staffInfoVO.setEmail(staffInfo.getEmail());
-                staffInfoVO.setEmployeeType(staffInfo.getEmployeeType());
-                staffInfoVO.setSupervisor(staffInfo.getSupervisor());
-                staffInfoVO.setStatus(staffInfo.getStatus() ? "1" : "0");
-                String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffInfo.getCreatedAt());
-                String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffInfo.getModifiedAt());
+                staffInfoVO.setUsername(staffsInfo.getUsername());
+                staffInfoVO.setFirstName(staffsInfo.getFirstName());
+                staffInfoVO.setMiddleName(staffsInfo.getMiddleName());
+                staffInfoVO.setLastName(staffsInfo.getLastName());
+                staffInfoVO.setPhone(staffsInfo.getPhone());
+                staffInfoVO.setTitle(staffsInfo.getTitle());
+                staffInfoVO.setEmail(staffsInfo.getEmail());
+                staffInfoVO.setEmployeeType(staffsInfo.getEmployeeType());
+                staffInfoVO.setSupervisor(staffsInfo.getSupervisor());
+                staffInfoVO.setStatus(staffsInfo.getStatus() ? "1" : "0");
+                String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getCreatedAt());
+                String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getModifiedAt());
                 staffInfoVO.setCreatedAt(formattedCreatedDateTime);
                 staffInfoVO.setModifiedAt(formattedModifiedDateTime);
                 return staffInfoVO;
@@ -130,10 +130,10 @@ public class StaffInfoService {
     public StaffInfoVO UpdateUserInfo(StaffInfoDTO staffInfoDTO, HttpServletRequest request){
         logger.info("Updating StaffInfo: {}" + staffInfoDTO.getStaffId());
         try {
-            StaffInfo staffInfo = staffInfoRepository.findById(staffInfoDTO.getStaffId()).orElse(null);
-            if (staffInfo != null) {
-                logger.info("Found staffInfo: {}" + staffInfo.getUsername());
-                return SaveUserInfo(staffInfo, staffInfoDTO, request);
+            StaffsInfo staffsInfo = staffInfoRepository.findById(staffInfoDTO.getStaffId()).orElse(null);
+            if (staffsInfo != null) {
+                logger.info("Found staffInfo: {}" + staffsInfo.getUsername());
+                return SaveUserInfo(staffsInfo, staffInfoDTO, request);
             } else {
                 logger.info("StaffInfo does not exist: {}");
                 return null;
@@ -145,23 +145,23 @@ public class StaffInfoService {
         return null;
     }
     @Transactional
-    public StaffInfoVO SaveUserInfo(StaffInfo staffInfo, StaffInfoDTO staffInfoDTO, HttpServletRequest request) {
+    public StaffInfoVO SaveUserInfo(StaffsInfo staffsInfo, StaffInfoDTO staffInfoDTO, HttpServletRequest request) {
         logger.info("Saving StaffInfo: {}" + staffInfoDTO.getStaffId());
         try {
 //            usersInfo.setId(userInfoDTO.getUserId());
-            staffInfo.setUsername(staffInfoDTO.getUsername());
-            staffInfo.setEmail(staffInfoDTO.getEmail());
-            staffInfo.setEmployeeType(staffInfoDTO.getEmployeeType());
-            staffInfo.setFirstName(staffInfoDTO.getFirstName());
-            staffInfo.setLastName(staffInfoDTO.getLastName());
-            staffInfo.setMiddleName(staffInfoDTO.getMiddleName());
-            staffInfo.setStatus(staffInfoDTO.getStatus() == 1);
-            staffInfo.setPhone(staffInfoDTO.getPhone());
-            staffInfo.setSupervisor(staffInfoDTO.getSupervisor());
-            staffInfo.setTitle(staffInfoDTO.getTitle());
-            staffInfo.setStatus(staffInfoDTO.getStatus() == 1);
-            staffInfo.setModifiedAt(Instant.now());
-            staffInfoRepository.save(staffInfo);
+            staffsInfo.setUsername(staffInfoDTO.getUsername());
+            staffsInfo.setEmail(staffInfoDTO.getEmail());
+            staffsInfo.setEmployeeType(staffInfoDTO.getEmployeeType());
+            staffsInfo.setFirstName(staffInfoDTO.getFirstName());
+            staffsInfo.setLastName(staffInfoDTO.getLastName());
+            staffsInfo.setMiddleName(staffInfoDTO.getMiddleName());
+            staffsInfo.setStatus(staffInfoDTO.getStatus() == 1);
+            staffsInfo.setPhone(staffInfoDTO.getPhone());
+            staffsInfo.setSupervisor(staffInfoDTO.getSupervisor());
+            staffsInfo.setTitle(staffInfoDTO.getTitle());
+            staffsInfo.setStatus(staffInfoDTO.getStatus() == 1);
+            staffsInfo.setModifiedAt(Instant.now());
+            staffInfoRepository.save(staffsInfo);
             logger.info("StaffInfo updated successfully");
 
         } catch (Exception e) {

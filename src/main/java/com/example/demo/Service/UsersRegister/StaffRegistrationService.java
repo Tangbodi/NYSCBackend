@@ -2,7 +2,7 @@ package com.example.demo.Service.UsersRegister;
 
 import com.example.demo.Controller.StaffController;
 import com.example.demo.Model.DTO.StaffRegisterDTO;
-import com.example.demo.Model.Entity.StaffLogin;
+import com.example.demo.Model.Entity.StaffsLogin;
 import com.example.demo.Repository.StaffLoginRepository;
 import com.example.demo.Service.UsersInfo.StaffInfoService;
 import com.example.demo.Util.Snowflake;
@@ -22,7 +22,7 @@ public class StaffRegistrationService {
     @Autowired
     private StaffLoginRepository staffLoginRepository;
     @Transactional
-    public StaffLogin RegisterUser(StaffRegisterDTO staffRegisterDTO) {
+    public StaffsLogin RegisterUser(StaffRegisterDTO staffRegisterDTO) {
         logger.info("Registering staff: {}", staffRegisterDTO.getUsername());
 
         try {
@@ -32,17 +32,17 @@ public class StaffRegistrationService {
             staffRegisterDTO.setCreatedAt(Instant.now());
 
             logger.info("Saving staff:{}", staffRegisterDTO.getUsername());
-            StaffLogin staffLogin = new StaffLogin();
-            staffLogin.setId(snowflakeId);
-            staffLogin.setUsername(staffRegisterDTO.getUsername());
+            StaffsLogin staffsLogin = new StaffsLogin();
+            staffsLogin.setId(snowflakeId);
+            staffsLogin.setUsername(staffRegisterDTO.getUsername());
 
             String encodedPassword = BCrypt.hashpw(staffRegisterDTO.getPassword(), BCrypt.gensalt());
-            staffLogin.setPassword(encodedPassword);
-            staffLogin.setIsAdmin(false);
-            staffLogin.setCreatedAt(staffRegisterDTO.getCreatedAt());
-            staffLogin.setModifiedAt(staffRegisterDTO.getCreatedAt());
+            staffsLogin.setPassword(encodedPassword);
+            staffsLogin.setIsAdmin(false);
+            staffsLogin.setCreatedAt(staffRegisterDTO.getCreatedAt());
+            staffsLogin.setModifiedAt(staffRegisterDTO.getCreatedAt());
 
-            StaffLogin savedStaff= staffLoginRepository.save(staffLogin);
+            StaffsLogin savedStaff= staffLoginRepository.save(staffsLogin);
             if (savedStaff == null) {
                 throw new StaffController.UserRegistrationException("Failed to save StaffLogin");
             }

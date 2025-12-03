@@ -14,8 +14,8 @@ import java.time.Instant;
     @Getter
     @Setter
     @Entity
-    @Table(name = "staff_login")
-    public class StaffLogin {
+    @Table(name = "staffs_login")
+    public class StaffsLogin {
         @Id
         @Column(name = "staff_id", nullable = false)
         private Long id;

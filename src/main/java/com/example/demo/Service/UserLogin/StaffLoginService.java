@@ -1,7 +1,7 @@
 package com.example.demo.Service.UserLogin;
 
 import com.example.demo.Model.DTO.StaffLoginDTO;
-import com.example.demo.Model.Entity.StaffLogin;
+import com.example.demo.Model.Entity.StaffsLogin;
 import com.example.demo.Repository.StaffLoginRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.mindrot.jbcrypt.BCrypt;
@@ -19,7 +19,7 @@ public class StaffLoginService {
         logger.info("Checking credentials for username: {}", staffLoginDTO.getUsername());
 
         // Do NOT wrap in a broad try/catch unless you rethrow
-        StaffLogin staffsLogin = staffLoginRepository
+        StaffsLogin staffsLogin = staffLoginRepository
                 .findByUsername(staffLoginDTO.getUsername())
                 .orElse(null);
 

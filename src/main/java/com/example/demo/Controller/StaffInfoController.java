@@ -2,7 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.StaffInfoDTO;
-import com.example.demo.Model.Entity.StaffInfo;
+import com.example.demo.Model.Entity.StaffsInfo;
 import com.example.demo.Model.VO.StaffInfoVO;
 import com.example.demo.Service.UsersInfo.StaffInfoService;
 import com.example.demo.Util.ApiResponse;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RequestMapping("/staff-info")
 public class StaffInfoController {
-    private static final Logger logger = LoggerFactory.getLogger(StaffInfo.class);
+    private static final Logger logger = LoggerFactory.getLogger(StaffsInfo.class);
 
     @Autowired
     private StaffInfoService staffInfoService;
