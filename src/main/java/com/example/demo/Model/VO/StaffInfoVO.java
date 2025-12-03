@@ -1,12 +1,13 @@
-package com.example.demo.Model.DTO;
+package com.example.demo.Model.VO;
 
 import lombok.Data;
 
-import java.time.Instant;
 
 @Data
-public class UserInfoDTO {
-    private Long userId;
+public class StaffInfoVO {
+
+    private Long LongUid;
+    private String staffId;
     private String username;
     private String email;
     private String firstName;
@@ -16,7 +17,8 @@ public class UserInfoDTO {
     private String supervisor;
     private String phone;
     private String title;
-    private Boolean status;
-    private Instant createdAt;
-    private Instant modifiedAt;
+    private String status;
+    private String JSESSIONID;
+    private String createdAt;
+    private String modifiedAt;
 }

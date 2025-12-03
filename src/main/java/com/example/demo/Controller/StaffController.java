@@ -1,13 +1,11 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Constant.Enum.ReturnCode;
-import com.example.demo.Model.DTO.UserLoginDTO;
-import com.example.demo.Model.DTO.UserRegisterDTO;
-import com.example.demo.Model.Entity.UsersLogin;
-import com.example.demo.Model.VO.UserInfoVO;
-import com.example.demo.Service.UserLogin.UserLoginService;
-import com.example.demo.Service.UsersInfo.UserInfoService;
-import com.example.demo.Service.UsersRegister.UserRegistrationService;
+import com.example.demo.Model.DTO.StaffLoginDTO;
+import com.example.demo.Model.DTO.StaffRegisterDTO;
+import com.example.demo.Service.UserLogin.StaffLoginService;
+import com.example.demo.Service.UsersInfo.StaffInfoService;
+import com.example.demo.Service.UsersRegister.StaffRegistrationService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -25,38 +23,38 @@ import java.io.IOException;
 
 @RestController
 @Validated
-@RequestMapping("/user")
-public class Users {
-    private static final Logger logger = LoggerFactory.getLogger(Users.class);
+@RequestMapping("/staff")
+public class StaffController {
+    private static final Logger logger = LoggerFactory.getLogger(StaffController.class);
     @Autowired
-    private UserRegistrationService userRegistrationService;
+    private StaffRegistrationService staffRegistrationService;
     @Autowired
-    private UserInfoService userInfoService;
+    private StaffInfoService staffInfoService;
     @Autowired
-    private UserLoginService userLoginService;
+    private StaffLoginService staffLoginService;
     @PostMapping("/registration")
     public ResponseEntity<ApiResponse> UserRegistration(
-            @Validated @RequestBody UserRegisterDTO userRegisterDTO,
+            @Validated @RequestBody StaffRegisterDTO staffRegisterDTO,
             HttpServletRequest request) {
 
         ApiResponse apiResponse;
 
         // Encode email for avoiding email scraping and spam bots
-        String encodedEmail = HtmlUtils.htmlEscape(userRegisterDTO.getEmail());
+        String encodedEmail = HtmlUtils.htmlEscape(staffRegisterDTO.getEmail());
         logger.info("Encoded email: {}", encodedEmail);
-        userRegisterDTO.setEmail(encodedEmail);
+        staffRegisterDTO.setEmail(encodedEmail);
 
-        logger.info("user status: {}",userRegisterDTO.getStatus());
+        logger.info("staff status: {}", staffRegisterDTO.getStatus());
         // 1) Basic validations
-        if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getConfirmPassword())) {
+        if (!staffRegisterDTO.getPassword().equals(staffRegisterDTO.getConfirmPassword())) {
             apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(),
                     "Password and confirm password must be the same");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        } else if (userInfoService.CheckUsernameExists(userRegisterDTO.getUsername()) != null) {
+        } else if (staffInfoService.CheckUsernameExists(staffRegisterDTO.getUsername()) != null) {
             apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(),
                     "Username already exists");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        } else if (userInfoService.CheckEmailExists(userRegisterDTO.getEmail()) != null) {
+        } else if (staffInfoService.CheckEmailExists(staffRegisterDTO.getEmail()) != null) {
             apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(),
                     "Email already exists");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
@@ -64,8 +62,8 @@ public class Users {
 
         // 2) Call service – let it throw if anything goes wrong
         try {
-            userRegistrationService.RegisterUser(userRegisterDTO);
-            apiResponse = ApiResponse.success("User registered successfully");
+            staffRegistrationService.RegisterUser(staffRegisterDTO);
+            apiResponse = ApiResponse.success("Staff registered successfully");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
         } catch (Exception e) {
@@ -80,9 +78,9 @@ public class Users {
 
     }
     @PostMapping("/login")
-    public ResponseEntity UserLogin(@Validated @RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
+    public ResponseEntity UserLogin(@Validated @RequestBody StaffLoginDTO staffLoginDTO, HttpServletRequest request) {
         ApiResponse apiResponse;
-        if(userLoginService.CheckCredentials(userLoginDTO,request)){
+        if(staffLoginService.CheckCredentials(staffLoginDTO,request)){
             apiResponse = ApiResponse.success("Login Successfully");
         }else{
             apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(),"Username or Password is wrong");

@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import jakarta.validation.constraints.NotBlank;
 
 @Data
-public class UserLoginDTO {
+public class StaffLoginDTO {
     @NotBlank(message = "Username is required")
     @Length(min = 1, max = 30, message = "Username length not eligible")
     @ValidUsername(message = "User not found")

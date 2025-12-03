@@ -14,10 +14,10 @@ import java.time.Instant;
     @Getter
     @Setter
     @Entity
-    @Table(name = "users_login")
-    public class UsersLogin {
+    @Table(name = "staff_login")
+    public class StaffLogin {
         @Id
-        @Column(name = "user_id", nullable = false)
+        @Column(name = "staff_id", nullable = false)
         private Long id;
 
         @Size(max = 31)
