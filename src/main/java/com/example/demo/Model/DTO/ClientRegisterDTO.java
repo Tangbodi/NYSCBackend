@@ -16,11 +16,14 @@ public class ClientRegisterDTO implements Serializable {
     private Long clientId;
     @NotBlank(message = "First name is required")
     @Length(min = 1, max = 31, message = "First name length not eligible")
+    @ValidUsername
     private String clientFirstName;
     @NotBlank(message = "Last name is required")
     @Length(min = 1, max = 31, message = "Last name length not eligible")
+    @ValidUsername
     private String clientLastName;
     @Length(min = 1, max = 31, message = "Middle name length not eligible")
+    @ValidUsername
     private String clientMiddleName;
     @NotBlank(message = "Date of birth is required")
     private String dateOfBirth;
