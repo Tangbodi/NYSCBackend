@@ -43,7 +43,7 @@ public class StaffRegisterDTO implements Serializable {
     @ValidPhone
     private String phone;
     private String title;
-    private Integer status;
+    private String status;
     private Instant createdAt;
     private Instant modifiedAt;
 }

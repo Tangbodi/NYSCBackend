@@ -32,6 +32,6 @@ public class StaffInfoDTO {
     @ValidPhone
     private String phone;
     private String title;
-    private Integer status;
+    private String status;
 
 }

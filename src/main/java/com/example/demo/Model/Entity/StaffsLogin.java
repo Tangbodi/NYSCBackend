@@ -30,8 +30,10 @@ import java.time.Instant;
         @Column(name = "password", nullable = false, length = 63)
         private String password;
         @NotNull
-        @Column(name = "is_admin", nullable = false)
-        private Boolean isAdmin = false;
+        @Size(max = 1)
+        @Column(name = "is_admin", length = 1)
+        private String isAdmin;
+
         @NotNull
         @Column(name = "created_at", nullable = false)
         private Instant createdAt;

@@ -72,7 +72,7 @@ public class StaffInfoService {
             staffsInfo.setFirstName(staffRegisterDTO.getFirstName());
             staffsInfo.setLastName(staffRegisterDTO.getLastName());
             staffsInfo.setMiddleName(staffRegisterDTO.getMiddleName());
-            staffsInfo.setStatus(staffRegisterDTO.getStatus() == 1);
+            staffsInfo.setStatus(staffRegisterDTO.getStatus());
             staffsInfo.setPhone(staffRegisterDTO.getPhone());
             staffsInfo.setSupervisor(staffRegisterDTO.getSupervisor());
             staffsInfo.setTitle(staffRegisterDTO.getTitle());
@@ -111,7 +111,7 @@ public class StaffInfoService {
                 staffInfoVO.setEmail(staffsInfo.getEmail());
                 staffInfoVO.setEmployeeType(staffsInfo.getEmployeeType());
                 staffInfoVO.setSupervisor(staffsInfo.getSupervisor());
-                staffInfoVO.setStatus(staffsInfo.getStatus() ? "1" : "0");
+                staffInfoVO.setStatus(staffsInfo.getStatus());
                 String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getCreatedAt());
                 String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getModifiedAt());
                 staffInfoVO.setCreatedAt(formattedCreatedDateTime);
@@ -155,11 +155,11 @@ public class StaffInfoService {
             staffsInfo.setFirstName(staffInfoDTO.getFirstName());
             staffsInfo.setLastName(staffInfoDTO.getLastName());
             staffsInfo.setMiddleName(staffInfoDTO.getMiddleName());
-            staffsInfo.setStatus(staffInfoDTO.getStatus() == 1);
+            staffsInfo.setStatus(staffInfoDTO.getStatus());
             staffsInfo.setPhone(staffInfoDTO.getPhone());
             staffsInfo.setSupervisor(staffInfoDTO.getSupervisor());
             staffsInfo.setTitle(staffInfoDTO.getTitle());
-            staffsInfo.setStatus(staffInfoDTO.getStatus() == 1);
+            staffsInfo.setStatus(staffInfoDTO.getStatus());
             staffsInfo.setModifiedAt(Instant.now());
             staffInfoRepository.save(staffsInfo);
             logger.info("StaffInfo updated successfully");

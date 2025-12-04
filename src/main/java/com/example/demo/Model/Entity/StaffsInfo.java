@@ -50,8 +50,9 @@ public class StaffsInfo {
     private String title;
 
     @NotNull
-    @Column(name = "status", nullable = false)
-    private Boolean status = false;
+    @Size(max = 1)
+    @Column(name = "status", length = 1)
+    private String status;
 
     @Size(max = 31)
     @NotNull

@@ -38,7 +38,7 @@ public class StaffRegistrationService {
 
             String encodedPassword = BCrypt.hashpw(staffRegisterDTO.getPassword(), BCrypt.gensalt());
             staffsLogin.setPassword(encodedPassword);
-            staffsLogin.setIsAdmin(false);
+            staffsLogin.setIsAdmin("0");
             staffsLogin.setCreatedAt(staffRegisterDTO.getCreatedAt());
             staffsLogin.setModifiedAt(staffRegisterDTO.getCreatedAt());
 

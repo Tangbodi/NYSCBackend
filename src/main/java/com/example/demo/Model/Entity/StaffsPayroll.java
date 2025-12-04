@@ -27,10 +27,12 @@ public class StaffsPayroll {
     @Column(name = "hourly_rate", nullable = false, length = 8)
     private String hourlyRate;
 
-    @Column(name = "effective_start_date")
-    private LocalDate effectiveStartDate;
+    @Size(max = 15)
+    @Column(name = "effective_start_date", length = 15)
+    private String effectiveStartDate;
 
-    @Column(name = "effective_end_date")
+    @Size(max = 15)
+    @Column(name = "effective_end_date", length = 15)
     private String effectiveEndDate;
 
     @Size(max = 63)
