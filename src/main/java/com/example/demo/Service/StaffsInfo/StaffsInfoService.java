@@ -1,6 +1,6 @@
 package com.example.demo.Service.StaffsInfo;
 
-import com.example.demo.Controller.StaffController;
+import com.example.demo.Controller.StaffsController;
 import com.example.demo.Model.DTO.StaffsInfoDTO;
 import com.example.demo.Model.Entity.StaffsInfo;
 import com.example.demo.Repository.StaffsInfoRepository;
@@ -82,7 +82,7 @@ public class StaffsInfoService {
 
             logger.info("Saving StaffsInfo:{}", staffsInfo.getUsername());
             if (staffsInfoRepository.save(staffsInfo) == null) {
-                throw new StaffController.UserRegistrationException("Failed to save StaffsLogin");
+                throw new StaffsController.UserRegistrationException("Failed to save StaffsLogin");
             }
             logger.info("StaffsInfo saved successfully");
         } catch (Exception e) {

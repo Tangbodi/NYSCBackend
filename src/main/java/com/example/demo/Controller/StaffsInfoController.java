@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Validated
-@RequestMapping("/staff-info")
-public class StaffInfoController {
+@RequestMapping("/staffs-info")
+public class StaffsInfoController {
     private static final Logger logger = LoggerFactory.getLogger(StaffsInfo.class);
 
     @Autowired

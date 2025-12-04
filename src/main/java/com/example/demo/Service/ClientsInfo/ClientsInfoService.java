@@ -1,13 +1,11 @@
 package com.example.demo.Service.ClientsInfo;
 
-import com.example.demo.Controller.StaffController;
+import com.example.demo.Controller.StaffsController;
 import com.example.demo.Model.DTO.ClientsRegisterDTO;
 import com.example.demo.Model.Entity.ClientsInfo;
-import com.example.demo.Model.Entity.StaffsLogin;
 import com.example.demo.Repository.ClientsInfoRepository;
 import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
-import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +45,7 @@ public class ClientsInfoService {
             clientsInfo.setModifiedAt(Instant.now());
 
             if (clientsInfoRepository.save(clientsInfo) == null) {
-                throw new StaffController.UserRegistrationException("Failed to save ClientsInfo");
+                throw new StaffsController.UserRegistrationException("Failed to save ClientsInfo");
             }
             logger.info("ClientsInfo saved successfully");
 

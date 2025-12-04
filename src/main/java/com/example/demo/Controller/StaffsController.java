@@ -23,9 +23,9 @@ import java.io.IOException;
 
 @RestController
 @Validated
-@RequestMapping("/staff")
-public class StaffController {
-    private static final Logger logger = LoggerFactory.getLogger(StaffController.class);
+@RequestMapping("/staffs")
+public class StaffsController {
+    private static final Logger logger = LoggerFactory.getLogger(StaffsController.class);
     @Autowired
     private StaffsRegistrationService staffsRegistrationService;
     @Autowired
