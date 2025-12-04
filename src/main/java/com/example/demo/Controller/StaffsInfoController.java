@@ -24,7 +24,7 @@ public class StaffsInfoController {
     private StaffsInfoService staffsInfoService;
 
     @GetMapping("/")
-    public ResponseEntity<ApiResponse> getUserInfo(HttpServletRequest request) {
+    public ResponseEntity<ApiResponse> getStaffsInfo(HttpServletRequest request) {
         Long userId = (Long) request.getSession().getAttribute("staffId");
         ApiResponse apiResponse;
 
@@ -40,7 +40,7 @@ public class StaffsInfoController {
     }
 
     @PostMapping(value = "/update")
-    public ResponseEntity UpdateUserInfo( @Validated @RequestBody StaffsInfoDTO staffsInfoDTO,
+    public ResponseEntity UpdateStaffsInfo( @Validated @RequestBody StaffsInfoDTO staffsInfoDTO,
                                           HttpServletRequest request) {
         Long userId = (Long) request.getSession().getAttribute("staffId");
         ApiResponse apiResponse;

@@ -33,7 +33,7 @@ public class StaffsController {
     @Autowired
     private StaffsLoginService staffsLoginService;
     @PostMapping("/registration")
-    public ResponseEntity<ApiResponse> UserRegistration(
+    public ResponseEntity<ApiResponse> StaffsRegistration(
             @Validated @RequestBody StaffsRegisterDTO staffsRegisterDTO,
             HttpServletRequest request) {
 
@@ -78,7 +78,7 @@ public class StaffsController {
 
     }
     @PostMapping("/login")
-    public ResponseEntity UserLogin(@Validated @RequestBody StaffsLoginDTO staffsLoginDTO, HttpServletRequest request) {
+    public ResponseEntity StaffsLogin(@Validated @RequestBody StaffsLoginDTO staffsLoginDTO, HttpServletRequest request) {
         ApiResponse apiResponse;
         if(staffsLoginService.CheckCredentials(staffsLoginDTO,request)){
             apiResponse = ApiResponse.success("Login Successfully");
@@ -88,7 +88,7 @@ public class StaffsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
     @PostMapping("/logout")
-    public ResponseEntity UserLogout(HttpServletRequest request) throws IOException {
+    public ResponseEntity StaffsLogout(HttpServletRequest request) throws IOException {
         logger.info("Logging out");
         ApiResponse apiResponse = ApiResponse.success("Logged out");
         request.getSession().invalidate();
