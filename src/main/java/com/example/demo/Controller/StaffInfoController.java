@@ -34,7 +34,7 @@ public class StaffInfoController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
 
-        StaffInfoVO staffInfoVO = staffsInfoService.GetUserInfo(userId, request);
+        StaffInfoVO staffInfoVO = staffsInfoService.GetStaffInfo(userId, request);
         apiResponse = ApiResponse.success(staffInfoVO);
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
@@ -49,7 +49,7 @@ public class StaffInfoController {
         } else {
             try {
                 staffInfoDTO.setStaffId(userId);
-                if (staffsInfoService.UpdateUserInfo(staffInfoDTO, request) != null) {
+                if (staffsInfoService.UpdateStaffInfo(staffInfoDTO, request) != null) {
                     apiResponse = ApiResponse.success("User info has been updated");
                 } else {
                     apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "User info hasn't been updated");

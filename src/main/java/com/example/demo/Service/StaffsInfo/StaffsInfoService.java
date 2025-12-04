@@ -61,7 +61,7 @@ public class StaffsInfoService {
 
 
     @Transactional
-    public void SaveUserInfo(StaffRegisterDTO staffRegisterDTO) {
+    public void SaveStaffInfo(StaffRegisterDTO staffRegisterDTO) {
         logger.info("Saving StaffInfo: {}" + staffRegisterDTO.getStaffId());
         try {
             StaffsInfo staffsInfo = new StaffsInfo();
@@ -88,7 +88,7 @@ public class StaffsInfoService {
         }
     }
 
-    public StaffInfoVO GetUserInfo(Long userId, HttpServletRequest request) {
+    public StaffInfoVO GetStaffInfo(Long userId, HttpServletRequest request) {
         logger.info("Getting StaffInfo: {}" + userId);
         try {
             StaffsInfo staffsInfo = staffInfoRepository.findById(userId).orElse(null);
@@ -127,13 +127,13 @@ public class StaffsInfoService {
         }
         return null;
     }
-    public StaffInfoVO UpdateUserInfo(StaffInfoDTO staffInfoDTO, HttpServletRequest request){
+    public StaffInfoVO UpdateStaffInfo(StaffInfoDTO staffInfoDTO, HttpServletRequest request){
         logger.info("Updating StaffInfo: {}" + staffInfoDTO.getStaffId());
         try {
             StaffsInfo staffsInfo = staffInfoRepository.findById(staffInfoDTO.getStaffId()).orElse(null);
             if (staffsInfo != null) {
                 logger.info("Found staffInfo: {}" + staffsInfo.getUsername());
-                return SaveUserInfo(staffsInfo, staffInfoDTO, request);
+                return SaveStaffInfo(staffsInfo, staffInfoDTO, request);
             } else {
                 logger.info("StaffInfo does not exist: {}");
                 return null;
@@ -145,7 +145,7 @@ public class StaffsInfoService {
         return null;
     }
     @Transactional
-    public StaffInfoVO SaveUserInfo(StaffsInfo staffsInfo, StaffInfoDTO staffInfoDTO, HttpServletRequest request) {
+    public StaffInfoVO SaveStaffInfo(StaffsInfo staffsInfo, StaffInfoDTO staffInfoDTO, HttpServletRequest request) {
         logger.info("Saving StaffInfo: {}" + staffInfoDTO.getStaffId());
         try {
 //            usersInfo.setId(userInfoDTO.getUserId());
@@ -168,6 +168,6 @@ public class StaffsInfoService {
             logger.error("Failed to save StaffInfo: {}", e.getMessage(), e);
             throw e;   // <--- rethrow EXACT exception
         }
-       return GetUserInfo(staffInfoDTO.getStaffId(), request);
+       return GetStaffInfo(staffInfoDTO.getStaffId(), request);
     }
 }
