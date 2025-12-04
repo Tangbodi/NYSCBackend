@@ -44,6 +44,5 @@ public class StaffRegisterDTO implements Serializable {
     private String phone;
     private String title;
     private String status;
-    private Instant createdAt;
-    private Instant modifiedAt;
+
 }

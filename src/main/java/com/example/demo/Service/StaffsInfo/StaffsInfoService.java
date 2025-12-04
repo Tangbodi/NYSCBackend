@@ -1,7 +1,9 @@
 package com.example.demo.Service.StaffsInfo;
 
+import com.example.demo.Controller.StaffController;
 import com.example.demo.Model.DTO.StaffInfoDTO;
 import com.example.demo.Model.Entity.StaffsInfo;
+import com.example.demo.Model.Entity.StaffsLogin;
 import com.example.demo.Repository.StaffInfoRepository;
 import com.example.demo.Repository.StaffLoginRepository;
 import com.example.demo.Model.DTO.StaffRegisterDTO;
@@ -62,7 +64,7 @@ public class StaffsInfoService {
 
     @Transactional
     public void SaveStaffInfo(StaffRegisterDTO staffRegisterDTO) {
-        logger.info("Saving StaffInfo: {}" + staffRegisterDTO.getStaffId());
+        logger.info("Creating StaffInfo: {}" + staffRegisterDTO.getStaffId());
         try {
             StaffsInfo staffsInfo = new StaffsInfo();
             staffsInfo.setId(staffRegisterDTO.getStaffId());
@@ -76,12 +78,13 @@ public class StaffsInfoService {
             staffsInfo.setPhone(staffRegisterDTO.getPhone());
             staffsInfo.setSupervisor(staffRegisterDTO.getSupervisor());
             staffsInfo.setTitle(staffRegisterDTO.getTitle());
-            staffsInfo.setCreatedAt(staffRegisterDTO.getCreatedAt());
-            staffsInfo.setModifiedAt(staffRegisterDTO.getCreatedAt());
-
-            staffInfoRepository.save(staffsInfo);
+            staffsInfo.setCreatedAt(Instant.now());
+            staffsInfo.setModifiedAt(Instant.now());
+            StaffsInfo savedStaffInfo= staffInfoRepository.save(staffsInfo);
+            if (savedStaffInfo == null) {
+                throw new StaffController.UserRegistrationException("Failed to save StaffLogin");
+            }
             logger.info("StaffInfo saved successfully");
-
         } catch (Exception e) {
             logger.error("Failed to save StaffInfo: {}", e.getMessage(), e);
             throw e;   // <--- rethrow EXACT exception
@@ -93,7 +96,7 @@ public class StaffsInfoService {
         try {
             StaffsInfo staffsInfo = staffInfoRepository.findById(userId).orElse(null);
             if (staffsInfo != null) {
-                logger.info("Found staffInfo: {}" + staffsInfo.getUsername());
+                logger.info("Found StaffInfo: {}" + staffsInfo.getUsername());
                 StaffInfoVO staffInfoVO = new StaffInfoVO();
                 staffInfoVO.setLongUid(staffsInfo.getId());
                 staffInfoVO.setStaffId(staffsInfo.getId().toString());

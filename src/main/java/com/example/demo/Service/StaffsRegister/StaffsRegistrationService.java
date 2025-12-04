@@ -29,9 +29,8 @@ public class StaffsRegistrationService {
             logger.info("Creating UUID for staff: {}", staffRegisterDTO.getUsername());
             Long snowflakeId = Snowflake.generateUniqueId();
             staffRegisterDTO.setStaffId(snowflakeId);
-            staffRegisterDTO.setCreatedAt(Instant.now());
 
-            logger.info("Saving staff:{}", staffRegisterDTO.getUsername());
+            logger.info("Creating StaffLogin:{}", staffRegisterDTO.getUsername());
             StaffsLogin staffsLogin = new StaffsLogin();
             staffsLogin.setId(snowflakeId);
             staffsLogin.setUsername(staffRegisterDTO.getUsername());
@@ -39,17 +38,16 @@ public class StaffsRegistrationService {
             String encodedPassword = BCrypt.hashpw(staffRegisterDTO.getPassword(), BCrypt.gensalt());
             staffsLogin.setPassword(encodedPassword);
             staffsLogin.setIsAdmin("0");
-            staffsLogin.setCreatedAt(staffRegisterDTO.getCreatedAt());
-            staffsLogin.setModifiedAt(staffRegisterDTO.getCreatedAt());
+            staffsLogin.setCreatedAt(Instant.now());
+            staffsLogin.setModifiedAt(Instant.now());
 
+            logger.info("Saving StaffLogin:{}", staffRegisterDTO.getUsername());
             StaffsLogin savedStaff= staffLoginRepository.save(staffsLogin);
             if (savedStaff == null) {
                 throw new StaffController.UserRegistrationException("Failed to save StaffLogin");
             }
-
             logger.info("StaffLogin saved successfully");
-            staffsInfoService.SaveUserInfo(staffRegisterDTO);  // <-- may also throw
-
+            staffsInfoService.SaveStaffInfo(staffRegisterDTO);  // <-- may also throw
             return savedStaff;
         }catch (Exception e) {
             logger.error("Failed to register staff: {}", e.getMessage(), e);
