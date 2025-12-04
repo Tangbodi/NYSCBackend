@@ -1,9 +1,9 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Constant.Enum.ReturnCode;
-import com.example.demo.Model.DTO.StaffInfoDTO;
+import com.example.demo.Model.DTO.StaffsInfoDTO;
 import com.example.demo.Model.Entity.StaffsInfo;
-import com.example.demo.Model.VO.StaffInfoVO;
+import com.example.demo.Model.VO.StaffsInfoVO;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,13 +34,13 @@ public class StaffInfoController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
 
-        StaffInfoVO staffInfoVO = staffsInfoService.GetStaffInfo(userId, request);
-        apiResponse = ApiResponse.success(staffInfoVO);
+        StaffsInfoVO staffsInfoVO = staffsInfoService.GetStaffsInfo(userId, request);
+        apiResponse = ApiResponse.success(staffsInfoVO);
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
     @PostMapping(value = "/update")
-    public ResponseEntity UpdateUserInfo( @Validated @RequestBody StaffInfoDTO staffInfoDTO,
+    public ResponseEntity UpdateUserInfo( @Validated @RequestBody StaffsInfoDTO staffsInfoDTO,
                                           HttpServletRequest request) {
         Long userId = (Long) request.getSession().getAttribute("staffId");
         ApiResponse apiResponse;
@@ -48,8 +48,8 @@ public class StaffInfoController {
             apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page");
         } else {
             try {
-                staffInfoDTO.setStaffId(userId);
-                if (staffsInfoService.UpdateStaffInfo(staffInfoDTO, request) != null) {
+                staffsInfoDTO.setStaffId(userId);
+                if (staffsInfoService.UpdateStaffsInfo(staffsInfoDTO, request) != null) {
                     apiResponse = ApiResponse.success("User info has been updated");
                 } else {
                     apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "User info hasn't been updated");

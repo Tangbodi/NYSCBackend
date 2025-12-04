@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class StaffInfoVO {
+public class StaffsInfoVO {
 
     private Long LongUid;
     private String staffId;

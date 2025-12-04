@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Data
-public class StaffLoginDTO implements Serializable {
+public class StaffsLoginDTO implements Serializable {
     @NotBlank(message = "Username is required")
     @Length(min = 1, max = 30, message = "Username length not eligible")
     @ValidUsername(message = "User not found")

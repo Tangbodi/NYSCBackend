@@ -1,8 +1,8 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Constant.Enum.ReturnCode;
-import com.example.demo.Model.DTO.StaffLoginDTO;
-import com.example.demo.Model.DTO.StaffRegisterDTO;
+import com.example.demo.Model.DTO.StaffsLoginDTO;
+import com.example.demo.Model.DTO.StaffsRegisterDTO;
 import com.example.demo.Service.StaffsLogin.StaffsLoginService;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
 import com.example.demo.Service.StaffsRegister.StaffsRegistrationService;
@@ -34,27 +34,27 @@ public class StaffController {
     private StaffsLoginService staffsLoginService;
     @PostMapping("/registration")
     public ResponseEntity<ApiResponse> UserRegistration(
-            @Validated @RequestBody StaffRegisterDTO staffRegisterDTO,
+            @Validated @RequestBody StaffsRegisterDTO staffsRegisterDTO,
             HttpServletRequest request) {
 
         ApiResponse apiResponse;
 
         // Encode email for avoiding email scraping and spam bots
-        String encodedEmail = HtmlUtils.htmlEscape(staffRegisterDTO.getEmail());
+        String encodedEmail = HtmlUtils.htmlEscape(staffsRegisterDTO.getEmail());
         logger.info("Encoded email: {}", encodedEmail);
-        staffRegisterDTO.setEmail(encodedEmail);
+        staffsRegisterDTO.setEmail(encodedEmail);
 
-        logger.info("staff status: {}", staffRegisterDTO.getStatus());
+        logger.info("staff status: {}", staffsRegisterDTO.getStatus());
         // 1) Basic validations
-        if (!staffRegisterDTO.getPassword().equals(staffRegisterDTO.getConfirmPassword())) {
+        if (!staffsRegisterDTO.getPassword().equals(staffsRegisterDTO.getConfirmPassword())) {
             apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(),
                     "Password and confirm password must be the same");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        } else if (staffsInfoService.CheckUsernameExists(staffRegisterDTO.getUsername()) != null) {
+        } else if (staffsInfoService.CheckUsernameExists(staffsRegisterDTO.getUsername()) != null) {
             apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(),
                     "Username already exists");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        } else if (staffsInfoService.CheckEmailExists(staffRegisterDTO.getEmail()) != null) {
+        } else if (staffsInfoService.CheckEmailExists(staffsRegisterDTO.getEmail()) != null) {
             apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(),
                     "Email already exists");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
@@ -62,7 +62,7 @@ public class StaffController {
 
         // 2) Call service – let it throw if anything goes wrong
         try {
-            staffsRegistrationService.RegisterUser(staffRegisterDTO);
+            staffsRegistrationService.RegisterStaffs(staffsRegisterDTO);
             apiResponse = ApiResponse.success("Staff registered successfully");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
@@ -78,9 +78,9 @@ public class StaffController {
 
     }
     @PostMapping("/login")
-    public ResponseEntity UserLogin(@Validated @RequestBody StaffLoginDTO staffLoginDTO, HttpServletRequest request) {
+    public ResponseEntity UserLogin(@Validated @RequestBody StaffsLoginDTO staffsLoginDTO, HttpServletRequest request) {
         ApiResponse apiResponse;
-        if(staffsLoginService.CheckCredentials(staffLoginDTO,request)){
+        if(staffsLoginService.CheckCredentials(staffsLoginDTO,request)){
             apiResponse = ApiResponse.success("Login Successfully");
         }else{
             apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(),"Username or Password is wrong");

@@ -1,9 +1,9 @@
 package com.example.demo.Service.StaffsRegister;
 
 import com.example.demo.Controller.StaffController;
-import com.example.demo.Model.DTO.StaffRegisterDTO;
+import com.example.demo.Model.DTO.StaffsRegisterDTO;
 import com.example.demo.Model.Entity.StaffsLogin;
-import com.example.demo.Repository.StaffLoginRepository;
+import com.example.demo.Repository.StaffsLoginRepository;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
 import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
@@ -20,35 +20,34 @@ public class StaffsRegistrationService {
     @Autowired
     private StaffsInfoService staffsInfoService;
     @Autowired
-    private StaffLoginRepository staffLoginRepository;
+    private StaffsLoginRepository staffsLoginRepository;
     @Transactional
-    public StaffsLogin RegisterUser(StaffRegisterDTO staffRegisterDTO) {
-        logger.info("Registering staff: {}", staffRegisterDTO.getUsername());
+    public void RegisterStaffs(StaffsRegisterDTO staffsRegisterDTO) {
+        logger.info("Registering staffs: {}", staffsRegisterDTO.getUsername());
 
         try {
-            logger.info("Creating UUID for staff: {}", staffRegisterDTO.getUsername());
+            logger.info("Creating UUID for staffs: {}", staffsRegisterDTO.getUsername());
             Long snowflakeId = Snowflake.generateUniqueId();
-            staffRegisterDTO.setStaffId(snowflakeId);
+            staffsRegisterDTO.setStaffId(snowflakeId);
 
-            logger.info("Creating StaffLogin:{}", staffRegisterDTO.getUsername());
+            logger.info("Creating StaffsLogin:{}", staffsRegisterDTO.getUsername());
             StaffsLogin staffsLogin = new StaffsLogin();
             staffsLogin.setId(snowflakeId);
-            staffsLogin.setUsername(staffRegisterDTO.getUsername());
+            staffsLogin.setUsername(staffsRegisterDTO.getUsername());
 
-            String encodedPassword = BCrypt.hashpw(staffRegisterDTO.getPassword(), BCrypt.gensalt());
+            String encodedPassword = BCrypt.hashpw(staffsRegisterDTO.getPassword(), BCrypt.gensalt());
             staffsLogin.setPassword(encodedPassword);
             staffsLogin.setIsAdmin("0");
             staffsLogin.setCreatedAt(Instant.now());
             staffsLogin.setModifiedAt(Instant.now());
 
-            logger.info("Saving StaffLogin:{}", staffRegisterDTO.getUsername());
-            StaffsLogin savedStaff= staffLoginRepository.save(staffsLogin);
-            if (savedStaff == null) {
+            logger.info("Saving StaffsLogin:{}", staffsRegisterDTO.getUsername());
+            if (staffsLoginRepository.save(staffsLogin) == null) {
                 throw new StaffController.UserRegistrationException("Failed to save StaffLogin");
             }
-            logger.info("StaffLogin saved successfully");
-            staffsInfoService.SaveStaffInfo(staffRegisterDTO);  // <-- may also throw
-            return savedStaff;
+            logger.info("StaffsLogin saved successfully");
+            staffsInfoService.SaveStaffsInfo(staffsRegisterDTO);  // <-- may also throw
+
         }catch (Exception e) {
             logger.error("Failed to register staff: {}", e.getMessage(), e);
             throw e;  // <--- DO NOT wrap, return exact error
