@@ -8,10 +8,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Data
-public class ClientRegisterDTO {
+public class ClientRegisterDTO implements Serializable {
     private Long clientId;
     @NotBlank(message = "First name is required")
     @Length(min = 1, max = 31, message = "First name length not eligible")

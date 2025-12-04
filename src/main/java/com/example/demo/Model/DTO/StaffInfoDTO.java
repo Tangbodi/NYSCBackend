@@ -7,8 +7,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import java.io.Serializable;
+
 @Data
-public class StaffInfoDTO {
+public class StaffInfoDTO implements Serializable {
     private Long staffId;
     @NotBlank(message = "Username is required")
     @Length(min = 1, max = 30, message = "Username length not eligible")
