@@ -1,4 +1,4 @@
-package com.example.demo.Service.UserLogin;
+package com.example.demo.Service.StaffsLogin;
 
 import com.example.demo.Model.DTO.StaffLoginDTO;
 import com.example.demo.Model.Entity.StaffsLogin;
@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StaffLoginService {
-    private static final Logger logger = LoggerFactory.getLogger(StaffLoginService.class);
+public class StaffsLoginService {
+    private static final Logger logger = LoggerFactory.getLogger(StaffsLoginService.class);
     @Autowired
     private StaffLoginRepository staffLoginRepository;
     public Boolean CheckCredentials(StaffLoginDTO staffLoginDTO, HttpServletRequest request) {

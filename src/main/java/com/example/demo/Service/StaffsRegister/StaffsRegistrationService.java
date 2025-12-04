@@ -1,10 +1,10 @@
-package com.example.demo.Service.UsersRegister;
+package com.example.demo.Service.StaffsRegister;
 
 import com.example.demo.Controller.StaffController;
 import com.example.demo.Model.DTO.StaffRegisterDTO;
 import com.example.demo.Model.Entity.StaffsLogin;
 import com.example.demo.Repository.StaffLoginRepository;
-import com.example.demo.Service.UsersInfo.StaffInfoService;
+import com.example.demo.Service.StaffsInfo.StaffsInfoService;
 import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 @Service
-public class StaffRegistrationService {
-    private static final Logger logger = LoggerFactory.getLogger(StaffRegistrationService.class);
+public class StaffsRegistrationService {
+    private static final Logger logger = LoggerFactory.getLogger(StaffsRegistrationService.class);
     @Autowired
-    private StaffInfoService staffInfoService;
+    private StaffsInfoService staffsInfoService;
     @Autowired
     private StaffLoginRepository staffLoginRepository;
     @Transactional
@@ -48,7 +48,7 @@ public class StaffRegistrationService {
             }
 
             logger.info("StaffLogin saved successfully");
-            staffInfoService.SaveUserInfo(staffRegisterDTO);  // <-- may also throw
+            staffsInfoService.SaveUserInfo(staffRegisterDTO);  // <-- may also throw
 
             return savedStaff;
         }catch (Exception e) {

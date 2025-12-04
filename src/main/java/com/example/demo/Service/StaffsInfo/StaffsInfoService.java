@@ -1,4 +1,4 @@
-package com.example.demo.Service.UsersInfo;
+package com.example.demo.Service.StaffsInfo;
 
 import com.example.demo.Model.DTO.StaffInfoDTO;
 import com.example.demo.Model.Entity.StaffsInfo;
@@ -18,8 +18,8 @@ import java.time.Instant;
 
 
 @Service
-public class StaffInfoService {
-    private static final Logger logger = LoggerFactory.getLogger(StaffInfoService.class);
+public class StaffsInfoService {
+    private static final Logger logger = LoggerFactory.getLogger(StaffsInfoService.class);
     @Autowired
     private StaffInfoRepository staffInfoRepository;
     @Autowired

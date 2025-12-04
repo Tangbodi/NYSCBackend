@@ -4,7 +4,7 @@ import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.StaffInfoDTO;
 import com.example.demo.Model.Entity.StaffsInfo;
 import com.example.demo.Model.VO.StaffInfoVO;
-import com.example.demo.Service.UsersInfo.StaffInfoService;
+import com.example.demo.Service.StaffsInfo.StaffsInfoService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class StaffInfoController {
     private static final Logger logger = LoggerFactory.getLogger(StaffsInfo.class);
 
     @Autowired
-    private StaffInfoService staffInfoService;
+    private StaffsInfoService staffsInfoService;
 
     @GetMapping("/")
     public ResponseEntity<ApiResponse> getUserInfo(HttpServletRequest request) {
@@ -34,7 +34,7 @@ public class StaffInfoController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
 
-        StaffInfoVO staffInfoVO = staffInfoService.GetUserInfo(userId, request);
+        StaffInfoVO staffInfoVO = staffsInfoService.GetUserInfo(userId, request);
         apiResponse = ApiResponse.success(staffInfoVO);
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
@@ -49,7 +49,7 @@ public class StaffInfoController {
         } else {
             try {
                 staffInfoDTO.setStaffId(userId);
-                if (staffInfoService.UpdateUserInfo(staffInfoDTO, request) != null) {
+                if (staffsInfoService.UpdateUserInfo(staffInfoDTO, request) != null) {
                     apiResponse = ApiResponse.success("User info has been updated");
                 } else {
                     apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "User info hasn't been updated");

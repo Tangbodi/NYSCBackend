@@ -3,9 +3,9 @@ package com.example.demo.Controller;
 import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.StaffLoginDTO;
 import com.example.demo.Model.DTO.StaffRegisterDTO;
-import com.example.demo.Service.UserLogin.StaffLoginService;
-import com.example.demo.Service.UsersInfo.StaffInfoService;
-import com.example.demo.Service.UsersRegister.StaffRegistrationService;
+import com.example.demo.Service.StaffsLogin.StaffsLoginService;
+import com.example.demo.Service.StaffsInfo.StaffsInfoService;
+import com.example.demo.Service.StaffsRegister.StaffsRegistrationService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -27,11 +27,11 @@ import java.io.IOException;
 public class StaffController {
     private static final Logger logger = LoggerFactory.getLogger(StaffController.class);
     @Autowired
-    private StaffRegistrationService staffRegistrationService;
+    private StaffsRegistrationService staffsRegistrationService;
     @Autowired
-    private StaffInfoService staffInfoService;
+    private StaffsInfoService staffsInfoService;
     @Autowired
-    private StaffLoginService staffLoginService;
+    private StaffsLoginService staffsLoginService;
     @PostMapping("/registration")
     public ResponseEntity<ApiResponse> UserRegistration(
             @Validated @RequestBody StaffRegisterDTO staffRegisterDTO,
@@ -50,11 +50,11 @@ public class StaffController {
             apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(),
                     "Password and confirm password must be the same");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        } else if (staffInfoService.CheckUsernameExists(staffRegisterDTO.getUsername()) != null) {
+        } else if (staffsInfoService.CheckUsernameExists(staffRegisterDTO.getUsername()) != null) {
             apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(),
                     "Username already exists");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        } else if (staffInfoService.CheckEmailExists(staffRegisterDTO.getEmail()) != null) {
+        } else if (staffsInfoService.CheckEmailExists(staffRegisterDTO.getEmail()) != null) {
             apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(),
                     "Email already exists");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
@@ -62,7 +62,7 @@ public class StaffController {
 
         // 2) Call service – let it throw if anything goes wrong
         try {
-            staffRegistrationService.RegisterUser(staffRegisterDTO);
+            staffsRegistrationService.RegisterUser(staffRegisterDTO);
             apiResponse = ApiResponse.success("Staff registered successfully");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
@@ -80,7 +80,7 @@ public class StaffController {
     @PostMapping("/login")
     public ResponseEntity UserLogin(@Validated @RequestBody StaffLoginDTO staffLoginDTO, HttpServletRequest request) {
         ApiResponse apiResponse;
-        if(staffLoginService.CheckCredentials(staffLoginDTO,request)){
+        if(staffsLoginService.CheckCredentials(staffLoginDTO,request)){
             apiResponse = ApiResponse.success("Login Successfully");
         }else{
             apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(),"Username or Password is wrong");
