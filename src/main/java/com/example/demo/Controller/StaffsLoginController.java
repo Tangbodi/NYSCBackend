@@ -24,8 +24,8 @@ import java.io.IOException;
 @RestController
 @Validated
 @RequestMapping("/staffs")
-public class StaffsController {
-    private static final Logger logger = LoggerFactory.getLogger(StaffsController.class);
+public class StaffsLoginController {
+    private static final Logger logger = LoggerFactory.getLogger(StaffsLoginController.class);
     @Autowired
     private StaffsRegistrationService staffsRegistrationService;
     @Autowired
@@ -62,7 +62,7 @@ public class StaffsController {
 
         // 2) Call service – let it throw if anything goes wrong
         try {
-            staffsRegistrationService.RegisterStaffs(staffsRegisterDTO);
+            staffsRegistrationService.RegisterStaffsLogin(staffsRegisterDTO);
             apiResponse = ApiResponse.success("Staff registered successfully");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 

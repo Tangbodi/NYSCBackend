@@ -1,7 +1,7 @@
 package com.example.demo.Service.ClientsInfo;
 
-import com.example.demo.Controller.StaffsController;
-import com.example.demo.Model.DTO.ClientsRegisterDTO;
+import com.example.demo.Controller.StaffsLoginController;
+import com.example.demo.Model.DTO.ClientsInfoDTO;
 import com.example.demo.Model.Entity.ClientsInfo;
 import com.example.demo.Repository.ClientsInfoRepository;
 import com.example.demo.Util.Snowflake;
@@ -20,38 +20,57 @@ public class ClientsInfoService {
     @Autowired
     private ClientsInfoRepository clientsInfoRepository;
     @Transactional
-    public void SaveClientsInfo(ClientsRegisterDTO clientsRegisterDTO) {
-        logger.info("Registering client: {}", clientsRegisterDTO.getClientFirstName() + "." + clientsRegisterDTO.getClientFirstName());
+    public void RegisterClientsInfo(ClientsInfoDTO clientsInfoDTO) {
+        logger.info("Registering ClientsInfo: {}", clientsInfoDTO.getClientFirstName() + "." + clientsInfoDTO.getClientLastName());
 
         try {
-            logger.info("Creating UUID for client: {}", clientsRegisterDTO.getClientFirstName());
+            logger.info("Creating UUID for ClientsInfo: {}", clientsInfoDTO.getClientFirstName());
             Long snowflakeId = Snowflake.generateUniqueId();
 
-            logger.info("Creating ClientsInfo:{}", clientsRegisterDTO.getClientFirstName());
+            logger.info("Creating ClientsInfo:{}", clientsInfoDTO.getClientFirstName());
             ClientsInfo clientsInfo = new ClientsInfo();
             clientsInfo.setId(snowflakeId);
-            clientsInfo.setClientLastName(clientsRegisterDTO.getClientLastName());
-            clientsInfo.setClientFirstName(clientsRegisterDTO.getClientFirstName());
-            clientsInfo.setClientMiddleName(clientsRegisterDTO.getClientMiddleName());
-            clientsInfo.setDateOfBirth(clientsRegisterDTO.getDateOfBirth());
-            clientsInfo.setGender(clientsRegisterDTO.getGender());
-            clientsInfo.setStatus(clientsRegisterDTO.getStatus());
-            clientsInfo.setAddress(clientsRegisterDTO.getAddress());
-            clientsInfo.setCity(clientsRegisterDTO.getCity());
-            clientsInfo.setState(clientsRegisterDTO.getState());
-            clientsInfo.setZipCode(clientsRegisterDTO.getZipCode());
-            clientsInfo.setNotes(clientsRegisterDTO.getNotes());
+            clientsInfo.setClientLastName(clientsInfoDTO.getClientLastName());
+            clientsInfo.setClientFirstName(clientsInfoDTO.getClientFirstName());
+            clientsInfo.setClientMiddleName(clientsInfoDTO.getClientMiddleName());
+            clientsInfo.setDateOfBirth(clientsInfoDTO.getDateOfBirth());
+            clientsInfo.setGender(clientsInfoDTO.getGender());
+            clientsInfo.setStatus(clientsInfoDTO.getStatus());
+            clientsInfo.setAddress(clientsInfoDTO.getAddress());
+            clientsInfo.setCity(clientsInfoDTO.getCity());
+            clientsInfo.setState(clientsInfoDTO.getState());
+            clientsInfo.setZipCode(clientsInfoDTO.getZipCode());
+            clientsInfo.setNotes(clientsInfoDTO.getNotes());
             clientsInfo.setCreatedAt(Instant.now());
             clientsInfo.setModifiedAt(Instant.now());
 
             if (clientsInfoRepository.save(clientsInfo) == null) {
-                throw new StaffsController.UserRegistrationException("Failed to save ClientsInfo");
+                throw new StaffsLoginController.UserRegistrationException("Failed to register ClientsInfo");
             }
-            logger.info("ClientsInfo saved successfully");
+            logger.info("ClientsInfo registered successfully");
 
         } catch (Exception e) {
-            logger.error("Failed to register staff: {}", e.getMessage(), e);
+            logger.error("Failed to register ClientsInfo: {}", e.getMessage(), e);
             throw e;  // <--- DO NOT wrap, return exact error
         }
+    }
+    @Transactional
+    public void UpdateClientsInfo(ClientsInfoDTO clientsInfoDTO) {
+        logger.info("Updating ClientsInfo: {}", clientsInfoDTO.getClientFirstName() + "." + clientsInfoDTO.getClientLastName());
+
+        clientsInfoRepository.UpdateClientsInfo(
+                clientsInfoDTO.getClientId(),
+                clientsInfoDTO.getClientFirstName(),
+                clientsInfoDTO.getClientLastName(),
+                clientsInfoDTO.getClientMiddleName(),
+                clientsInfoDTO.getDateOfBirth(),
+                clientsInfoDTO.getGender(),
+                clientsInfoDTO.getStatus(),
+                clientsInfoDTO.getAddress(),
+                clientsInfoDTO.getCity(),
+                clientsInfoDTO.getState(),
+                clientsInfoDTO.getZipCode(),
+                clientsInfoDTO.getNotes()
+        );
     }
 }

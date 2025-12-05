@@ -1,6 +1,6 @@
 package com.example.demo.Service.StaffsRegister;
 
-import com.example.demo.Controller.StaffsController;
+import com.example.demo.Controller.StaffsLoginController;
 import com.example.demo.Model.DTO.StaffsRegisterDTO;
 import com.example.demo.Model.Entity.StaffsLogin;
 import com.example.demo.Repository.StaffsLoginRepository;
@@ -22,11 +22,11 @@ public class StaffsRegistrationService {
     @Autowired
     private StaffsLoginRepository staffsLoginRepository;
     @Transactional
-    public void RegisterStaffs(StaffsRegisterDTO staffsRegisterDTO) {
-        logger.info("Registering staffs: {}", staffsRegisterDTO.getUsername());
+    public void RegisterStaffsLogin(StaffsRegisterDTO staffsRegisterDTO) {
+        logger.info("Registering StaffsLogin: {}", staffsRegisterDTO.getUsername());
 
         try {
-            logger.info("Creating UUID for staffs: {}", staffsRegisterDTO.getUsername());
+            logger.info("Creating UUID for StaffsLogin: {}", staffsRegisterDTO.getUsername());
             Long snowflakeId = Snowflake.generateUniqueId();
             staffsRegisterDTO.setStaffId(snowflakeId);
 
@@ -43,13 +43,13 @@ public class StaffsRegistrationService {
 
             logger.info("Saving StaffsLogin:{}", staffsRegisterDTO.getUsername());
             if (staffsLoginRepository.save(staffsLogin) == null) {
-                throw new StaffsController.UserRegistrationException("Failed to save StaffLogin");
+                throw new StaffsLoginController.UserRegistrationException("Failed to register StaffsLogin");
             }
-            logger.info("StaffsLogin saved successfully");
+            logger.info("StaffsLogin registered successfully");
             staffsInfoService.SaveStaffsInfo(staffsRegisterDTO);  // <-- may also throw
 
         }catch (Exception e) {
-            logger.error("Failed to register staff: {}", e.getMessage(), e);
+            logger.error("Failed to register StaffsLogin: {}", e.getMessage(), e);
             throw e;  // <--- DO NOT wrap, return exact error
         }
     }

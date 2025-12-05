@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.time.Instant;
 
 @Data
-public class ClientsRegisterDTO implements Serializable {
+public class ClientsInfoDTO implements Serializable {
     private Long clientId;
     @NotBlank(message = "First name is required")
     @Length(min = 1, max = 31, message = "First name length not eligible")
@@ -19,7 +19,7 @@ public class ClientsRegisterDTO implements Serializable {
     @Length(min = 1, max = 31, message = "Last name length not eligible")
     @ValidUsername
     private String clientLastName;
-    @Length(min = 1, max = 31, message = "Middle name length not eligible")
+    @Length(min = 0, max = 31, message = "Middle name length not eligible")
     @ValidUsername
     private String clientMiddleName;
     @NotBlank(message = "Date of birth is required")
@@ -42,8 +42,7 @@ public class ClientsRegisterDTO implements Serializable {
     @NotBlank(message = "Zip code is required")
     @Length(min = 1, max = 15, message = "Zip code length not eligible")
     private String zipCode;
-
-    @Length(min = 1, max = 63, message = "Notes length not eligible")
+    @Length(min = 0, max = 63, message = "Notes length not eligible")
     private String notes;
     private Instant createdAt;
     private Instant modifiedAt;

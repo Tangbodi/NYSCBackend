@@ -1,6 +1,6 @@
 package com.example.demo.Service.StaffsInfo;
 
-import com.example.demo.Controller.StaffsController;
+import com.example.demo.Controller.StaffsLoginController;
 import com.example.demo.Model.DTO.StaffsInfoDTO;
 import com.example.demo.Model.Entity.StaffsInfo;
 import com.example.demo.Repository.StaffsInfoRepository;
@@ -82,7 +82,7 @@ public class StaffsInfoService {
 
             logger.info("Saving StaffsInfo:{}", staffsInfo.getUsername());
             if (staffsInfoRepository.save(staffsInfo) == null) {
-                throw new StaffsController.UserRegistrationException("Failed to save StaffsLogin");
+                throw new StaffsLoginController.UserRegistrationException("Failed to save StaffsLogin");
             }
             logger.info("StaffsInfo saved successfully");
         } catch (Exception e) {
@@ -126,7 +126,7 @@ public class StaffsInfoService {
             }
 
         } catch (Exception e) {
-            logger.error("Failed to get StaffInfo: {}", e.getMessage(), e);
+            logger.error("Failed to get StaffsInfo: {}", e.getMessage(), e);
         }
         return null;
     }
@@ -165,10 +165,10 @@ public class StaffsInfoService {
             staffsInfo.setStatus(staffsInfoDTO.getStatus());
             staffsInfo.setModifiedAt(Instant.now());
             staffsInfoRepository.save(staffsInfo);
-            logger.info("StaffInfo updated successfully");
+            logger.info("StaffsInfo updated successfully");
 
         } catch (Exception e) {
-            logger.error("Failed to save StaffInfo: {}", e.getMessage(), e);
+            logger.error("Failed to save StaffsInfo: {}", e.getMessage(), e);
             throw e;   // <--- rethrow EXACT exception
         }
        return GetStaffsInfo(staffsInfoDTO.getStaffId(), request);
