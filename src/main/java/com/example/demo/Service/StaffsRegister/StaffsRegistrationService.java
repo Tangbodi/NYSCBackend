@@ -43,9 +43,9 @@ public class StaffsRegistrationService {
 
             logger.info("Saving StaffsLogin:{}", staffsRegisterDTO.getUsername());
             if (staffsLoginRepository.save(staffsLogin) == null) {
-                throw new StaffsLoginController.UserRegistrationException("Failed to register StaffsLogin");
+                throw new StaffsLoginController.UserRegistrationException("Failed to register StaffsLogin.");
             }
-            logger.info("StaffsLogin registered successfully");
+            logger.info("StaffsLogin registered successfully.");
             staffsInfoService.SaveStaffsInfo(staffsRegisterDTO);  // <-- may also throw
 
         }catch (Exception e) {

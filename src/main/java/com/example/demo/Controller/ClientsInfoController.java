@@ -49,21 +49,27 @@ public class ClientsInfoController {
     public ResponseEntity<ApiResponse> ClientsInfoUpdate(
             @Validated @RequestBody ClientsInfoDTO clientsInfoDTO,
             HttpServletRequest request) {
-
         ApiResponse apiResponse;
-        try {
-            clientsInfoService.UpdateClientsInfo(clientsInfoDTO);
-            apiResponse = ApiResponse.success("Clients updated successfully");
+        Long userId = (Long) request.getSession().getAttribute("staffId");
+        if (userId == null) {
+            logger.info("No staffId in session. Access denied");
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }else{
+            try {
+                clientsInfoService.UpdateClientsInfo(clientsInfoDTO);
+                apiResponse = ApiResponse.success("Clients updated successfully");
+                return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
-        } catch (Exception e) {
-            logger.error("Update error: {}", e.getMessage(), e);
+            } catch (Exception e) {
+                logger.error("Update error: {}", e.getMessage(), e);
 
-            // Return *exact* message in API response
-            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(),
-                    "Error: " + e.getMessage());
+                // Return *exact* message in API response
+                apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(),
+                        "Error: " + e.getMessage());
 
-            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+                return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+            }
         }
 
     }

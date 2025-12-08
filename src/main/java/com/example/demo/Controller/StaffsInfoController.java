@@ -25,17 +25,22 @@ public class StaffsInfoController {
 
     @GetMapping("/")
     public ResponseEntity<ApiResponse> getStaffsInfo(HttpServletRequest request) {
-        Long userId = (Long) request.getSession().getAttribute("staffId");
         ApiResponse apiResponse;
-
+        Long userId = (Long) request.getSession().getAttribute("staffId");
         if (userId == null) {
             logger.info("No staffId in session. Access denied");
             apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        }
+        }else{
+            try{
+                StaffsInfoVO staffsInfoVO = staffsInfoService.GetStaffsInfo(userId, request);
+                apiResponse = ApiResponse.success(staffsInfoVO);
 
-        StaffsInfoVO staffsInfoVO = staffsInfoService.GetStaffsInfo(userId, request);
-        apiResponse = ApiResponse.success(staffsInfoVO);
+            }catch (Exception e) {
+                logger.error("Failed to login", e.getMessage(), e);
+                apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+            }
+        }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 

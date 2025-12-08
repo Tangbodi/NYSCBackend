@@ -5,11 +5,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 
@@ -22,11 +24,15 @@ public class StaffsPayroll {
     @Column(name = "staff_id", nullable = false)
     private Long id;
 
-    @Size(max = 8)
+    @Digits(integer = 6, fraction = 2)
     @NotNull
-    @Column(name = "hourly_rate", nullable = false, length = 8)
-    private String hourlyRate;
+    @Column(name = "hourly_rate", nullable = false, precision = 8, scale = 2)
+    private BigDecimal hourlyRate;
 
+    @Size(max = 7)
+    @Column(name = "pay_code", length = 7)
+    @NotNull
+    private String payCode;
     @Size(max = 15)
     @Column(name = "effective_start_date", length = 15)
     private String effectiveStartDate;
@@ -36,7 +42,6 @@ public class StaffsPayroll {
     private String effectiveEndDate;
 
     @Size(max = 63)
-    @NotNull
     @Column(name = "notes", nullable = false, length = 63)
     private String notes;
     @NotNull

@@ -45,9 +45,9 @@ public class ClientsInfoService {
             clientsInfo.setModifiedAt(Instant.now());
 
             if (clientsInfoRepository.save(clientsInfo) == null) {
-                throw new StaffsLoginController.UserRegistrationException("Failed to register ClientsInfo");
+                throw new StaffsLoginController.UserRegistrationException("Failed to register ClientsInfo.");
             }
-            logger.info("ClientsInfo registered successfully");
+            logger.info("ClientsInfo registered successfully.");
 
         } catch (Exception e) {
             logger.error("Failed to register ClientsInfo: {}", e.getMessage(), e);

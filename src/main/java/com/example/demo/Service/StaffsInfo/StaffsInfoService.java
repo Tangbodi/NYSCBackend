@@ -34,7 +34,7 @@ public class StaffsInfoService {
                 logger.info("Username: {}" + staffsInfo.getUsername());
                 return staffsInfo;
             } else {
-                logger.info("Username does not exist: {}");
+                logger.info("Username does not exist.");
                 return null;
             }
         } catch (Exception e) {
@@ -51,7 +51,7 @@ public class StaffsInfoService {
                 logger.info("Email: {}" + staffsInfo.getEmail());
                 return staffsInfo;
             } else {
-                logger.info("Email does not exist: {}");
+                logger.info("Email does not exist.");
                 return null;
             }
         } catch (Exception e) {
@@ -82,9 +82,9 @@ public class StaffsInfoService {
 
             logger.info("Saving StaffsInfo:{}", staffsInfo.getUsername());
             if (staffsInfoRepository.save(staffsInfo) == null) {
-                throw new StaffsLoginController.UserRegistrationException("Failed to save StaffsLogin");
+                throw new StaffsLoginController.UserRegistrationException("Failed to save StaffsLogin.");
             }
-            logger.info("StaffsInfo saved successfully");
+            logger.info("StaffsInfo saved successfully.");
         } catch (Exception e) {
             logger.error("Failed to save StaffsInfo: {}", e.getMessage(), e);
             throw e;   // <--- rethrow EXACT exception
