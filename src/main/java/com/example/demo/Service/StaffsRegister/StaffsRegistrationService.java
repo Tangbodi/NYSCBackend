@@ -5,6 +5,7 @@ import com.example.demo.Model.DTO.StaffsRegisterDTO;
 import com.example.demo.Model.Entity.StaffsLogin;
 import com.example.demo.Repository.StaffsLoginRepository;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
+import com.example.demo.Service.StaffsPayroll.StaffsPayrollService;
 import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
@@ -21,6 +22,8 @@ public class StaffsRegistrationService {
     private StaffsInfoService staffsInfoService;
     @Autowired
     private StaffsLoginRepository staffsLoginRepository;
+    @Autowired
+    private StaffsPayrollService staffsPayrollService;
     @Transactional
     public void RegisterStaffsLogin(StaffsRegisterDTO staffsRegisterDTO) {
         logger.info("Registering StaffsLogin: {}", staffsRegisterDTO.getUsername());
@@ -42,11 +45,15 @@ public class StaffsRegistrationService {
             staffsLogin.setModifiedAt(Instant.now());
 
             logger.info("Saving StaffsLogin:{}", staffsRegisterDTO.getUsername());
+
             if (staffsLoginRepository.save(staffsLogin) == null) {
                 throw new StaffsLoginController.UserRegistrationException("Failed to register StaffsLogin.");
+            }else{
+                logger.info("StaffsLogin registered successfully.");
             }
-            logger.info("StaffsLogin registered successfully.");
-            staffsInfoService.SaveStaffsInfo(staffsRegisterDTO);  // <-- may also throw
+
+            staffsInfoService.CreateStaffsInfo(staffsRegisterDTO);
+            staffsPayrollService.CreateStaffsPayroll(snowflakeId);
 
         }catch (Exception e) {
             logger.error("Failed to register StaffsLogin: {}", e.getMessage(), e);

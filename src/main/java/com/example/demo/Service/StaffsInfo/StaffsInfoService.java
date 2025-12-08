@@ -62,7 +62,7 @@ public class StaffsInfoService {
 
 
     @Transactional
-    public void SaveStaffsInfo(StaffsRegisterDTO staffsRegisterDTO) {
+    public void CreateStaffsInfo(StaffsRegisterDTO staffsRegisterDTO) {
         logger.info("Creating StaffInfo: {}" + staffsRegisterDTO.getStaffId());
         try {
             StaffsInfo staffsInfo = new StaffsInfo();
@@ -79,12 +79,12 @@ public class StaffsInfoService {
             staffsInfo.setTitle(staffsRegisterDTO.getTitle());
             staffsInfo.setCreatedAt(Instant.now());
             staffsInfo.setModifiedAt(Instant.now());
-
             logger.info("Saving StaffsInfo:{}", staffsInfo.getUsername());
             if (staffsInfoRepository.save(staffsInfo) == null) {
                 throw new StaffsLoginController.UserRegistrationException("Failed to save StaffsLogin.");
+            }else{
+                logger.info("StaffsInfo saved successfully.");
             }
-            logger.info("StaffsInfo saved successfully.");
         } catch (Exception e) {
             logger.error("Failed to save StaffsInfo: {}", e.getMessage(), e);
             throw e;   // <--- rethrow EXACT exception
@@ -97,48 +97,9 @@ public class StaffsInfoService {
             StaffsInfo staffsInfo = staffsInfoRepository.findById(userId).orElse(null);
             if (staffsInfo != null) {
                 logger.info("Found StaffsInfo: {}" + staffsInfo.getUsername());
-                StaffsInfoVO staffsInfoVO = new StaffsInfoVO();
-                staffsInfoVO.setLongUid(staffsInfo.getId());
-                staffsInfoVO.setStaffId(staffsInfo.getId().toString());
-                staffsInfoVO.setJSESSIONID(request.getSession().getId());
-//                logger.info("Session userId: {}", request.getSession().getAttribute("userId"));
-//                logger.info("Session userName: {}", request.getSession().getAttribute("userName"));
-//                logger.info("JSESSIONID: {}", request.getSession().getId());
-
-                staffsInfoVO.setUsername(staffsInfo.getUsername());
-                staffsInfoVO.setFirstName(staffsInfo.getFirstName());
-                staffsInfoVO.setMiddleName(staffsInfo.getMiddleName());
-                staffsInfoVO.setLastName(staffsInfo.getLastName());
-                staffsInfoVO.setPhone(staffsInfo.getPhone());
-                staffsInfoVO.setTitle(staffsInfo.getTitle());
-                staffsInfoVO.setEmail(staffsInfo.getEmail());
-                staffsInfoVO.setEmployeeType(staffsInfo.getEmployeeType());
-                staffsInfoVO.setSupervisor(staffsInfo.getSupervisor());
-                staffsInfoVO.setStatus(staffsInfo.getStatus());
-                String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getCreatedAt());
-                String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getModifiedAt());
-                staffsInfoVO.setCreatedAt(formattedCreatedDateTime);
-                staffsInfoVO.setModifiedAt(formattedModifiedDateTime);
-                return staffsInfoVO;
+                return ConvertToStaffsInfoVO(staffsInfo, request);
             } else {
-                logger.info("StaffsInfo does not exist: {}");
-                return null;
-            }
-
-        } catch (Exception e) {
-            logger.error("Failed to get StaffsInfo: {}", e.getMessage(), e);
-        }
-        return null;
-    }
-    public StaffsInfoVO UpdateStaffsInfo(StaffsInfoDTO staffsInfoDTO, HttpServletRequest request){
-        logger.info("Updating StaffsInfo: {}" + staffsInfoDTO.getStaffId());
-        try {
-            StaffsInfo staffsInfo = staffsInfoRepository.findById(staffsInfoDTO.getStaffId()).orElse(null);
-            if (staffsInfo != null) {
-                logger.info("Found StaffsInfo: {}" + staffsInfo.getUsername());
-                return SaveStaffsInfo(staffsInfo, staffsInfoDTO, request);
-            } else {
-                logger.info("StaffsInfo does not exist: {}");
+                logger.info("StaffsInfo does not exist.");
                 return null;
             }
 
@@ -148,29 +109,62 @@ public class StaffsInfoService {
         return null;
     }
     @Transactional
-    public StaffsInfoVO SaveStaffsInfo(StaffsInfo staffsInfo, StaffsInfoDTO staffsInfoDTO, HttpServletRequest request) {
-        logger.info("Saving StaffsInfo: {}" + staffsInfoDTO.getStaffId());
+    public StaffsInfoVO UpdateStaffsInfo(StaffsInfoDTO staffsInfoDTO, HttpServletRequest request){
+        logger.info("Updating StaffsInfo: {}" + staffsInfoDTO.getStaffId());
         try {
-//            usersInfo.setId(userInfoDTO.getUserId());
-            staffsInfo.setUsername(staffsInfoDTO.getUsername());
-            staffsInfo.setEmail(staffsInfoDTO.getEmail());
-            staffsInfo.setEmployeeType(staffsInfoDTO.getEmployeeType());
-            staffsInfo.setFirstName(staffsInfoDTO.getFirstName());
-            staffsInfo.setLastName(staffsInfoDTO.getLastName());
-            staffsInfo.setMiddleName(staffsInfoDTO.getMiddleName());
-            staffsInfo.setStatus(staffsInfoDTO.getStatus());
-            staffsInfo.setPhone(staffsInfoDTO.getPhone());
-            staffsInfo.setSupervisor(staffsInfoDTO.getSupervisor());
-            staffsInfo.setTitle(staffsInfoDTO.getTitle());
-            staffsInfo.setStatus(staffsInfoDTO.getStatus());
-            staffsInfo.setModifiedAt(Instant.now());
-            staffsInfoRepository.save(staffsInfo);
-            logger.info("StaffsInfo updated successfully");
+            StaffsInfo staffsInfo = staffsInfoRepository.findById(staffsInfoDTO.getStaffId()).orElse(null);
+            if (staffsInfo != null) {
+                logger.info("Found StaffsInfo: {}" + staffsInfo.getUsername());
+                staffsInfo.setUsername(staffsInfoDTO.getUsername());
+                staffsInfo.setEmail(staffsInfoDTO.getEmail());
+                staffsInfo.setEmployeeType(staffsInfoDTO.getEmployeeType());
+                staffsInfo.setFirstName(staffsInfoDTO.getFirstName());
+                staffsInfo.setLastName(staffsInfoDTO.getLastName());
+                staffsInfo.setMiddleName(staffsInfoDTO.getMiddleName());
+                staffsInfo.setStatus(staffsInfoDTO.getStatus());
+                staffsInfo.setPhone(staffsInfoDTO.getPhone());
+                staffsInfo.setSupervisor(staffsInfoDTO.getSupervisor());
+                staffsInfo.setTitle(staffsInfoDTO.getTitle());
+                staffsInfo.setStatus(staffsInfoDTO.getStatus());
+                staffsInfo.setModifiedAt(Instant.now());
+                staffsInfoRepository.save(staffsInfo);
+                logger.info("StaffsInfo updated successfully.");
+                return GetStaffsInfo(staffsInfo.getId(), request);
+            } else {
+                logger.info("StaffsInfo does not exist.");
+                return null;
+            }
 
         } catch (Exception e) {
-            logger.error("Failed to save StaffsInfo: {}", e.getMessage(), e);
-            throw e;   // <--- rethrow EXACT exception
+            logger.error("Failed to get StaffsInfo: {}", e.getMessage(), e);
         }
-       return GetStaffsInfo(staffsInfoDTO.getStaffId(), request);
+        return null;
+    }
+    public StaffsInfoVO ConvertToStaffsInfoVO( StaffsInfo staffsInfo, HttpServletRequest request){
+        logger.info("Converting to StaffsInfoVO: {}", staffsInfo.getId());
+        StaffsInfoVO staffsInfoVO = new StaffsInfoVO();
+        staffsInfoVO.setLongUid(staffsInfo.getId());
+        staffsInfoVO.setStaffId(staffsInfo.getId().toString());
+        staffsInfoVO.setJSESSIONID(request.getSession().getId());
+//                logger.info("Session userId: {}", request.getSession().getAttribute("userId"));
+//                logger.info("Session userName: {}", request.getSession().getAttribute("userName"));
+//                logger.info("JSESSIONID: {}", request.getSession().getId());
+
+        staffsInfoVO.setUsername(staffsInfo.getUsername());
+        staffsInfoVO.setFirstName(staffsInfo.getFirstName());
+        staffsInfoVO.setMiddleName(staffsInfo.getMiddleName());
+        staffsInfoVO.setLastName(staffsInfo.getLastName());
+        staffsInfoVO.setPhone(staffsInfo.getPhone());
+        staffsInfoVO.setTitle(staffsInfo.getTitle());
+        staffsInfoVO.setEmail(staffsInfo.getEmail());
+        staffsInfoVO.setEmployeeType(staffsInfo.getEmployeeType());
+        staffsInfoVO.setSupervisor(staffsInfo.getSupervisor());
+        staffsInfoVO.setStatus(staffsInfo.getStatus());
+        String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getCreatedAt());
+        String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getModifiedAt());
+        staffsInfoVO.setCreatedAt(formattedCreatedDateTime);
+        staffsInfoVO.setModifiedAt(formattedModifiedDateTime);
+        logger.info("StaffsInfoVO converted successfully.");
+        return staffsInfoVO;
     }
 }

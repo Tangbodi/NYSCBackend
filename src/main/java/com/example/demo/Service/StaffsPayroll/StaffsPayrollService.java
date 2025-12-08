@@ -22,6 +22,24 @@ public class StaffsPayrollService {
     private StaffsPayrollRepository staffsPayrollRepository;
 
     @Transactional
+    public void CreateStaffsPayroll(Long staffId){
+        logger.info("Creating StaffsPayroll: {}", staffId);
+        try{
+            StaffsPayroll staffsPayroll = new StaffsPayroll();
+            staffsPayroll.setId(staffId);
+            staffsPayroll.setHourlyRate(new BigDecimal("0.00"));
+            staffsPayroll.setPayCode("");
+            staffsPayroll.setCreatedAt(Instant.now());
+            staffsPayroll.setModifiedAt(Instant.now());
+            staffsPayrollRepository.save(staffsPayroll);
+            logger.info("Created StaffsPayroll successfully.");
+        }catch (Exception e) {
+            logger.error("Failed to create StaffsPayroll: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Transactional
     public StaffsPayrollVO GetStaffsPayroll(Long staffId){
         logger.info("Getting StaffsPayroll:{} ", staffId);
         try{
