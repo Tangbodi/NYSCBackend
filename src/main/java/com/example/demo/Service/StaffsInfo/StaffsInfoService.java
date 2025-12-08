@@ -26,6 +26,35 @@ public class StaffsInfoService {
     @Autowired
     private StaffsLoginRepository staffsLoginRepository;
 
+    @Transactional
+    public void CreateStaffsInfo(StaffsRegisterDTO staffsRegisterDTO) {
+        logger.info("Creating StaffInfo: {}" + staffsRegisterDTO.getStaffId());
+        try {
+            StaffsInfo staffsInfo = new StaffsInfo();
+            staffsInfo.setId(staffsRegisterDTO.getStaffId());
+            staffsInfo.setUsername(staffsRegisterDTO.getUsername());
+            staffsInfo.setEmail(staffsRegisterDTO.getEmail());
+            staffsInfo.setEmployeeType(staffsRegisterDTO.getEmployeeType());
+            staffsInfo.setFirstName(staffsRegisterDTO.getFirstName());
+            staffsInfo.setLastName(staffsRegisterDTO.getLastName());
+            staffsInfo.setMiddleName(staffsRegisterDTO.getMiddleName());
+            staffsInfo.setStatus(staffsRegisterDTO.getStatus());
+            staffsInfo.setPhone(staffsRegisterDTO.getPhone());
+            staffsInfo.setSupervisor(staffsRegisterDTO.getSupervisor());
+            staffsInfo.setTitle(staffsRegisterDTO.getTitle());
+            staffsInfo.setCreatedAt(Instant.now());
+            staffsInfo.setModifiedAt(Instant.now());
+            logger.info("Saving StaffsInfo:{}", staffsInfo.getUsername());
+            if (staffsInfoRepository.save(staffsInfo) == null) {
+                throw new StaffsLoginController.UserRegistrationException("Failed to save StaffsLogin.");
+            }else{
+                logger.info("StaffsInfo saved successfully.");
+            }
+        } catch (Exception e) {
+            logger.error("Failed to save StaffsInfo: {}", e.getMessage(), e);
+            throw e;   // <--- rethrow EXACT exception
+        }
+    }
     public StaffsInfo CheckUsernameExists(String username) {
         logger.info("Checking if username exists: {}", username);
         try {
@@ -58,37 +87,6 @@ public class StaffsInfoService {
             logger.error("Failed to check email: {}", e.getMessage(), e);
         }
         return null;
-    }
-
-
-    @Transactional
-    public void CreateStaffsInfo(StaffsRegisterDTO staffsRegisterDTO) {
-        logger.info("Creating StaffInfo: {}" + staffsRegisterDTO.getStaffId());
-        try {
-            StaffsInfo staffsInfo = new StaffsInfo();
-            staffsInfo.setId(staffsRegisterDTO.getStaffId());
-            staffsInfo.setUsername(staffsRegisterDTO.getUsername());
-            staffsInfo.setEmail(staffsRegisterDTO.getEmail());
-            staffsInfo.setEmployeeType(staffsRegisterDTO.getEmployeeType());
-            staffsInfo.setFirstName(staffsRegisterDTO.getFirstName());
-            staffsInfo.setLastName(staffsRegisterDTO.getLastName());
-            staffsInfo.setMiddleName(staffsRegisterDTO.getMiddleName());
-            staffsInfo.setStatus(staffsRegisterDTO.getStatus());
-            staffsInfo.setPhone(staffsRegisterDTO.getPhone());
-            staffsInfo.setSupervisor(staffsRegisterDTO.getSupervisor());
-            staffsInfo.setTitle(staffsRegisterDTO.getTitle());
-            staffsInfo.setCreatedAt(Instant.now());
-            staffsInfo.setModifiedAt(Instant.now());
-            logger.info("Saving StaffsInfo:{}", staffsInfo.getUsername());
-            if (staffsInfoRepository.save(staffsInfo) == null) {
-                throw new StaffsLoginController.UserRegistrationException("Failed to save StaffsLogin.");
-            }else{
-                logger.info("StaffsInfo saved successfully.");
-            }
-        } catch (Exception e) {
-            logger.error("Failed to save StaffsInfo: {}", e.getMessage(), e);
-            throw e;   // <--- rethrow EXACT exception
-        }
     }
 
     public StaffsInfoVO GetStaffsInfo(Long userId, HttpServletRequest request) {

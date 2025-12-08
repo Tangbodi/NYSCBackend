@@ -47,5 +47,19 @@ public class StaffsLoginService {
 
         return true;
     }
-
+    public Boolean CheckIsAdmin(Long staffId){
+        logger.info("Checking admin status: {}", staffId);
+        StaffsLogin staffsLogin = staffsLoginRepository.findById(staffId).orElse(null);
+        if(staffsLogin != null){
+            logger.info("Found staff: {}", staffId);
+            if(staffsLogin.getIsAdmin()=="1"){
+                logger.info("You are admin.");
+                return true;
+            }
+        }else{
+            logger.info("The staff doesn't exist.");
+            return false;
+        }
+        return false;
+    }
 }

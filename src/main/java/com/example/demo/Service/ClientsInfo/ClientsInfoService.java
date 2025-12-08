@@ -3,6 +3,7 @@ package com.example.demo.Service.ClientsInfo;
 import com.example.demo.Controller.StaffsLoginController;
 import com.example.demo.Model.DTO.ClientsInfoDTO;
 import com.example.demo.Model.Entity.ClientsInfo;
+import com.example.demo.Model.VO.ClientsInfoVO;
 import com.example.demo.Repository.ClientsInfoRepository;
 import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+
+import static java.lang.Long.valueOf;
 
 @Service
 public class ClientsInfoService {
@@ -36,11 +39,11 @@ public class ClientsInfoService {
             clientsInfo.setDateOfBirth(clientsInfoDTO.getDateOfBirth());
             clientsInfo.setGender(clientsInfoDTO.getGender());
             clientsInfo.setStatus(clientsInfoDTO.getStatus());
-            clientsInfo.setAddress(clientsInfoDTO.getAddress());
-            clientsInfo.setCity(clientsInfoDTO.getCity());
-            clientsInfo.setState(clientsInfoDTO.getState());
-            clientsInfo.setZipCode(clientsInfoDTO.getZipCode());
-            clientsInfo.setNotes(clientsInfoDTO.getNotes());
+            clientsInfo.setAddress(emptyIfNull(clientsInfoDTO.getAddress()));
+            clientsInfo.setCity(emptyIfNull(clientsInfoDTO.getCity()));
+            clientsInfo.setState(emptyIfNull(clientsInfoDTO.getState()));
+            clientsInfo.setZipCode(emptyIfNull(clientsInfoDTO.getZipCode()));
+            clientsInfo.setNotes(emptyIfNull(clientsInfoDTO.getNotes()));
             clientsInfo.setCreatedAt(Instant.now());
             clientsInfo.setModifiedAt(Instant.now());
 
@@ -53,6 +56,23 @@ public class ClientsInfoService {
             logger.error("Failed to register ClientsInfo: {}", e.getMessage(), e);
             throw e;  // <--- DO NOT wrap, return exact error
         }
+    }
+    @Transactional
+    public ClientsInfoVO GetClientsInfo(String clientId){
+        logger.info("Getting ClientsInfo: {}", clientId);
+        try{
+            ClientsInfo clientsInfo = clientsInfoRepository.findById(valueOf(clientId)).orElse(null);
+            if (clientsInfo != null) {
+                logger.info("Found ClientsInfo: {}" + clientsInfo.getClientFirstName() +"."+clientsInfo.getClientLastName());
+                return ConvertToClientsInfoVO(clientsInfo);
+            } else {
+                logger.info("StaffsInfo does not exist.");
+                return null;
+            }
+        }catch (Exception e) {
+            logger.error("Failed to get StaffsInfo: {}", e.getMessage(), e);
+        }
+        return null;
     }
     @Transactional
     public void UpdateClientsInfo(ClientsInfoDTO clientsInfoDTO) {
@@ -72,5 +92,28 @@ public class ClientsInfoService {
                 clientsInfoDTO.getZipCode(),
                 clientsInfoDTO.getNotes()
         );
+    }
+    public ClientsInfoVO ConvertToClientsInfoVO(ClientsInfo clientsInfo) {
+        logger.info("Converting to ClientsInfoVO: {}", clientsInfo.getId());
+
+        ClientsInfoVO clientsInfoVO = new ClientsInfoVO();
+
+        clientsInfoVO.setClientId(clientsInfo.getId());
+        clientsInfoVO.setClientFirstName(clientsInfo.getClientFirstName());
+        clientsInfoVO.setClientLastName(clientsInfo.getClientLastName());
+        clientsInfoVO.setClientMiddleName(clientsInfo.getClientMiddleName());
+        clientsInfoVO.setDateOfBirth(clientsInfo.getDateOfBirth());
+        clientsInfoVO.setGender(clientsInfo.getGender());
+        clientsInfoVO.setStatus(clientsInfo.getStatus());
+        clientsInfoVO.setAddress(clientsInfo.getAddress());
+        clientsInfoVO.setCity(clientsInfo.getCity());
+        clientsInfoVO.setState(clientsInfo.getState());
+        clientsInfoVO.setZipCode(clientsInfo.getZipCode());
+        clientsInfoVO.setNotes(clientsInfo.getNotes());
+
+        return clientsInfoVO;
+    }
+    private String emptyIfNull(String s) {
+        return s == null ? "" : s;
     }
 }
