@@ -1,7 +1,6 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Constant.Enum.ReturnCode;
-import com.example.demo.Model.DTO.StaffsLoginDTO;
 import com.example.demo.Model.DTO.StaffsPayrollDTO;
 import com.example.demo.Model.VO.StaffsPayrollVO;
 import com.example.demo.Service.StaffsPayroll.StaffsPayrollService;
@@ -17,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Validated
 @RequestMapping("/staffs")
-public class StaffsPayrollController {
-    private static final Logger logger = LoggerFactory.getLogger(StaffsPayrollController.class);
+public class StaffsPayroll {
+    private static final Logger logger = LoggerFactory.getLogger(StaffsPayroll.class);
     @Autowired
     private StaffsPayrollService staffsPayrollService;
 

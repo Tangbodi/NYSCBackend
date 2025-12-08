@@ -1,8 +1,7 @@
 package com.example.demo.Service.StaffsRegister;
 
-import com.example.demo.Controller.StaffsLoginController;
+import com.example.demo.Controller.StaffsLogin;
 import com.example.demo.Model.DTO.StaffsRegisterDTO;
-import com.example.demo.Model.Entity.StaffsLogin;
 import com.example.demo.Repository.StaffsLoginRepository;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
 import com.example.demo.Service.StaffsPayroll.StaffsPayrollService;
@@ -34,7 +33,7 @@ public class StaffsRegistrationService {
             staffsRegisterDTO.setStaffId(snowflakeId);
 
             logger.info("Creating StaffsLogin:{}", staffsRegisterDTO.getUsername());
-            StaffsLogin staffsLogin = new StaffsLogin();
+            com.example.demo.Model.Entity.StaffsLogin staffsLogin = new com.example.demo.Model.Entity.StaffsLogin();
             staffsLogin.setId(snowflakeId);
             staffsLogin.setUsername(staffsRegisterDTO.getUsername());
 
@@ -47,7 +46,7 @@ public class StaffsRegistrationService {
             logger.info("Saving StaffsLogin:{}", staffsRegisterDTO.getUsername());
 
             if (staffsLoginRepository.save(staffsLogin) == null) {
-                throw new StaffsLoginController.UserRegistrationException("Failed to register StaffsLogin.");
+                throw new StaffsLogin.UserRegistrationException("Failed to register StaffsLogin.");
             }else{
                 logger.info("StaffsLogin registered successfully.");
             }

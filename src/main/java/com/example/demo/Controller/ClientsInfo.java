@@ -2,9 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.ClientsInfoDTO;
-import com.example.demo.Model.Entity.StaffsLogin;
 import com.example.demo.Model.VO.ClientsInfoVO;
-import com.example.demo.Model.VO.StaffsInfoVO;
 import com.example.demo.Service.ClientsInfo.ClientsInfoService;
 import com.example.demo.Service.StaffsLogin.StaffsLoginService;
 import com.example.demo.Util.ApiResponse;
@@ -19,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Validated
 @RequestMapping("/clients")
-public class ClientsInfoController {
-    private static final Logger logger = LoggerFactory.getLogger(ClientsInfoController.class);
+public class ClientsInfo {
+    private static final Logger logger = LoggerFactory.getLogger(ClientsInfo.class);
     @Autowired
     private ClientsInfoService clientsInfoService;
     @Autowired

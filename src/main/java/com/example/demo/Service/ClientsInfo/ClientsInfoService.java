@@ -1,6 +1,6 @@
 package com.example.demo.Service.ClientsInfo;
 
-import com.example.demo.Controller.StaffsLoginController;
+import com.example.demo.Controller.StaffsLogin;
 import com.example.demo.Model.DTO.ClientsInfoDTO;
 import com.example.demo.Model.Entity.ClientsInfo;
 import com.example.demo.Model.VO.ClientsInfoVO;
@@ -48,7 +48,7 @@ public class ClientsInfoService {
             clientsInfo.setModifiedAt(Instant.now());
 
             if (clientsInfoRepository.save(clientsInfo) == null) {
-                throw new StaffsLoginController.UserRegistrationException("Failed to register ClientsInfo.");
+                throw new StaffsLogin.UserRegistrationException("Failed to register ClientsInfo.");
             }
             logger.info("ClientsInfo registered successfully.");
 
