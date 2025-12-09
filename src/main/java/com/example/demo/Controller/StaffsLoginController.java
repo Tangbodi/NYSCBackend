@@ -24,8 +24,8 @@ import java.io.IOException;
 @RestController
 @Validated
 @RequestMapping("/staffs")
-public class StaffsLogin {
-    private static final Logger logger = LoggerFactory.getLogger(StaffsLogin.class);
+public class StaffsLoginController {
+    private static final Logger logger = LoggerFactory.getLogger(StaffsLoginController.class);
     @Autowired
     private StaffsRegistrationService staffsRegistrationService;
     @Autowired
@@ -48,22 +48,22 @@ public class StaffsLogin {
         // 1) Basic validations
         if (!staffsRegisterDTO.getPassword().equals(staffsRegisterDTO.getConfirmPassword())) {
             apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(),
-                    "Password and confirm password must be the same");
+                    "Password and confirm password must be the same.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         } else if (staffsInfoService.CheckUsernameExists(staffsRegisterDTO.getUsername()) != null) {
             apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(),
-                    "Username already exists");
+                    "Username already exists.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         } else if (staffsInfoService.CheckEmailExists(staffsRegisterDTO.getEmail()) != null) {
             apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(),
-                    "Email already exists");
+                    "Email already exists.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
 
         // 2) Call service – let it throw if anything goes wrong
         try {
             staffsRegistrationService.RegisterStaffsLogin(staffsRegisterDTO);
-            apiResponse = ApiResponse.success("Staff registered successfully");
+            apiResponse = ApiResponse.success("Staff registered successfully.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
         } catch (Exception e) {
@@ -81,16 +81,16 @@ public class StaffsLogin {
     public ResponseEntity StaffsLogin(@Validated @RequestBody StaffsLoginDTO staffsLoginDTO, HttpServletRequest request) {
         ApiResponse apiResponse;
         if(staffsLoginService.CheckCredentials(staffsLoginDTO,request)){
-            apiResponse = ApiResponse.success("Login Successfully");
+            apiResponse = ApiResponse.success("Login Successfully.");
         }else{
-            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(),"Username or Password is wrong");
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(),"Username or Password is wrong.");
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
     @PostMapping("/logout")
     public ResponseEntity StaffsLogout(HttpServletRequest request) throws IOException {
-        logger.info("Logging out");
-        ApiResponse apiResponse = ApiResponse.success("Logged out");
+        logger.info("Logging out.");
+        ApiResponse apiResponse = ApiResponse.success("Logged out.");
         request.getSession().invalidate();
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }

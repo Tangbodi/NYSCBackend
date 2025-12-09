@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Validated
 @RequestMapping("/staffs")
-public class StaffsPayroll {
-    private static final Logger logger = LoggerFactory.getLogger(StaffsPayroll.class);
+public class StaffsPayrollController {
+    private static final Logger logger = LoggerFactory.getLogger(StaffsPayrollController.class);
     @Autowired
     private StaffsPayrollService staffsPayrollService;
 
@@ -27,8 +27,8 @@ public class StaffsPayroll {
 
         Long staffId = (Long) request.getSession().getAttribute("staffId");
         if (staffId == null) {
-            logger.info("No staffId in session. Access denied");
-            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page");
+            logger.info("No staffId in session. Access denied.");
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
 
@@ -37,14 +37,14 @@ public class StaffsPayroll {
 
             if (staffsPayrollVO == null) {
                 logger.info("No existing payroll found for staffId: {}", staffId);
-                apiResponse = ApiResponse.error(ReturnCode.RC404.getCode(), "No payroll record found");
+                apiResponse = ApiResponse.error(ReturnCode.RC404.getCode(), "No payroll record found.");
             } else {
                 apiResponse = ApiResponse.success(staffsPayrollVO);
             }
 
         } catch (Exception e) {
             logger.error("Failed to get StaffsPayroll: {}", e.getMessage(), e);
-            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Failed to get payroll information");
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Failed to get payroll information.");
         }
 
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
@@ -54,14 +54,14 @@ public class StaffsPayroll {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
         if (staffId == null) {
-            logger.info("No staffId in session. Access denied");
-            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page");
+            logger.info("No staffId in session. Access denied.");
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }else{
             try{
                 staffsPayrollDTO.setStaffId(staffId);
                 staffsPayrollService.UpdateStaffsPayroll(staffsPayrollDTO);
-                apiResponse = ApiResponse.success("Staffs Payroll updated successfully");
+                apiResponse = ApiResponse.success("Staffs Payroll updated successfully.");
             }catch (Exception e) {
                 logger.error("Failed to update StaffsPayroll", e.getMessage(), e);
                 apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());

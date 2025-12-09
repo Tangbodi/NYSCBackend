@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Validated
 @RequestMapping("/clients")
-public class ClientsInfo {
-    private static final Logger logger = LoggerFactory.getLogger(ClientsInfo.class);
+public class ClientsInfoController {
+    private static final Logger logger = LoggerFactory.getLogger(ClientsInfoController.class);
     @Autowired
     private ClientsInfoService clientsInfoService;
     @Autowired
@@ -51,8 +51,8 @@ public class ClientsInfo {
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
         if (userId == null) {
-            logger.info("No staffId in session. Access denied");
-            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page");
+            logger.info("No staffId in session. Access denied.");
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }else{
             try{
@@ -74,8 +74,8 @@ public class ClientsInfo {
 
         Long staffId = (Long) request.getSession().getAttribute("staffId");
         if (staffId == null) {
-            logger.info("No staffId in session. Access denied");
-            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page");
+            logger.info("No staffId in session. Access denied.");
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
 
@@ -86,7 +86,7 @@ public class ClientsInfo {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
                 clientsInfoService.UpdateClientsInfo(clientsInfoDTO);
-                apiResponse = ApiResponse.success("Clients updated successfully");
+                apiResponse = ApiResponse.success("Clients updated successfully.");
             }
         } catch (Exception e) {
             logger.error("Update error: {}", e.getMessage(), e);

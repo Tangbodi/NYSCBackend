@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Validated
 @RequestMapping("/staffs-info")
-public class StaffsInfo {
-    private static final Logger logger = LoggerFactory.getLogger(com.example.demo.Model.Entity.StaffsInfo.class);
+public class StaffsInfoController {
+    private static final Logger logger = LoggerFactory.getLogger(StaffsInfoController.class);
 
     @Autowired
     private StaffsInfoService staffsInfoService;
@@ -27,8 +27,8 @@ public class StaffsInfo {
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
         if (userId == null) {
-            logger.info("No staffId in session. Access denied");
-            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page");
+            logger.info("No staffId in session. Access denied.");
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }else{
             try{
@@ -49,14 +49,14 @@ public class StaffsInfo {
         Long userId = (Long) request.getSession().getAttribute("staffId");
         ApiResponse apiResponse;
         if (userId == null) {
-            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page");
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
         } else {
             try {
                 staffsInfoDTO.setStaffId(userId);
                 if (staffsInfoService.UpdateStaffsInfo(staffsInfoDTO, request) != null) {
-                    apiResponse = ApiResponse.success("User info has been updated");
+                    apiResponse = ApiResponse.success("User info has been updated.");
                 } else {
-                    apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "User info hasn't been updated");
+                    apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "User info hasn't been updated.");
                 }
             } catch (Exception e) {
                 logger.error("Failed to update user info", e.getMessage(), e);

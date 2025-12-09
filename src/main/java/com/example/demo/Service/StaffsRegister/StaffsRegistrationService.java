@@ -1,6 +1,6 @@
 package com.example.demo.Service.StaffsRegister;
 
-import com.example.demo.Controller.StaffsLogin;
+import com.example.demo.Controller.StaffsLoginController;
 import com.example.demo.Model.DTO.StaffsRegisterDTO;
 import com.example.demo.Repository.StaffsLoginRepository;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
@@ -46,7 +46,7 @@ public class StaffsRegistrationService {
             logger.info("Saving StaffsLogin:{}", staffsRegisterDTO.getUsername());
 
             if (staffsLoginRepository.save(staffsLogin) == null) {
-                throw new StaffsLogin.UserRegistrationException("Failed to register StaffsLogin.");
+                throw new StaffsLoginController.UserRegistrationException("Failed to register StaffsLogin.");
             }else{
                 logger.info("StaffsLogin registered successfully.");
             }
