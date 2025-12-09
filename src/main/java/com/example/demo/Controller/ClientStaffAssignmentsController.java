@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequestMapping("/clients-assignment")
+@RequestMapping("/client-assignments")
 public class ClientStaffAssignmentsController {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientStaffAssignmentsController.class);
 
     @Autowired
     private ClientStaffAssignmentsService clientStaffAssignmentsService;
-    @PostMapping("/create")
+    @PostMapping("/assign")
     public ResponseEntity<ApiResponse> CreateClientStaffAssignments(@RequestBody ClientStaffAssignmentsDTO clientStaffAssignmentsDTO, HttpServletRequest request){
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
