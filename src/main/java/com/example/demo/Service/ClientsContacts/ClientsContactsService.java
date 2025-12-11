@@ -21,23 +21,23 @@ public class ClientsContactsService {
     private ClientsContactsRepository clientsContactsRepository;
 
     @Transactional
-    public void CreateClientsContacts(ClientsInfoDTO clientsInfoDTO) {
-        logger.info("Creating ClientsContacts: {}", clientsInfoDTO.getClientId());
+    public void CreateClientsContacts() {
+        logger.info("Creating ClientsContacts: {}");
         try{
             ClientsContacts clientsContacts = new ClientsContacts();
-            clientsContacts.setId(clientsInfoDTO.getClientId());
-            clientsContacts.setFirstName(clientsInfoDTO.getFirstName());
-            clientsContacts.setLastName(clientsInfoDTO.getLastName());
-            clientsContacts.setMiddleName(clientsInfoDTO.getMiddleName());
-            clientsContacts.setRelationshipType(clientsInfoDTO.getRelationshipType());
-            clientsContacts.setIsPrimary(clientsInfoDTO.getIsPrimary());
-            clientsContacts.setPhone(clientsInfoDTO.getPhone());
-            clientsContacts.setEmail(clientsInfoDTO.getEmail());
-            clientsContacts.setAddress(clientsInfoDTO.getAddress());
-            clientsContacts.setCity(clientsInfoDTO.getCity());
-            clientsContacts.setState(clientsInfoDTO.getState());
-            clientsContacts.setZipCode(clientsInfoDTO.getZipCode());
-            clientsContacts.setNotes(clientsInfoDTO.getNotes());
+            clientsContacts.setId();
+            clientsContacts.setFirstName();
+            clientsContacts.setLastName();
+            clientsContacts.setMiddleName();
+            clientsContacts.setRelationshipType();
+            clientsContacts.setIsPrimary();
+            clientsContacts.setPhone();
+            clientsContacts.setEmail();
+            clientsContacts.setAddress();
+            clientsContacts.setCity();
+            clientsContacts.setState();
+            clientsContacts.setZipCode();
+            clientsContacts.setNotes();
             clientsContacts.setCreatedAt(Instant.now());
             clientsContacts.setModifiedAt(Instant.now());
             clientsContactsRepository.save(clientsContacts);
