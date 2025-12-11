@@ -12,30 +12,31 @@ import java.io.Serializable;
 @Data
 public class StaffsInfoDTO implements Serializable {
     private Long staffId;
-    @NotBlank(message = "Username is required")
-    @Length(min = 1, max = 31, message = "Username length not eligible")
+    @NotBlank(message = "Username is required.")
+    @Length(min = 1, max = 31, message = "Username length not eligible.")
     @ValidUsername
     private String username;
-    @NotBlank(message = "Email is required")
-    @Length(max = 63, message = "Email address length not eligible")
-    @Email(message = "Invalid email address")
+    @NotBlank(message = "Email is required.")
+    @Length(max = 63, message = "Email address length not eligible.")
+    @Email(message = "Invalid email address.")
     private String email;
-    @NotBlank(message = "Staff first name is required")
-    @Length(min = 1, max = 31, message = "Staff first name length not eligible")
+    @NotBlank(message = "Staff first name is required.")
+    @Length(min = 1, max = 31, message = "Staff first name length not eligible.")
     @ValidUsername
     private String firstName;
-    @NotBlank(message = "Staff last name is required")
-    @Length(min = 1, max = 31, message = "Staff last name length not eligible")
+    @NotBlank(message = "Staff last name is required.")
+    @Length(min = 1, max = 31, message = "Staff last name length not eligible.")
     @ValidUsername
     private String lastName;
     @ValidUsername
-    @Length(min = 1, max = 31, message = "Staff middle name length not eligible")
+    @Length(min = 1, max = 31, message = "Staff middle name length not eligible.")
     private String middleName;
     private String employeeType;
     private String supervisor;
     @ValidPhone
     private String phone;
     private String title;
+    @NotBlank
     private String status;
 
 }

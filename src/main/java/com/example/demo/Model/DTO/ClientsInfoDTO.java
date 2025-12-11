@@ -11,39 +11,44 @@ import java.time.Instant;
 @Data
 public class ClientsInfoDTO implements Serializable {
     private Long clientId;
-    @NotBlank(message = "First name is required")
-    @Length(min = 1, max = 31, message = "First name length not eligible")
+    @NotBlank(message = "First name is required.")
+    @Length(min = 1, max = 31, message = "First name length not eligible.")
     @ValidUsername
     private String firstName;
-    @NotBlank(message = "Last name is required")
-    @Length(min = 1, max = 31, message = "Last name length not eligible")
+    @NotBlank(message = "Last name is required.")
+    @Length(min = 1, max = 31, message = "Last name length not eligible.")
     @ValidUsername
     private String lastName;
-    @Length(min = 0, max = 31, message = "Middle name length not eligible")
+    @Length(min = 0, max = 31, message = "Middle name length not eligible.")
     @ValidUsername
     private String middleName;
-    @NotBlank(message = "Date of birth is required")
+    @NotBlank(message = "Date of birth is required.")
     private String dateOfBirth;
-    @NotBlank(message = "Gender is required")
-    @Length(min = 1, max = 7, message = "Gender length not eligible")
+    @NotBlank(message = "Gender is required.")
+    @Length(min = 1, max = 7, message = "Gender length not eligible.")
     private String gender;
-    @NotBlank(message = "Status is required")
-    @Length(min = 1, max = 2, message = "Status length not eligible")
+    @NotBlank(message = "Status is required.")
+    @Length(min = 1, max = 2, message = "Status length not eligible.")
     private String status;
-    @NotBlank(message = "Address is required")
-    @Length(min = 1, max = 63, message = "Address length not eligible")
+    @NotBlank(message = "Address is required.")
+    @Length(min = 1, max = 63, message = "Address length not eligible.")
     private String address;
-    @NotBlank(message = "City is required")
-    @Length(min = 1, max = 15, message = "City length not eligible")
+    @NotBlank(message = "City is required.")
+    @Length(min = 1, max = 15, message = "City length not eligible.")
     private String city;
-    @NotBlank(message = "State is required")
-    @Length(min = 1, max = 7, message = "State length not eligible")
+    @NotBlank(message = "State is required.")
+    @Length(min = 1, max = 7, message = "State length not eligible.")
     private String state;
-    @NotBlank(message = "Zip code is required")
-    @Length(min = 1, max = 15, message = "Zip code length not eligible")
+    @NotBlank(message = "Zip code is required.")
+    @Length(min = 1, max = 15, message = "Zip code length not eligible.")
     private String zipCode;
-    @Length(min = 0, max = 63, message = "Notes length not eligible")
+    @Length(min = 0, max = 63, message = "Notes length not eligible.")
     private String notes;
+    @NotBlank
+    private String isPrimary;
+    @NotBlank
+    @Length(min = 1, max = 15, message = "Relationship type not eligible")
+    private String relationshipType;
     private Instant createdAt;
     private Instant modifiedAt;
 }
