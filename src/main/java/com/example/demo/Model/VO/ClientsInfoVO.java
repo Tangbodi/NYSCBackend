@@ -31,5 +31,6 @@ public class ClientsInfoVO {
 
     private String zipCode;
     private String notes;
-
+    private String createdAt;
+    private String modifiedAt;
 }

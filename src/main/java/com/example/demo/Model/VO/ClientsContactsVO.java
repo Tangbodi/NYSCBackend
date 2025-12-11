@@ -21,4 +21,6 @@ public class ClientsContactsVO {
     private String zipCode;
     private String notes;
     private String relationshipType;
+    private String createdAt;
+    private String modifiedAt;
 }

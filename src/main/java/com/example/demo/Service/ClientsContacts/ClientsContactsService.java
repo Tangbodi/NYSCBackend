@@ -64,5 +64,19 @@ public class ClientsContactsService {
         logger.info("Converting to ClientsContactsVO: {}");
         ClientsContactsVO clientsContactsVO = new ClientsContactsVO();
         clientsContactsVO.setClientId();
+        clientsContactsVO.setFirstName();
+        clientsContactsVO.setLastName();
+        clientsContactsVO.setMiddleName();
+        clientsContactsVO.setRelationshipType();
+        clientsContactsVO.setIsPrimary();
+        clientsContactsVO.setPhone();
+        clientsContactsVO.setEmail();
+        clientsContactsVO.setAddress();
+        clientsContactsVO.setCity();
+        clientsContactsVO.setState();
+        clientsContactsVO.setZipCode();
+        clientsContactsVO.setNotes();
+        clientsContactsVO.setCreatedAt();
+        clientsContactsVO.setModifiedAt();
     }
 }

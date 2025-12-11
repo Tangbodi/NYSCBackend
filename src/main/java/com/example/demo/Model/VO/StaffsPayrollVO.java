@@ -10,4 +10,6 @@ public class StaffsPayrollVO {
     private String effectiveStartDate;
     private String effectiveEndDate;
     private String notes;
+    private String createdAt;
+    private String modifiedAt;
 }
