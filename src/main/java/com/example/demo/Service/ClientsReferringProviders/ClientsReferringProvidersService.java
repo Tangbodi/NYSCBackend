@@ -40,7 +40,7 @@ public class ClientsReferringProvidersService {
             logger.info("ClientsReferringProviders created successfully.");
         } catch (Exception e) {
             logger.error("Failed to register ClientsInfo: {}", e.getMessage(), e);
-            throw e;  // <--- DO NOT wrap, return exact error
+            throw e;
         }
     }
 }

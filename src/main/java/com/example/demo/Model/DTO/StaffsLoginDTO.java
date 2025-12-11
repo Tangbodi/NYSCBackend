@@ -11,11 +11,11 @@ import java.io.Serializable;
 @Data
 public class StaffsLoginDTO implements Serializable {
     @NotBlank(message = "Username is required.")
-    @Length(min = 1, max = 30, message = "Username length not eligible.")
+    @Length(min = 1, max = 31, message = "Username length not eligible.")
     @ValidUsername(message = "User not found.")
     private String username;
     @NotBlank(message = "Password is required.")
-    @Length(min =8, max = 30, message = "Password length not eligible.")
+    @Length(min =8, max = 31, message = "Password length not eligible.")
     @ValidPassword(message = "Username or password is incorrect.")
     private String password;
 }
