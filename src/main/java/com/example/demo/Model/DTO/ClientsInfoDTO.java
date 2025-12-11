@@ -14,14 +14,14 @@ public class ClientsInfoDTO implements Serializable {
     @NotBlank(message = "First name is required")
     @Length(min = 1, max = 31, message = "First name length not eligible")
     @ValidUsername
-    private String clientFirstName;
+    private String firstName;
     @NotBlank(message = "Last name is required")
     @Length(min = 1, max = 31, message = "Last name length not eligible")
     @ValidUsername
-    private String clientLastName;
+    private String lastName;
     @Length(min = 0, max = 31, message = "Middle name length not eligible")
     @ValidUsername
-    private String clientMiddleName;
+    private String middleName;
     @NotBlank(message = "Date of birth is required")
     private String dateOfBirth;
     @NotBlank(message = "Gender is required")

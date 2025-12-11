@@ -21,17 +21,17 @@ public class ClientsInfo {
 
     @Size(max = 31)
     @NotNull
-    @Column(name = "client_first_name", nullable = false, length = 31)
-    private String clientFirstName;
+    @Column(name = "first_name", nullable = false, length = 31)
+    private String firstName;
 
     @Size(max = 31)
     @NotNull
-    @Column(name = "client_last_name", nullable = false, length = 31)
-    private String clientLastName;
+    @Column(name = "last_name", nullable = false, length = 31)
+    private String lastName;
     @Size(max = 31)
     @NotNull
-    @Column(name = "client_middle_name", nullable = false, length = 31)
-    private String clientMiddleName;
+    @Column(name = "middle_name", nullable = false, length = 31)
+    private String middleName;
     @Size(max = 15)
     @NotNull
     @Column(name = "date_of_birth", nullable = false, length = 15)

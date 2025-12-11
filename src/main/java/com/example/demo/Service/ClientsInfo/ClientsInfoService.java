@@ -24,18 +24,18 @@ public class ClientsInfoService {
     private ClientsInfoRepository clientsInfoRepository;
     @Transactional
     public void RegisterClientsInfo(ClientsInfoDTO clientsInfoDTO) {
-        logger.info("Registering ClientsInfo: {}", clientsInfoDTO.getClientFirstName() + "." + clientsInfoDTO.getClientLastName());
+        logger.info("Registering ClientsInfo: {}", clientsInfoDTO.getFirstName() + "." + clientsInfoDTO.getLastName());
 
         try {
-            logger.info("Creating UUID for ClientsInfo: {}", clientsInfoDTO.getClientFirstName());
+            logger.info("Creating UUID for ClientsInfo: {}", clientsInfoDTO.getFirstName());
             Long snowflakeId = Snowflake.generateUniqueId();
 
-            logger.info("Creating ClientsInfo:{}", clientsInfoDTO.getClientFirstName());
+            logger.info("Creating ClientsInfo:{}", clientsInfoDTO.getFirstName());
             ClientsInfo clientsInfo = new ClientsInfo();
             clientsInfo.setId(snowflakeId);
-            clientsInfo.setClientLastName(clientsInfoDTO.getClientLastName());
-            clientsInfo.setClientFirstName(clientsInfoDTO.getClientFirstName());
-            clientsInfo.setClientMiddleName(clientsInfoDTO.getClientMiddleName());
+            clientsInfo.setLastName(clientsInfoDTO.getLastName());
+            clientsInfo.setFirstName(clientsInfoDTO.getFirstName());
+            clientsInfo.setMiddleName(clientsInfoDTO.getMiddleName());
             clientsInfo.setDateOfBirth(clientsInfoDTO.getDateOfBirth());
             clientsInfo.setGender(clientsInfoDTO.getGender());
             clientsInfo.setStatus(clientsInfoDTO.getStatus());
@@ -63,7 +63,7 @@ public class ClientsInfoService {
         try{
             ClientsInfo clientsInfo = clientsInfoRepository.findById(valueOf(clientId)).orElse(null);
             if (clientsInfo != null) {
-                logger.info("Found ClientsInfo: {}" + clientsInfo.getClientFirstName() +"."+clientsInfo.getClientLastName());
+                logger.info("Found ClientsInfo: {}" + clientsInfo.getFirstName() +"."+clientsInfo.getLastName());
                 return ConvertToClientsInfoVO(clientsInfo);
             } else {
                 logger.info("StaffsInfo does not exist.");
@@ -76,13 +76,13 @@ public class ClientsInfoService {
     }
     @Transactional
     public void UpdateClientsInfo(ClientsInfoDTO clientsInfoDTO) {
-        logger.info("Updating ClientsInfo: {}", clientsInfoDTO.getClientFirstName() + "." + clientsInfoDTO.getClientLastName());
+        logger.info("Updating ClientsInfo: {}", clientsInfoDTO.getFirstName() + "." + clientsInfoDTO.getLastName());
 
         clientsInfoRepository.UpdateClientsInfo(
                 clientsInfoDTO.getClientId(),
-                clientsInfoDTO.getClientFirstName(),
-                clientsInfoDTO.getClientLastName(),
-                clientsInfoDTO.getClientMiddleName(),
+                clientsInfoDTO.getFirstName(),
+                clientsInfoDTO.getLastName(),
+                clientsInfoDTO.getMiddleName(),
                 clientsInfoDTO.getDateOfBirth(),
                 clientsInfoDTO.getGender(),
                 clientsInfoDTO.getStatus(),
@@ -99,9 +99,9 @@ public class ClientsInfoService {
         ClientsInfoVO clientsInfoVO = new ClientsInfoVO();
 
         clientsInfoVO.setClientId(clientsInfo.getId());
-        clientsInfoVO.setClientFirstName(clientsInfo.getClientFirstName());
-        clientsInfoVO.setClientLastName(clientsInfo.getClientLastName());
-        clientsInfoVO.setClientMiddleName(clientsInfo.getClientMiddleName());
+        clientsInfoVO.setClientFirstName(clientsInfo.getFirstName());
+        clientsInfoVO.setClientLastName(clientsInfo.getLastName());
+        clientsInfoVO.setClientMiddleName(clientsInfo.getMiddleName());
         clientsInfoVO.setDateOfBirth(clientsInfo.getDateOfBirth());
         clientsInfoVO.setGender(clientsInfo.getGender());
         clientsInfoVO.setStatus(clientsInfo.getStatus());
