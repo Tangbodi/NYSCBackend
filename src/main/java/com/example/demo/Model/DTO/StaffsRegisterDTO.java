@@ -28,12 +28,12 @@ public class StaffsRegisterDTO implements Serializable {
     @NotBlank(message = "Confirm password is required.")
     @ValidPassword
     private String confirmPassword;
-    @NotBlank(message = "Username is required.")
-    @Length(min = 1, max = 30, message = "Username length not eligible.")
+    @NotBlank(message = "First name is required.")
+    @Length(min = 1, max = 30, message = "First name length not eligible.")
     @ValidUsername
     private String firstName;
-    @NotBlank(message = "Username is required.")
-    @Length(min = 1, max = 30, message = "Username length not eligible.")
+    @NotBlank(message = "Last name is required.")
+    @Length(min = 1, max = 30, message = "Last name length not eligible.")
     @ValidUsername
     private String lastName;
     private String middleName;

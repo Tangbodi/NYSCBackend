@@ -35,14 +35,11 @@ public class ClientsInfoDTO implements Serializable {
     @NotBlank(message = "Address is required.")
     @Length(min = 1, max = 63, message = "Address length not eligible.")
     private String address;
-    @NotBlank(message = "City is required.")
-    @Length(min = 1, max = 15, message = "City length not eligible.")
+    @Length(min = 0, max = 15, message = "City length not eligible.")
     private String city;
-    @NotBlank(message = "State is required.")
-    @Length(min = 1, max = 7, message = "State length not eligible.")
+    @Length(min = 0, max = 7, message = "State length not eligible.")
     private String state;
-    @NotBlank(message = "Zip code is required.")
-    @Length(min = 1, max = 15, message = "Zip code length not eligible.")
+    @Length(min = 0, max = 15, message = "Zip code length not eligible.")
     private String zipCode;
     @Length(min = 0, max = 63, message = "Notes length not eligible.")
     private String notes;

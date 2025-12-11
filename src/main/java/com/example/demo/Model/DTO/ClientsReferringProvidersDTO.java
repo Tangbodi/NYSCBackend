@@ -8,37 +8,35 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
-import java.time.Instant;
 
 @Data
-public class ClientsContactsDTO implements Serializable {
-
+public class ClientsReferringProvidersDTO implements Serializable {
     private String clientId;
     @NotBlank(message = "First name is required.")
     @Length(min = 1, max = 31, message = "First name length not eligible.")
     @ValidUsername
-    private String firstName;
+    private String providerFirstName;
     @NotBlank(message = "Last name is required.")
     @Length(min = 1, max = 31, message = "Last name length not eligible.")
     @ValidUsername
-    private String lastName;
+    private String providerLastName;
     @Length(min = 0, max = 31, message = "Middle name length not eligible.")
     @ValidUsername
-    private String middleName;
-    @NotBlank(message = "Email is required.")
-    @Length(max = 63, message = "Email address length not eligible.")
-    @Email(message = "Invalid email address.")
-    private String email;
+    private String providerMiddleName;
+    private String npiNumber;
     @ValidPhone
     private String phone;
     @NotBlank(message = "Address is required.")
     @Length(min = 1, max = 63, message = "Address length not eligible.")
     private String address;
-    @Length(min = 0, max = 15, message = "City length not eligible.")
+    @NotBlank(message = "City is required.")
+    @Length(min = 1, max = 15, message = "City length not eligible.")
     private String city;
-    @Length(min = 0, max = 7, message = "State length not eligible.")
+    @NotBlank(message = "State is required.")
+    @Length(min = 1, max = 7, message = "State length not eligible.")
     private String state;
-    @Length(min = 0, max = 15, message = "Zip code length not eligible.")
+    @NotBlank(message = "Zip code is required.")
+    @Length(min = 1, max = 15, message = "Zip code length not eligible.")
     private String zipCode;
     @Length(min = 0, max = 63, message = "Notes length not eligible.")
     private String notes;
