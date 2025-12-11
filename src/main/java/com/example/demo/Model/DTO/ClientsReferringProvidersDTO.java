@@ -23,16 +23,16 @@ public class ClientsReferringProvidersDTO implements Serializable {
     @Length(min = 1, max = 31, message = "Middle name length not eligible.")
     @ValidUsername
     private String providerMiddleName;
-    @Length(min = 1, max = 15, message = "Middle name length not eligible.")
+    @Length(min = 1, max = 15, message = "NPI number length not eligible.")
     private String npiNumber;
     @NotBlank(message = "Status is required.")
     @Length(min = 1, max = 2, message = "Status length not eligible.")
     private String isActive;
-    @Length(min = 1, max = 31, message = "Last name length not eligible.")
+    @Length(min = 1, max = 31, message = "Taxonomy code length not eligible.")
     private String taxonomyCode;
     @ValidPhone
     private String phone;
-    @Length(min = 1, max = 15, message = "Middle name length not eligible.")
+    @Length(min = 1, max = 15, message = "Fax length not eligible.")
     private String fax;
     @NotBlank(message = "Address is required.")
     @Length(min = 1, max = 63, message = "Address length not eligible.")

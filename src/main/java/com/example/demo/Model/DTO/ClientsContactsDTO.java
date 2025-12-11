@@ -47,7 +47,7 @@ public class ClientsContactsDTO implements Serializable {
     @Length(min = 1, max = 2, message = "Status length not eligible.")
     private String isPrimary;
     @NotBlank
-    @Length(min = 1, max = 15, message = "Relationship type not eligible")
+    @Length(min = 1, max = 15, message = "Relationship type length not eligible")
     private String relationshipType;
 
 }
