@@ -51,7 +51,7 @@ public class ClientsInfoService {
             clientsInfo.setModifiedAt(Instant.now());
             clientsInfoRepository.save(clientsInfo);
             logger.info("ClientsInfo registered successfully.");
-            clientsContactsService.CreateClientsContacts(clientsInfoDTO);
+//            clientsContactsService.CreateClientsContacts(clientsInfoDTO);
         } catch (Exception e) {
             logger.error("Failed to register ClientsInfo: {}", e.getMessage(), e);
             throw e;  // <--- DO NOT wrap, return exact error
