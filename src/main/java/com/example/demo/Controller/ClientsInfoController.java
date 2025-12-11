@@ -78,7 +78,6 @@ public class ClientsInfoController {
             apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
-
         try {
             // check admin
             if (!staffsLoginService.CheckIsAdmin(staffId)) {

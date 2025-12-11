@@ -11,7 +11,8 @@ import java.io.Serializable;
 import java.time.Instant;
 
 @Data
-public class ClientsInfoDTO implements Serializable {
+public class ClientsContactsDTO implements Serializable {
+
     private String clientId;
     @NotBlank(message = "First name is required.")
     @Length(min = 1, max = 31, message = "First name length not eligible.")
@@ -24,14 +25,12 @@ public class ClientsInfoDTO implements Serializable {
     @Length(min = 0, max = 31, message = "Middle name length not eligible.")
     @ValidUsername
     private String middleName;
-    @NotBlank(message = "Date of birth is required.")
-    private String dateOfBirth;
-    @NotBlank(message = "Gender is required.")
-    @Length(min = 1, max = 7, message = "Gender length not eligible.")
-    private String gender;
-    @NotBlank(message = "Status is required.")
-    @Length(min = 1, max = 2, message = "Status length not eligible.")
-    private String status;
+    @NotBlank(message = "Email is required.")
+    @Length(max = 63, message = "Email address length not eligible.")
+    @Email(message = "Invalid email address.")
+    private String email;
+    @ValidPhone
+    private String phone;
     @NotBlank(message = "Address is required.")
     @Length(min = 1, max = 63, message = "Address length not eligible.")
     private String address;
@@ -46,6 +45,10 @@ public class ClientsInfoDTO implements Serializable {
     private String zipCode;
     @Length(min = 0, max = 63, message = "Notes length not eligible.")
     private String notes;
-
+    @NotBlank
+    private String isPrimary;
+    @NotBlank
+    @Length(min = 1, max = 15, message = "Relationship type not eligible")
+    private String relationshipType;
 
 }

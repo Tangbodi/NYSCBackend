@@ -17,6 +17,7 @@ public class ClientsFundersService {
     private ClientsFundersRepository clientsFundersRepository;
 
     public void CreateClientsFunders(){
+
         logger.info("Creating ClientsFunders: {}");
         try{
             ClientsFunders clientsFunders = new ClientsFunders();
@@ -41,6 +42,8 @@ public class ClientsFundersService {
             clientsFunders.setCreatedAt(Instant.now());
             clientsFunders.setModifiedAt(Instant.now());
             clientsFundersRepository.save(clientsFunders);
+            logger.info("ClientsFunders created successfully.");
+
         }catch (Exception e) {
             logger.error("Failed to create ClientsFunders: {}", e.getMessage(), e);
             throw e;

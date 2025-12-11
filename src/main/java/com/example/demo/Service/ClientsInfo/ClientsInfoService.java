@@ -79,7 +79,7 @@ public class ClientsInfoService {
         logger.info("Updating ClientsInfo: {}", clientsInfoDTO.getFirstName() + "." + clientsInfoDTO.getLastName());
 
         clientsInfoRepository.UpdateClientsInfo(
-                clientsInfoDTO.getClientId(),
+                Long.valueOf(clientsInfoDTO.getClientId()),
                 clientsInfoDTO.getFirstName(),
                 clientsInfoDTO.getLastName(),
                 clientsInfoDTO.getMiddleName(),
