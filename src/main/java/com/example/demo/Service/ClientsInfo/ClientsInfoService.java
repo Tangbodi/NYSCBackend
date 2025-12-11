@@ -5,6 +5,7 @@ import com.example.demo.Model.DTO.ClientsInfoDTO;
 import com.example.demo.Model.Entity.ClientsInfo;
 import com.example.demo.Model.VO.ClientsInfoVO;
 import com.example.demo.Repository.ClientsInfoRepository;
+import com.example.demo.Service.ClientsContacts.ClientsContactsService;
 import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ public class ClientsInfoService {
 
     @Autowired
     private ClientsInfoRepository clientsInfoRepository;
+    @Autowired
+    private ClientsContactsService clientsContactsService;
     @Transactional
     public void RegisterClientsInfo(ClientsInfoDTO clientsInfoDTO) {
         logger.info("Registering ClientsInfo: {}", clientsInfoDTO.getFirstName() + "." + clientsInfoDTO.getLastName());
@@ -46,12 +49,9 @@ public class ClientsInfoService {
             clientsInfo.setNotes(emptyIfNull(clientsInfoDTO.getNotes()));
             clientsInfo.setCreatedAt(Instant.now());
             clientsInfo.setModifiedAt(Instant.now());
-
-            if (clientsInfoRepository.save(clientsInfo) == null) {
-                throw new StaffsLoginController.UserRegistrationException("Failed to register ClientsInfo.");
-            }
+            clientsInfoRepository.save(clientsInfo);
             logger.info("ClientsInfo registered successfully.");
-
+            clientsContactsService.CreateClientsContacts(clientsInfoDTO);
         } catch (Exception e) {
             logger.error("Failed to register ClientsInfo: {}", e.getMessage(), e);
             throw e;  // <--- DO NOT wrap, return exact error
