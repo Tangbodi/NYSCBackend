@@ -1,10 +1,9 @@
 package com.example.demo.Service.ClientsContacts;
 
-import com.example.demo.Controller.StaffsLoginController;
-import com.example.demo.Model.DTO.ClientsInfoDTO;
+
 import com.example.demo.Model.Entity.ClientsContacts;
+import com.example.demo.Model.VO.ClientsContactsVO;
 import com.example.demo.Repository.ClientsContactsRepository;
-import com.example.demo.Service.ClientsInfo.ClientsInfoService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,5 +46,23 @@ public class ClientsContactsService {
             logger.error("Failed to create ClientsContacts: {}", e.getMessage(), e);
             throw e;
         }
+    }
+    public ClientsContactsVO GetClientsContacts(){
+        logger.info("Getting ClientsContacts: {}");
+        try{
+            ClientsContacts clientsContacts = clientsContactsRepository.findById().orElse(null);
+            if(clientsContacts != null){
+                logger.info("Found ClientsContacts: {}");
+                return ConvertToClientsContactsVO();
+            }else{
+                logger.info("ClientsContacts does not exist.");
+                return null;
+            }
+        }
+    }
+    public ClientsContactsVO ConvertToClientsContactsVO(){
+        logger.info("Converting to ClientsContactsVO: {}");
+        ClientsContactsVO clientsContactsVO = new ClientsContactsVO();
+        clientsContactsVO.setClientId();
     }
 }
