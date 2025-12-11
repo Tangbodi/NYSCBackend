@@ -28,6 +28,10 @@ public class ClientsFunders {
     private String payerName;
 
     @Size(max = 31)
+    @NotNull
+    @Column(name = "plan_name", length = 31)
+    private String planName;
+    @Size(max = 31)
     @Column(name = "member_id", length = 31)
     private String memberId;
     @Size(max = 31)
