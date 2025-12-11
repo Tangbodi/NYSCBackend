@@ -51,7 +51,7 @@ public class StaffsInfo {
 
     @NotNull
     @Size(max = 1)
-    @Column(name = "status", length = 1)
+    @Column(name = "status", nullable = false, length = 1)
     private String status;
 
     @Size(max = 31)
