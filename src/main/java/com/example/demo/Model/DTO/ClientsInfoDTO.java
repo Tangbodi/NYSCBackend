@@ -21,7 +21,7 @@ public class ClientsInfoDTO implements Serializable {
     @Length(min = 1, max = 31, message = "Last name length not eligible.")
     @ValidUsername
     private String lastName;
-    @Length(min = 0, max = 31, message = "Middle name length not eligible.")
+    @Length(min = 1, max = 31, message = "Middle name length not eligible.")
     @ValidUsername
     private String middleName;
     @NotBlank(message = "Date of birth is required.")
