@@ -29,6 +29,9 @@ public class StaffsInfo {
     @NotNull
     @Column(name = "email", nullable = false, length = 63)
     private String email;
+    @Size(max = 11)
+    @Column(name = "phone", length = 11)
+    private String phone;
 
     @Size(max = 31)
     @NotNull
@@ -40,9 +43,6 @@ public class StaffsInfo {
     @Column(name = "last_name", nullable = false, length = 31)
     private String lastName;
 
-    @Size(max = 11)
-    @Column(name = "phone", length = 11)
-    private String phone;
 
     @Size(max = 7)
     @NotNull
