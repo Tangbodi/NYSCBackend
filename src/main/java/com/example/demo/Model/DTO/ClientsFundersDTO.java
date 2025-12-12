@@ -1,10 +1,14 @@
 package com.example.demo.Model.DTO;
 
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
+import jakarta.validation.constraints.NotNull;
 
 public class ClientsFundersDTO {
 
+    @NotNull(message = "clientId is required")
     private String clientId;
+    @NotBlank(message = "Payer name is required.")
     @Length(min = 1, max = 31, message = "Payer name length not eligible.")
     private String payerName;
     @Length(min = 1, max = 31, message = "Plan name length not eligible.")

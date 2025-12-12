@@ -1,5 +1,6 @@
 package com.example.demo.Service.ClientsFundersService;
 
+import com.example.demo.Model.DTO.ClientsFundersDTO;
 import com.example.demo.Model.Entity.ClientsFunders;
 import com.example.demo.Repository.ClientsFundersRepository;
 import com.example.demo.Service.ClientsContacts.ClientsContactsService;
@@ -18,7 +19,7 @@ public class ClientsFundersService {
     private ClientsFundersRepository clientsFundersRepository;
 
     @Transactional
-    public void CreateClientsFunders(){
+    public void CreateClientsFunders(ClientsFundersDTO clientsFundersDTO){
         logger.info("Creating ClientsFunders: {}");
         try{
             ClientsFunders clientsFunders = new ClientsFunders();
