@@ -3,6 +3,7 @@ package com.example.demo.Service.ClientsFundersService;
 import com.example.demo.Model.Entity.ClientsFunders;
 import com.example.demo.Repository.ClientsFundersRepository;
 import com.example.demo.Service.ClientsContacts.ClientsContactsService;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class ClientsFundersService {
     @Autowired
     private ClientsFundersRepository clientsFundersRepository;
 
+    @Transactional
     public void CreateClientsFunders(){
-
         logger.info("Creating ClientsFunders: {}");
         try{
             ClientsFunders clientsFunders = new ClientsFunders();
@@ -48,5 +49,9 @@ public class ClientsFundersService {
             logger.error("Failed to create ClientsFunders: {}", e.getMessage(), e);
             throw e;
         }
+    }
+
+    public clientsFundersVO GetClientsFunders(){
+
     }
 }
