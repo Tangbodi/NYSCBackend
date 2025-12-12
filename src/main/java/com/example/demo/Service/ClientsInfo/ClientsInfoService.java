@@ -77,21 +77,24 @@ public class ClientsInfoService {
     @Transactional
     public void UpdateClientsInfo(ClientsInfoDTO clientsInfoDTO) {
         logger.info("Updating ClientsInfo: {}", clientsInfoDTO.getFirstName() + "." + clientsInfoDTO.getLastName());
-
-        clientsInfoRepository.UpdateClientsInfo(
-                Long.valueOf(clientsInfoDTO.getClientId()),
-                clientsInfoDTO.getFirstName(),
-                clientsInfoDTO.getLastName(),
-                clientsInfoDTO.getMiddleName(),
-                clientsInfoDTO.getDateOfBirth(),
-                clientsInfoDTO.getGender(),
-                clientsInfoDTO.getStatus(),
-                clientsInfoDTO.getAddress(),
-                clientsInfoDTO.getCity(),
-                clientsInfoDTO.getState(),
-                clientsInfoDTO.getZipCode(),
-                clientsInfoDTO.getNotes()
-        );
+        try{
+            clientsInfoRepository.UpdateClientsInfo(
+                    Long.valueOf(clientsInfoDTO.getClientId()),
+                    clientsInfoDTO.getFirstName(),
+                    clientsInfoDTO.getLastName(),
+                    clientsInfoDTO.getMiddleName(),
+                    clientsInfoDTO.getDateOfBirth(),
+                    clientsInfoDTO.getGender(),
+                    clientsInfoDTO.getStatus(),
+                    clientsInfoDTO.getAddress(),
+                    clientsInfoDTO.getCity(),
+                    clientsInfoDTO.getState(),
+                    clientsInfoDTO.getZipCode(),
+                    clientsInfoDTO.getNotes()
+            );
+        }catch (Exception e) {
+            logger.error("Failed to update StaffsInfo: {}", e.getMessage(), e);
+        }
     }
     public ClientsInfoVO ConvertToClientsInfoVO(ClientsInfo clientsInfo) {
         logger.info("Converting to ClientsInfoVO: {}", clientsInfo.getId());

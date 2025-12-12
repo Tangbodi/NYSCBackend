@@ -1,6 +1,7 @@
 package com.example.demo.Service.ClientsContacts;
 
 
+import com.example.demo.Model.DTO.ClientsContactsDTO;
 import com.example.demo.Model.Entity.ClientsContacts;
 import com.example.demo.Model.VO.ClientsContactsVO;
 import com.example.demo.Repository.ClientsContactsRepository;
@@ -58,6 +59,31 @@ public class ClientsContactsService {
                 logger.info("ClientsContacts does not exist.");
                 return null;
             }
+        }catch (Exception e) {
+            logger.error("Failed to get StaffsInfo: {}", e.getMessage(), e);
+        }
+        return null;
+    }
+    public void UpdateClientsContacts(ClientsContactsDTO clientsContactsDTO){
+        logger.info("Updating ClientsContacts: {}");
+        try{
+            clientsContactsRepository.UpdateClientsContacts(
+                    Long.valueOf(clientsContactsDTO.getClientId()),
+                    clientsContactsDTO.getFirstName(),
+                    clientsContactsDTO.getLastName(),
+                    clientsContactsDTO.getMiddleName(),
+                    clientsContactsDTO.getRelationshipType(),
+                    clientsContactsDTO.getIsPrimary(),
+                    clientsContactsDTO.getPhone(),
+                    clientsContactsDTO.getEmail(),
+                    clientsContactsDTO.getAddress(),
+                    clientsContactsDTO.getCity(),
+                    clientsContactsDTO.getState(),
+                    clientsContactsDTO.getZipCode(),
+                    clientsContactsDTO.getNotes()
+            );
+        }catch (Exception e) {
+            logger.error("Failed to update ClientsContacts: {}", e.getMessage(), e);
         }
     }
     public ClientsContactsVO ConvertToClientsContactsVO(){
@@ -78,5 +104,6 @@ public class ClientsContactsService {
         clientsContactsVO.setNotes();
         clientsContactsVO.setCreatedAt();
         clientsContactsVO.setModifiedAt();
+        return clientsContactsVO;
     }
 }

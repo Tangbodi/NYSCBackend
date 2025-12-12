@@ -15,9 +15,9 @@ public interface ClientsInfoRepository extends JpaRepository<ClientsInfo, Long> 
     @Transactional
     @Query(value = """
         UPDATE clients_info 
-        SET client_first_name = :firstName,
-            client_last_name = :lastName,
-            client_middle_name = :middleName,
+        SET first_name = :firstName,
+            last_name = :lastName,
+            middle_name = :middleName,
             date_of_birth = :dob,
             gender = :gender,
             status = :status,
