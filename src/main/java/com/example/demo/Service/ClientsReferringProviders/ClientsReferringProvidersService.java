@@ -1,5 +1,6 @@
 package com.example.demo.Service.ClientsReferringProviders;
 
+import com.example.demo.Model.DTO.ClientsReferringProvidersDTO;
 import com.example.demo.Model.Entity.ClientsReferringProviders;
 import com.example.demo.Repository.ClientsReferringProvidersRepository;
 import com.example.demo.Service.ClientsInfo.ClientsInfoService;
@@ -16,24 +17,24 @@ public class ClientsReferringProvidersService {
     @Autowired
     private ClientsReferringProvidersRepository clientsReferringProvidersRepository;
 
-    public void CreateClientsReferringProviders(){
+    public void CreateClientsReferringProviders(ClientsReferringProvidersDTO clientsReferringProvidersDTO){
         logger.info("Creating ClientsReferringProviders: {}");
         try{
             ClientsReferringProviders clientsReferringProviders = new ClientsReferringProviders();
-            clientsReferringProviders.setClientId();
-            clientsReferringProviders.setProviderLastName();
-            clientsReferringProviders.setProviderFirstName();
-            clientsReferringProviders.setProviderMiddleName();
-            clientsReferringProviders.setNpiNumber();
-            clientsReferringProviders.setIsActive();
-            clientsReferringProviders.setTaxonomyCode();
-            clientsReferringProviders.setAddress();
-            clientsReferringProviders.setCity();
-            clientsReferringProviders.setState();
-            clientsReferringProviders.setZipCode();
-            clientsReferringProviders.setPhone();
-            clientsReferringProviders.setFax();
-            clientsReferringProviders.setNotes();
+            clientsReferringProviders.setClientId(Long.valueOf(clientsReferringProvidersDTO.getClientId()));
+            clientsReferringProviders.setProviderLastName(clientsReferringProvidersDTO.getProviderLastName());
+            clientsReferringProviders.setProviderFirstName(clientsReferringProvidersDTO.getProviderFirstName());
+            clientsReferringProviders.setProviderMiddleName(clientsReferringProvidersDTO.getProviderMiddleName());
+            clientsReferringProviders.setNpiNumber(clientsReferringProvidersDTO.getNpiNumber());
+            clientsReferringProviders.setIsActive(clientsReferringProvidersDTO.getIsActive());
+            clientsReferringProviders.setTaxonomyCode(clientsReferringProvidersDTO.getTaxonomyCode());
+            clientsReferringProviders.setAddress(clientsReferringProvidersDTO.getAddress());
+            clientsReferringProviders.setCity(clientsReferringProvidersDTO.getCity());
+            clientsReferringProviders.setState(clientsReferringProvidersDTO.getState());
+            clientsReferringProviders.setZipCode(clientsReferringProvidersDTO.getZipCode());
+            clientsReferringProviders.setPhone(clientsReferringProvidersDTO.getPhone());
+            clientsReferringProviders.setFax(clientsReferringProvidersDTO.getFax());
+            clientsReferringProviders.setNotes(clientsReferringProvidersDTO.getNotes());
             clientsReferringProviders.setCreatedAt(Instant.now());
             clientsReferringProviders.setModifiedAt(Instant.now());
             clientsReferringProvidersRepository.save(clientsReferringProviders);
