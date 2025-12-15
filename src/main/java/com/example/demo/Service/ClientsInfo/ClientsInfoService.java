@@ -6,6 +6,7 @@ import com.example.demo.Model.Entity.ClientsInfo;
 import com.example.demo.Model.VO.ClientsInfoVO;
 import com.example.demo.Repository.ClientsInfoRepository;
 import com.example.demo.Service.ClientsContacts.ClientsContactsService;
+import com.example.demo.Util.DateTimeConverter;
 import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -113,7 +114,10 @@ public class ClientsInfoService {
         clientsInfoVO.setState(clientsInfo.getState());
         clientsInfoVO.setZipCode(clientsInfo.getZipCode());
         clientsInfoVO.setNotes(clientsInfo.getNotes());
-
+        String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientsInfo.getCreatedAt());
+        String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientsInfo.getModifiedAt());
+        clientsInfoVO.setCreatedAt(formattedCreatedDateTime);
+        clientsInfoVO.setModifiedAt(formattedModifiedDateTime);
         return clientsInfoVO;
     }
     private String emptyIfNull(String s) {
