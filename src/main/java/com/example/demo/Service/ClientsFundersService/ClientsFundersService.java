@@ -60,6 +60,7 @@ public class ClientsFundersService {
         try{
             List<Map<String,Object>> fundersList = clientsFundersRepository.findByClientId(clientId);
             if (!fundersList.isEmpty()) {
+                logger.info("Found fundersList.");
                 List<ClientsFundersVO> clientsFundersVOList = new ArrayList<>();
                 for(Map<String,Object> funder: fundersList){
                     ClientsFundersVO clientsFundersVO = new ClientsFundersVO();

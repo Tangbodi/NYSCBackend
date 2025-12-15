@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface ClientsInfoRepository extends JpaRepository<ClientsInfo, Long> {
 
@@ -43,6 +46,7 @@ public interface ClientsInfoRepository extends JpaRepository<ClientsInfo, Long> 
             @Param("zipCode") String zipCode,
             @Param("notes") String notes
     );
+
 }
 
 

@@ -23,7 +23,7 @@ public class ClientsContactsService {
 
     @Transactional
     public void CreateClientsContacts(ClientsContactsDTO clientsContactsDTO) {
-        logger.info("Creating ClientsContacts: {}");
+        logger.info("Creating ClientsContacts: {}", clientsContactsDTO.getClientId());
         try{
             ClientsContacts clientsContacts = new ClientsContacts();
             clientsContacts.setId(Long.valueOf(clientsContactsDTO.getClientId()));
@@ -50,7 +50,7 @@ public class ClientsContactsService {
         }
     }
     public ClientsContactsVO GetClientsContacts(String clientId){
-        logger.info("Getting ClientsContacts: {}");
+        logger.info("Getting ClientsContacts: {}", clientId);
         try{
             ClientsContacts clientsContacts = clientsContactsRepository.findById(Long.valueOf(clientId)).orElse(null);
             if(clientsContacts != null){
@@ -66,7 +66,7 @@ public class ClientsContactsService {
         return null;
     }
     public void UpdateClientsContacts(ClientsContactsDTO clientsContactsDTO){
-        logger.info("Updating ClientsContacts: {}");
+        logger.info("Updating ClientsContacts: {}", clientsContactsDTO.getClientId());
         try{
             clientsContactsRepository.UpdateClientsContacts(
                     Long.valueOf(clientsContactsDTO.getClientId()),
@@ -88,7 +88,7 @@ public class ClientsContactsService {
         }
     }
     public ClientsContactsVO ConvertToClientsContactsVO(ClientsContacts clientsContacts){
-        logger.info("Converting to ClientsContactsVO: {}");
+        logger.info("Converting to ClientsContactsVO: {}", clientsContacts.getId());
         ClientsContactsVO clientsContactsVO = new ClientsContactsVO();
         clientsContactsVO.setClientId(String.valueOf(clientsContacts.getId()));
         clientsContactsVO.setFirstName(clientsContacts.getFirstName());

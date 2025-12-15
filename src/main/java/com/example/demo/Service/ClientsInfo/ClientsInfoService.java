@@ -1,6 +1,5 @@
 package com.example.demo.Service.ClientsInfo;
 
-import com.example.demo.Controller.StaffsLoginController;
 import com.example.demo.Model.DTO.ClientsInfoDTO;
 import com.example.demo.Model.Entity.ClientsInfo;
 import com.example.demo.Model.VO.ClientsInfoVO;
@@ -15,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static java.lang.Long.valueOf;
 
@@ -74,6 +77,27 @@ public class ClientsInfoService {
             logger.error("Failed to get StaffsInfo: {}", e.getMessage(), e);
         }
         return null;
+    }
+    public List<ClientsInfoVO> GetAllClientsInfo(){
+        logger.info("Getting all ClientsInfo: {}");
+        try{
+            List<ClientsInfo> clientsInfoList = clientsInfoRepository.findAll();
+            if(!clientsInfoList.isEmpty()){
+                logger.info("Found clientsInfoList.");
+                List<ClientsInfoVO> clientsInfoVOList = new ArrayList<>();
+                for(ClientsInfo clientsInfo: clientsInfoList){
+                    ClientsInfoVO clientsInfoVO = ConvertToClientsInfoVO(clientsInfo);
+                    clientsInfoVOList.add(clientsInfoVO);
+                }
+                return clientsInfoVOList;
+            }else{
+                logger.info("No ClientsInfo found.");
+                return Collections.emptyList();
+            }
+        }catch (Exception e) {
+            logger.error("Failed to update StaffsInfo: {}", e.getMessage(), e);
+        }
+        return Collections.emptyList();
     }
     @Transactional
     public void UpdateClientsInfo(ClientsInfoDTO clientsInfoDTO) {
