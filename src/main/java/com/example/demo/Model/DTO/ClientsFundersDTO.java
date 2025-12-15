@@ -1,9 +1,11 @@
 package com.example.demo.Model.DTO;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import jakarta.validation.constraints.NotNull;
 
+@Data
 public class ClientsFundersDTO {
 
     @NotNull(message = "clientId is required")
