@@ -29,7 +29,6 @@ public class ClientsInfo {
     @Column(name = "last_name", nullable = false, length = 31)
     private String lastName;
     @Size(max = 31)
-    @NotNull
     @Column(name = "middle_name", nullable = false, length = 31)
     private String middleName;
     @Size(max = 15)
@@ -47,6 +46,7 @@ public class ClientsInfo {
     private String status;
 
     @Size(max = 63)
+    @NotNull
     @Column(name = "address", length = 63)
     private String address;
 
@@ -64,7 +64,6 @@ public class ClientsInfo {
     private String zipCode;
 
     @Size(max = 63)
-    @NotNull
     @Column(name = "notes", nullable = false, length = 63)
     private String notes;
 

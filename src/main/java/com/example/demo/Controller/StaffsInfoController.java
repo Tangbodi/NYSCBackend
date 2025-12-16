@@ -13,17 +13,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Validated
-@RequestMapping("/staffs-info")
+@RequestMapping("/staffs")
 public class StaffsInfoController {
     private static final Logger logger = LoggerFactory.getLogger(StaffsInfoController.class);
 
     @Autowired
     private StaffsInfoService staffsInfoService;
 
-    @GetMapping("/")
-    public ResponseEntity<ApiResponse> getStaffsInfo(HttpServletRequest request) {
+    @GetMapping("/info")
+    public ResponseEntity<ApiResponse> getStaffsInfo(@RequestParam(value = "staff") String staffId, HttpServletRequest request) {
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
         if (userId == null) {
@@ -32,8 +34,28 @@ public class StaffsInfoController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }else{
             try{
-                StaffsInfoVO staffsInfoVO = staffsInfoService.GetStaffsInfo(userId, request);
+                StaffsInfoVO staffsInfoVO = staffsInfoService.GetStaffsInfo(staffId, request);
                 apiResponse = ApiResponse.success(staffsInfoVO);
+
+            }catch (Exception e) {
+                logger.error("Failed to login", e.getMessage(), e);
+                apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+            }
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+    @GetMapping("/info/")
+    public ResponseEntity<ApiResponse> getAllStaffsInfo(HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long userId = (Long) request.getSession().getAttribute("staffId");
+        if (userId == null) {
+            logger.info("No staffId in session. Access denied.");
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }else{
+            try{
+                List<StaffsInfoVO> staffsInfoVOList = staffsInfoService.GetAllStaffsInfo(request);
+                apiResponse = ApiResponse.success(staffsInfoVOList);
 
             }catch (Exception e) {
                 logger.error("Failed to login", e.getMessage(), e);

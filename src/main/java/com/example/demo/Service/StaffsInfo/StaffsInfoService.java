@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 @Service
@@ -37,10 +40,10 @@ public class StaffsInfoService {
             staffsInfo.setEmployeeType(staffsRegisterDTO.getEmployeeType());
             staffsInfo.setFirstName(staffsRegisterDTO.getFirstName());
             staffsInfo.setLastName(staffsRegisterDTO.getLastName());
-            staffsInfo.setMiddleName(staffsRegisterDTO.getMiddleName());
+            staffsInfo.setMiddleName(emptyIfNull(staffsRegisterDTO.getMiddleName()));
             staffsInfo.setStatus(staffsRegisterDTO.getStatus());
             staffsInfo.setPhone(staffsRegisterDTO.getPhone());
-            staffsInfo.setSupervisor(staffsRegisterDTO.getSupervisor());
+            staffsInfo.setSupervisor(emptyIfNull(staffsRegisterDTO.getSupervisor()));
             staffsInfo.setTitle(staffsRegisterDTO.getTitle());
             staffsInfo.setCreatedAt(Instant.now());
             staffsInfo.setModifiedAt(Instant.now());
@@ -89,10 +92,10 @@ public class StaffsInfoService {
         return null;
     }
 
-    public StaffsInfoVO GetStaffsInfo(Long userId, HttpServletRequest request) {
-        logger.info("Getting StaffsInfo: {}" + userId);
+    public StaffsInfoVO GetStaffsInfo(String staffId, HttpServletRequest request) {
+        logger.info("Getting StaffsInfo: {}" + staffId);
         try {
-            StaffsInfo staffsInfo = staffsInfoRepository.findById(userId).orElse(null);
+            StaffsInfo staffsInfo = staffsInfoRepository.findById(Long.valueOf(staffId)).orElse(null);
             if (staffsInfo != null) {
                 logger.info("Found StaffsInfo: {}" + staffsInfo.getUsername());
                 return ConvertToStaffsInfoVO(staffsInfo, request);
@@ -105,6 +108,27 @@ public class StaffsInfoService {
             logger.error("Failed to get StaffsInfo: {}", e.getMessage(), e);
         }
         return null;
+    }
+    public List<StaffsInfoVO> GetAllStaffsInfo(HttpServletRequest request){
+        logger.info("Getting AllStaffsInfo: {}");
+        try{
+            List<StaffsInfo> staffsInfoList = staffsInfoRepository.findAll();
+            if(!staffsInfoList.isEmpty()){
+                logger.info("Found StaffsInfo.");
+                List<StaffsInfoVO> staffsInfoVOList = new ArrayList<>();
+                for(StaffsInfo staffsInfo: staffsInfoList){
+                    StaffsInfoVO staffsInfoVO = ConvertToStaffsInfoVO(staffsInfo,request);
+                    staffsInfoVOList.add(staffsInfoVO);
+                }
+                return staffsInfoVOList;
+            }else{
+                logger.info("No StaffsInfo found.");
+                return Collections.emptyList();
+            }
+        }catch (Exception e) {
+            logger.error("Failed to update StaffsInfo: {}", e.getMessage(), e);
+        }
+        return Collections.emptyList();
     }
     @Transactional
     public StaffsInfoVO UpdateStaffsInfo(StaffsInfoDTO staffsInfoDTO, HttpServletRequest request){
@@ -127,7 +151,7 @@ public class StaffsInfoService {
                 staffsInfo.setModifiedAt(Instant.now());
                 staffsInfoRepository.save(staffsInfo);
                 logger.info("StaffsInfo updated successfully.");
-                return GetStaffsInfo(staffsInfo.getId(), request);
+                return GetStaffsInfo(String.valueOf(staffsInfo.getId()), request);
             } else {
                 logger.info("StaffsInfo does not exist.");
                 return null;
@@ -164,5 +188,8 @@ public class StaffsInfoService {
         staffsInfoVO.setModifiedAt(formattedModifiedDateTime);
         logger.info("StaffsInfoVO converted successfully.");
         return staffsInfoVO;
+    }
+    private String emptyIfNull(String s) {
+        return s == null ? "" : s;
     }
 }

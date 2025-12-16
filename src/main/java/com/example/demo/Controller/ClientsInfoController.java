@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Validated
 @RequestMapping("/clients")
@@ -31,6 +33,7 @@ public class ClientsInfoController {
 
         ApiResponse apiResponse;
         try {
+            logger.info("clientsInfoDTO: {}", clientsInfoDTO);
             clientsInfoService.RegisterClientsInfo(clientsInfoDTO);
             apiResponse = ApiResponse.success("Clients registered successfully");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
@@ -65,6 +68,26 @@ public class ClientsInfoController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
+    @GetMapping("/info/")
+    public ResponseEntity<ApiResponse> GetAllClientsInfo(HttpServletRequest request){
+        ApiResponse apiResponse;
+        Long userId = (Long) request.getSession().getAttribute("staffId");
+        if (userId == null) {
+            logger.info("No staffId in session. Access denied.");
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }else{
+            try{
+                List<ClientsInfoVO> clientsInfoVO = clientsInfoService.GetAllClientsInfo();
+                apiResponse = ApiResponse.success(clientsInfoVO);
+            }catch (Exception e) {
+                logger.error("Failed to login", e.getMessage(), e);
+                apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+            }
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+
     @PostMapping("/info/update")
     public ResponseEntity<ApiResponse> UpdateClientsInfo(
             @Validated @RequestBody ClientsInfoDTO clientsInfoDTO,

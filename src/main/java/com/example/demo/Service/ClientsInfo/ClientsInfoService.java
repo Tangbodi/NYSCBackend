@@ -83,7 +83,7 @@ public class ClientsInfoService {
         try{
             List<ClientsInfo> clientsInfoList = clientsInfoRepository.findAll();
             if(!clientsInfoList.isEmpty()){
-                logger.info("Found clientsInfoList.");
+                logger.info("Found ClientsInfo.");
                 List<ClientsInfoVO> clientsInfoVOList = new ArrayList<>();
                 for(ClientsInfo clientsInfo: clientsInfoList){
                     ClientsInfoVO clientsInfoVO = ConvertToClientsInfoVO(clientsInfo);
@@ -127,9 +127,9 @@ public class ClientsInfoService {
         ClientsInfoVO clientsInfoVO = new ClientsInfoVO();
 
         clientsInfoVO.setClientId(clientsInfo.getId());
-        clientsInfoVO.setClientFirstName(clientsInfo.getFirstName());
-        clientsInfoVO.setClientLastName(clientsInfo.getLastName());
-        clientsInfoVO.setClientMiddleName(clientsInfo.getMiddleName());
+        clientsInfoVO.setFirstName(clientsInfo.getFirstName());
+        clientsInfoVO.setLastName(clientsInfo.getLastName());
+        clientsInfoVO.setMiddleName(clientsInfo.getMiddleName());
         clientsInfoVO.setDateOfBirth(clientsInfo.getDateOfBirth());
         clientsInfoVO.setGender(clientsInfo.getGender());
         clientsInfoVO.setStatus(clientsInfo.getStatus());

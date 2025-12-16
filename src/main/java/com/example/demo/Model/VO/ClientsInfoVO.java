@@ -11,11 +11,11 @@ import java.time.Instant;
 
 public class ClientsInfoVO {
     private Long clientId;
-    private String clientFirstName;
+    private String firstName;
 
-    private String clientLastName;
+    private String lastName;
 
-    private String clientMiddleName;
+    private String middleName;
 
     private String dateOfBirth;
 
