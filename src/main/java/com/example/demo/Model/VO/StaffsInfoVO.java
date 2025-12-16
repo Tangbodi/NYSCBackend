@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class StaffsInfoVO {
 
-    private Long LongUid;
+    private String LongUid;
     private String staffId;
     private String username;
     private String email;

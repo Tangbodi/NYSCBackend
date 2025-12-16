@@ -126,7 +126,7 @@ public class ClientsInfoService {
 
         ClientsInfoVO clientsInfoVO = new ClientsInfoVO();
 
-        clientsInfoVO.setClientId(clientsInfo.getId());
+        clientsInfoVO.setClientId(String.valueOf(clientsInfo.getId()));
         clientsInfoVO.setFirstName(clientsInfo.getClientFirstName());
         clientsInfoVO.setLastName(clientsInfo.getClientLastName());
         clientsInfoVO.setMiddleName(clientsInfo.getClientMiddleName());

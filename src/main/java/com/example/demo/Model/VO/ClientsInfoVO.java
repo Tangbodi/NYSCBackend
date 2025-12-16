@@ -10,7 +10,7 @@ import java.time.Instant;
 @Data
 
 public class ClientsInfoVO {
-    private Long clientId;
+    private String clientId;
     private String firstName;
 
     private String lastName;

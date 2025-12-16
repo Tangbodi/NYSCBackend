@@ -6,6 +6,7 @@ import com.example.demo.Model.VO.ClientsFundersVO;
 import com.example.demo.Repository.ClientsFundersRepository;
 import com.example.demo.Service.ClientsContacts.ClientsContactsService;
 import com.example.demo.Util.DateTimeConverter;
+import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,8 @@ public class ClientsFundersService {
         logger.info("Creating ClientsFunders: {}");
         try{
             ClientsFunders clientsFunders = new ClientsFunders();
+            Long snowflakeId = Snowflake.generateUniqueId();
+            clientsFunders.setId(snowflakeId);
             clientsFunders.setClientId(Long.valueOf(clientsFundersDTO.getClientId()));
             clientsFunders.setPayerName(clientsFundersDTO.getPayerName());
             clientsFunders.setPlanName(clientsFundersDTO.getPlanName());

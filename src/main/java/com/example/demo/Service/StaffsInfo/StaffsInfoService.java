@@ -165,7 +165,7 @@ public class StaffsInfoService {
     public StaffsInfoVO ConvertToStaffsInfoVO( StaffsInfo staffsInfo, HttpServletRequest request){
         logger.info("Converting to StaffsInfoVO: {}", staffsInfo.getId());
         StaffsInfoVO staffsInfoVO = new StaffsInfoVO();
-        staffsInfoVO.setLongUid(staffsInfo.getId());
+        staffsInfoVO.setLongUid(String.valueOf(staffsInfo.getId()));
         staffsInfoVO.setStaffId(staffsInfo.getId().toString());
         staffsInfoVO.setJSESSIONID(request.getSession().getId());
 //                logger.info("Session userId: {}", request.getSession().getAttribute("userId"));

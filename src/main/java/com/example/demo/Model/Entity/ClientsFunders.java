@@ -28,7 +28,6 @@ public class ClientsFunders {
     private String payerName;
 
     @Size(max = 31)
-    @NotNull
     @Column(name = "plan_name", length = 31)
     private String planName;
     @Size(max = 31)
@@ -38,10 +37,8 @@ public class ClientsFunders {
     @Column(name = "group_number", length = 31)
     private String groupNumber;
     @Size(max = 15)
-    @NotNull
     @Column(name = "relationship_to_client", nullable = false, length = 15)
     private String relationshipToClient;
-    @NotNull
     @Size(max = 31)
     @Column(name = "policy_holder_name", nullable = false, length = 31)
     private String policyHolderName;
