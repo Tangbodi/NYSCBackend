@@ -40,9 +40,9 @@ public class ClientsInfoService {
             logger.info("Creating ClientsInfo:{}", clientsInfoDTO.getFirstName());
             ClientsInfo clientsInfo = new ClientsInfo();
             clientsInfo.setId(snowflakeId);
-            clientsInfo.setLastName(clientsInfoDTO.getLastName());
-            clientsInfo.setFirstName(clientsInfoDTO.getFirstName());
-            clientsInfo.setMiddleName(clientsInfoDTO.getMiddleName());
+            clientsInfo.setClientLastName(clientsInfoDTO.getLastName());
+            clientsInfo.setClientFirstName(clientsInfoDTO.getFirstName());
+            clientsInfo.setClientMiddleName(clientsInfoDTO.getMiddleName());
             clientsInfo.setDateOfBirth(clientsInfoDTO.getDateOfBirth());
             clientsInfo.setGender(clientsInfoDTO.getGender());
             clientsInfo.setStatus(clientsInfoDTO.getStatus());
@@ -67,7 +67,7 @@ public class ClientsInfoService {
         try{
             ClientsInfo clientsInfo = clientsInfoRepository.findById(valueOf(clientId)).orElse(null);
             if (clientsInfo != null) {
-                logger.info("Found ClientsInfo: {}" + clientsInfo.getFirstName() +"."+clientsInfo.getLastName());
+                logger.info("Found ClientsInfo: {}" + clientsInfo.getClientFirstName() +"."+clientsInfo.getClientLastName());
                 return ConvertToClientsInfoVO(clientsInfo);
             } else {
                 logger.info("StaffsInfo does not exist.");
@@ -127,9 +127,9 @@ public class ClientsInfoService {
         ClientsInfoVO clientsInfoVO = new ClientsInfoVO();
 
         clientsInfoVO.setClientId(clientsInfo.getId());
-        clientsInfoVO.setFirstName(clientsInfo.getFirstName());
-        clientsInfoVO.setLastName(clientsInfo.getLastName());
-        clientsInfoVO.setMiddleName(clientsInfo.getMiddleName());
+        clientsInfoVO.setFirstName(clientsInfo.getClientFirstName());
+        clientsInfoVO.setLastName(clientsInfo.getClientLastName());
+        clientsInfoVO.setMiddleName(clientsInfo.getClientMiddleName());
         clientsInfoVO.setDateOfBirth(clientsInfo.getDateOfBirth());
         clientsInfoVO.setGender(clientsInfo.getGender());
         clientsInfoVO.setStatus(clientsInfo.getStatus());

@@ -18,9 +18,9 @@ public interface ClientsInfoRepository extends JpaRepository<ClientsInfo, Long> 
     @Transactional
     @Query(value = """
         UPDATE clients_info 
-        SET first_name = :firstName,
-            last_name = :lastName,
-            middle_name = :middleName,
+        SET client_first_name = :clientFirstName,
+            client_last_name = :clientLastName,
+            client_middle_name = :clientMiddleName,
             date_of_birth = :dob,
             gender = :gender,
             status = :status,
@@ -34,9 +34,9 @@ public interface ClientsInfoRepository extends JpaRepository<ClientsInfo, Long> 
         """, nativeQuery = true)
     int UpdateClientsInfo(
             @Param("id") Long id,
-            @Param("firstName") String firstName,
-            @Param("lastName") String lastName,
-            @Param("middleName") String middleName,
+            @Param("clientFirstName") String clientFirstName,
+            @Param("clientLastName") String clientLastName,
+            @Param("clientMiddleName") String clientMiddleName,
             @Param("dob") String dob,  // keep as String since DTO has String
             @Param("gender") String gender,
             @Param("status") String status,

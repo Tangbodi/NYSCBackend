@@ -35,13 +35,13 @@ public class StaffsInfo {
 
     @Size(max = 31)
     @NotNull
-    @Column(name = "first_name", nullable = false, length = 31)
-    private String firstName;
+    @Column(name = "staff_first_name", nullable = false, length = 31)
+    private String staffFirstName;
 
     @Size(max = 31)
     @NotNull
-    @Column(name = "last_name", nullable = false, length = 31)
-    private String lastName;
+    @Column(name = "staff_last_name", nullable = false, length = 31)
+    private String staffLastName;
 
 
     @Size(max = 7)
@@ -56,8 +56,8 @@ public class StaffsInfo {
 
     @Size(max = 31)
     @NotNull
-    @Column(name = "middle_name", nullable = false, length = 31)
-    private String middleName;
+    @Column(name = "staff_middle_name", nullable = false, length = 31)
+    private String staffMiddleName;
 
     @Size(max = 15)
     @NotNull

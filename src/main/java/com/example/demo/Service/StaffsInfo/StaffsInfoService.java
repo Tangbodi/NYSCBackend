@@ -38,9 +38,9 @@ public class StaffsInfoService {
             staffsInfo.setUsername(staffsRegisterDTO.getUsername());
             staffsInfo.setEmail(staffsRegisterDTO.getEmail());
             staffsInfo.setEmployeeType(staffsRegisterDTO.getEmployeeType());
-            staffsInfo.setFirstName(staffsRegisterDTO.getFirstName());
-            staffsInfo.setLastName(staffsRegisterDTO.getLastName());
-            staffsInfo.setMiddleName(emptyIfNull(staffsRegisterDTO.getMiddleName()));
+            staffsInfo.setStaffFirstName(staffsRegisterDTO.getFirstName());
+            staffsInfo.setStaffLastName(staffsRegisterDTO.getLastName());
+            staffsInfo.setStaffMiddleName(emptyIfNull(staffsRegisterDTO.getMiddleName()));
             staffsInfo.setStatus(staffsRegisterDTO.getStatus());
             staffsInfo.setPhone(staffsRegisterDTO.getPhone());
             staffsInfo.setSupervisor(emptyIfNull(staffsRegisterDTO.getSupervisor()));
@@ -140,9 +140,9 @@ public class StaffsInfoService {
                 staffsInfo.setUsername(staffsInfoDTO.getUsername());
                 staffsInfo.setEmail(staffsInfoDTO.getEmail());
                 staffsInfo.setEmployeeType(staffsInfoDTO.getEmployeeType());
-                staffsInfo.setFirstName(staffsInfoDTO.getFirstName());
-                staffsInfo.setLastName(staffsInfoDTO.getLastName());
-                staffsInfo.setMiddleName(staffsInfoDTO.getMiddleName());
+                staffsInfo.setStaffFirstName(staffsInfoDTO.getFirstName());
+                staffsInfo.setStaffLastName(staffsInfoDTO.getLastName());
+                staffsInfo.setStaffMiddleName(staffsInfoDTO.getMiddleName());
                 staffsInfo.setStatus(staffsInfoDTO.getStatus());
                 staffsInfo.setPhone(staffsInfoDTO.getPhone());
                 staffsInfo.setSupervisor(staffsInfoDTO.getSupervisor());
@@ -173,9 +173,9 @@ public class StaffsInfoService {
 //                logger.info("JSESSIONID: {}", request.getSession().getId());
 
         staffsInfoVO.setUsername(staffsInfo.getUsername());
-        staffsInfoVO.setFirstName(staffsInfo.getFirstName());
-        staffsInfoVO.setMiddleName(staffsInfo.getMiddleName());
-        staffsInfoVO.setLastName(staffsInfo.getLastName());
+        staffsInfoVO.setFirstName(staffsInfo.getStaffFirstName());
+        staffsInfoVO.setMiddleName(staffsInfo.getStaffMiddleName());
+        staffsInfoVO.setLastName(staffsInfo.getStaffLastName());
         staffsInfoVO.setPhone(staffsInfo.getPhone());
         staffsInfoVO.setTitle(staffsInfo.getTitle());
         staffsInfoVO.setEmail(staffsInfo.getEmail());

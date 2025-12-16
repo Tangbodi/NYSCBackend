@@ -52,7 +52,7 @@ public class StaffsLoginService {
         StaffsLogin staffsLogin = staffsLoginRepository.findById(staffId).orElse(null);
         if(staffsLogin != null){
             logger.info("Found staff: {}", staffId);
-            if(staffsLogin.getIsAdmin()=="1"){
+            if(staffsLogin.getIsAdmin().equals("1")){
                 logger.info("You are admin.");
                 return true;
             }
