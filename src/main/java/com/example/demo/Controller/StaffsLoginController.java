@@ -32,7 +32,7 @@ public class StaffsLoginController {
     private StaffsInfoService staffsInfoService;
     @Autowired
     private StaffsLoginService staffsLoginService;
-    @PostMapping("/registration")
+    @PostMapping("/new")
     public ResponseEntity<ApiResponse> StaffsRegistration(
             @Validated @RequestBody StaffsRegisterDTO staffsRegisterDTO,
             HttpServletRequest request) {
@@ -63,11 +63,11 @@ public class StaffsLoginController {
         // 2) Call service – let it throw if anything goes wrong
         try {
             staffsRegistrationService.RegisterStaffsLogin(staffsRegisterDTO);
-            apiResponse = ApiResponse.success("Staff registered successfully.");
+            apiResponse = ApiResponse.success("Add new staff successfully.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
         } catch (Exception e) {
-            logger.error("Registration error: {}", e.getMessage(), e);
+            logger.error("Error: {}", e.getMessage(), e);
 
             // Return *exact* message in API response
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(),

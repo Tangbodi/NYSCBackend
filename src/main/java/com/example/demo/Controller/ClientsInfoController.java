@@ -26,7 +26,7 @@ public class ClientsInfoController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
-    @PostMapping("/registration")
+    @PostMapping("/new")
     public ResponseEntity<ApiResponse> ClientsInfoRegistration(
             @Validated @RequestBody ClientsInfoDTO clientsInfoDTO,
             HttpServletRequest request) {
@@ -35,11 +35,11 @@ public class ClientsInfoController {
         try {
             logger.info("clientsInfoDTO: {}", clientsInfoDTO);
             clientsInfoService.RegisterClientsInfo(clientsInfoDTO);
-            apiResponse = ApiResponse.success("Clients registered successfully");
+            apiResponse = ApiResponse.success("Add new client successfully.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
         } catch (Exception e) {
-            logger.error("Registration error: {}", e.getMessage(), e);
+            logger.error("Error: {}", e.getMessage(), e);
 
             // Return *exact* message in API response
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(),
