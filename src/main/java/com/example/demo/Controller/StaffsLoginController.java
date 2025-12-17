@@ -33,7 +33,7 @@ public class StaffsLoginController {
     @Autowired
     private StaffsLoginService staffsLoginService;
     @PostMapping("/new")
-    public ResponseEntity<ApiResponse> StaffsRegistration(
+    public ResponseEntity<ApiResponse> NewStaffs(
             @Validated @RequestBody StaffsRegisterDTO staffsRegisterDTO,
             HttpServletRequest request) {
 

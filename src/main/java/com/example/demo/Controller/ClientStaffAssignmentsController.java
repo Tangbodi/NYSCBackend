@@ -25,7 +25,7 @@ public class ClientStaffAssignmentsController {
     @Autowired
     private ClientStaffAssignmentsService clientStaffAssignmentsService;
     @PostMapping("/assign")
-    public ResponseEntity<ApiResponse> CreateClientStaffAssignments(@RequestBody ClientStaffAssignmentsDTO clientStaffAssignmentsDTO, HttpServletRequest request){
+    public ResponseEntity<ApiResponse> NewClientStaffAssignments(@RequestBody ClientStaffAssignmentsDTO clientStaffAssignmentsDTO, HttpServletRequest request){
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
         if (userId == null) {

@@ -27,7 +27,7 @@ public class ClientsInfoController {
     private StaffsLoginService staffsLoginService;
 
     @PostMapping("/new")
-    public ResponseEntity<ApiResponse> ClientsInfoRegistration(
+    public ResponseEntity<ApiResponse> NewClientsInfo(
             @Validated @RequestBody ClientsInfoDTO clientsInfoDTO,
             HttpServletRequest request) {
 

@@ -25,7 +25,7 @@ public class ClientsReferringProvidersController {
     @Autowired
     private ClientsReferringProvidersService clientsReferringProvidersService;
     @PostMapping("/new")
-    public ResponseEntity<ApiResponse> ClientsInfoRegistration(
+    public ResponseEntity<ApiResponse> NewClientsReferringProviders(
             @Validated @RequestBody ClientsReferringProvidersDTO clientsReferringProvidersDTO,
             HttpServletRequest request) {
 

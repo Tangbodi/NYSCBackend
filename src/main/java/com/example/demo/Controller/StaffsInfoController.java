@@ -25,7 +25,7 @@ public class StaffsInfoController {
     private StaffsInfoService staffsInfoService;
 
     @GetMapping("/info")
-    public ResponseEntity<ApiResponse> getStaffsInfo(@RequestParam(value = "staff") String staffId, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse> GetStaffsInfo(@RequestParam(value = "staff") String staffId, HttpServletRequest request) {
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
         if (userId == null) {
@@ -45,7 +45,7 @@ public class StaffsInfoController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
     @GetMapping("/info/")
-    public ResponseEntity<ApiResponse> getAllStaffsInfo(HttpServletRequest request) {
+    public ResponseEntity<ApiResponse> GetAllStaffsInfo(HttpServletRequest request) {
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
         if (userId == null) {

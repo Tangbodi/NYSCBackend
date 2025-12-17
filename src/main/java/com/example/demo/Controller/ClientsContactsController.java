@@ -2,13 +2,10 @@ package com.example.demo.Controller;
 
 import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.ClientsFundersDTO;
-import com.example.demo.Model.DTO.ClientsInfoDTO;
-import com.example.demo.Service.ClientsFundersService.ClientsFundersService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,15 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequestMapping("/clients/funders")
-public class ClientsFundersController {
-    private static final Logger logger = LoggerFactory.getLogger(ClientsFundersController.class);
-
-    @Autowired
-    private ClientsFundersService clientsFundersService;
+@RequestMapping("/clients/contacts")
+public class ClientsContactsController {
+    private static final Logger logger = LoggerFactory.getLogger(ClientsContactsController.class);
 
     @PostMapping("/new")
-    public ResponseEntity<ApiResponse> NewClientsFunders(
+    public ResponseEntity<ApiResponse> NewClientsContacts(
             @Validated @RequestBody ClientsFundersDTO clientsFundersDTO,
             HttpServletRequest request) {
 
@@ -48,4 +42,5 @@ public class ClientsFundersController {
         }
 
     }
+
 }
