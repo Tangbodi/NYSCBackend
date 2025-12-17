@@ -12,7 +12,7 @@ import java.time.Instant;
 
 @Data
 public class ClientsContactsDTO implements Serializable {
-
+    @NotBlank(message = "clientId is required")
     private String clientId;
     @NotBlank(message = "First name is required.")
     @Length(min = 1, max = 31, message = "First name length not eligible.")
@@ -49,5 +49,4 @@ public class ClientsContactsDTO implements Serializable {
     @NotBlank
     @Length(min = 1, max = 15, message = "Relationship type length not eligible")
     private String relationshipType;
-
 }
