@@ -2,8 +2,10 @@ package com.example.demo.Service.ClientsReferringProviders;
 
 import com.example.demo.Model.DTO.ClientsReferringProvidersDTO;
 import com.example.demo.Model.Entity.ClientsReferringProviders;
+import com.example.demo.Model.VO.ClientsReferringProvidersVO;
 import com.example.demo.Repository.ClientsReferringProvidersRepository;
 import com.example.demo.Service.ClientsInfo.ClientsInfoService;
+import com.example.demo.Util.DateTimeConverter;
 import com.example.demo.Util.Snowflake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,5 +48,46 @@ public class ClientsReferringProvidersService {
             logger.error("Failed to register ClientsInfo: {}", e.getMessage(), e);
             throw e;
         }
+    }
+    public ClientsReferringProvidersVO GetClientsReferringProviders(String providerId){
+        logger.info("Getting ClientsReferringProviders: {}", providerId);
+        try{
+            ClientsReferringProviders clientsReferringProviders = clientsReferringProvidersRepository.findById(Long.valueOf(providerId)).orElse(null);
+            if(clientsReferringProviders!=null){
+                logger.info("Found ClientsReferringProviders.");
+                return ConvertToClientsReferringProvidersVO(clientsReferringProviders);
+            }else{
+                logger.info("No ClientsReferringProviders found.");
+                return null;
+            }
+        }catch (Exception e) {
+            logger.error("Failed to find ClientsReferringProviders: {}", e.getMessage(), e);
+        }
+        return null;
+    }
+    public ClientsReferringProvidersVO ConvertToClientsReferringProvidersVO(ClientsReferringProviders clientsReferringProviders){
+        logger.info("Converting to ClientsReferringProvidersVO: {}", clientsReferringProviders.getId());
+        ClientsReferringProvidersVO clientsReferringProvidersVO = new ClientsReferringProvidersVO();
+        clientsReferringProvidersVO.setProviderId(String.valueOf(clientsReferringProviders.getId()));
+        clientsReferringProvidersVO.setClientId(String.valueOf(clientsReferringProviders.getClientId()));
+        clientsReferringProvidersVO.setProviderFirstName(clientsReferringProviders.getProviderFirstName());
+        clientsReferringProvidersVO.setProviderLastName(clientsReferringProviders.getProviderLastName());
+        clientsReferringProvidersVO.setProviderMiddleName(clientsReferringProviders.getProviderMiddleName());
+        clientsReferringProvidersVO.setNpiNumber(clientsReferringProviders.getNpiNumber());
+        clientsReferringProvidersVO.setIsActive(clientsReferringProviders.getIsActive());
+        clientsReferringProvidersVO.setTaxonomyCode(clientsReferringProviders.getTaxonomyCode());
+        clientsReferringProvidersVO.setPhone(clientsReferringProviders.getPhone());
+        clientsReferringProvidersVO.setFax(clientsReferringProviders.getFax());
+        clientsReferringProvidersVO.setAddress(clientsReferringProviders.getAddress());
+        clientsReferringProvidersVO.setCity(clientsReferringProviders.getCity());
+        clientsReferringProvidersVO.setState(clientsReferringProviders.getState());
+        clientsReferringProvidersVO.setZipCode(clientsReferringProviders.getZipCode());
+        clientsReferringProvidersVO.setNotes(clientsReferringProviders.getNotes());
+        String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientsReferringProviders.getCreatedAt());
+        String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientsReferringProviders.getModifiedAt());
+        clientsReferringProvidersVO.setCreatedAt(formattedCreatedDateTime);
+        clientsReferringProvidersVO.setModifiedAt(formattedModifiedDateTime);
+        logger.info("ClientsFundersVO converted successfully.");
+        return clientsReferringProvidersVO;
     }
 }

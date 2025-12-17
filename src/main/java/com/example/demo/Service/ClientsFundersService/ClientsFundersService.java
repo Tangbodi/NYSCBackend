@@ -100,7 +100,7 @@ public class ClientsFundersService {
         return Collections.emptyList();
     }
     public ClientsFundersVO GetClientsFunders(String funderId){
-        logger.info("Getting ClientsFunders: {}");
+        logger.info("Getting ClientsFunders: {}", funderId);
         try{
             ClientsFunders clientsFunders = clientsFundersRepository.findById(Long.valueOf(funderId)).orElse(null);
             if(clientsFunders != null){
@@ -116,7 +116,7 @@ public class ClientsFundersService {
         return null;
     }
     public ClientsFundersVO ConvertToClientsFundersVO(ClientsFunders clientsFunders){
-        logger.info("Converting to ClientsFundersVO: {}");
+        logger.info("Converting to ClientsFundersVO: {}", clientsFunders.getId());
         ClientsFundersVO clientsFundersVO = new ClientsFundersVO();
         clientsFundersVO.setClientId(String.valueOf(clientsFunders.getClientId()));
         clientsFundersVO.setPayerName(clientsFunders.getPayerName());
