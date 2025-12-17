@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("/clients")
+@RequestMapping("/clients/info")
 public class ClientsInfoController {
     private static final Logger logger = LoggerFactory.getLogger(ClientsInfoController.class);
     @Autowired
@@ -49,7 +49,7 @@ public class ClientsInfoController {
         }
 
     }
-    @GetMapping("/info")
+    @GetMapping("/")
     public ResponseEntity<ApiResponse> GetClientsInfo(@RequestParam(value = "client") String clientId, HttpServletRequest request){
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");

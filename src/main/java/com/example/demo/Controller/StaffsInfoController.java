@@ -17,14 +17,14 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("/staffs")
+@RequestMapping("/staffs/info")
 public class StaffsInfoController {
     private static final Logger logger = LoggerFactory.getLogger(StaffsInfoController.class);
 
     @Autowired
     private StaffsInfoService staffsInfoService;
 
-    @GetMapping("/info")
+    @GetMapping("/")
     public ResponseEntity<ApiResponse> GetStaffsInfo(@RequestParam(value = "staff") String staffId, HttpServletRequest request) {
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
@@ -44,7 +44,7 @@ public class StaffsInfoController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
-    @GetMapping("/info/")
+    @GetMapping("/all")
     public ResponseEntity<ApiResponse> GetAllStaffsInfo(HttpServletRequest request) {
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
