@@ -35,7 +35,7 @@ public class ClientsInfoController {
         try {
             logger.info("clientsInfoDTO: {}", clientsInfoDTO);
             clientsInfoService.RegisterClientsInfo(clientsInfoDTO);
-            apiResponse = ApiResponse.success("Add new client successfully.");
+            apiResponse = ApiResponse.success("New client added successfully.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
         } catch (Exception e) {

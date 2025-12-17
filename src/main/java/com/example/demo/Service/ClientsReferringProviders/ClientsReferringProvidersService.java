@@ -4,6 +4,7 @@ import com.example.demo.Model.DTO.ClientsReferringProvidersDTO;
 import com.example.demo.Model.Entity.ClientsReferringProviders;
 import com.example.demo.Repository.ClientsReferringProvidersRepository;
 import com.example.demo.Service.ClientsInfo.ClientsInfoService;
+import com.example.demo.Util.Snowflake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class ClientsReferringProvidersService {
         logger.info("Creating ClientsReferringProviders: {}");
         try{
             ClientsReferringProviders clientsReferringProviders = new ClientsReferringProviders();
+            Long snowflakeId = Snowflake.generateUniqueId();
+            clientsReferringProviders.setId(snowflakeId);
             clientsReferringProviders.setClientId(Long.valueOf(clientsReferringProvidersDTO.getClientId()));
             clientsReferringProviders.setProviderLastName(clientsReferringProvidersDTO.getProviderLastName());
             clientsReferringProviders.setProviderFirstName(clientsReferringProvidersDTO.getProviderFirstName());

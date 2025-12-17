@@ -63,7 +63,7 @@ public class StaffsLoginController {
         // 2) Call service – let it throw if anything goes wrong
         try {
             staffsRegistrationService.RegisterStaffsLogin(staffsRegisterDTO);
-            apiResponse = ApiResponse.success("Add new staff successfully.");
+            apiResponse = ApiResponse.success("New staff added successfully.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
         } catch (Exception e) {

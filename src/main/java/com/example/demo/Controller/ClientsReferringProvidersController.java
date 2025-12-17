@@ -2,8 +2,8 @@ package com.example.demo.Controller;
 
 import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.ClientsFundersDTO;
-import com.example.demo.Model.DTO.ClientsInfoDTO;
-import com.example.demo.Service.ClientsFundersService.ClientsFundersService;
+import com.example.demo.Model.DTO.ClientsReferringProvidersDTO;
+import com.example.demo.Service.ClientsReferringProviders.ClientsReferringProvidersService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -18,23 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@RequestMapping("/clients/funders")
-public class ClientsFundersController {
-    private static final Logger logger = LoggerFactory.getLogger(ClientsFundersController.class);
+@RequestMapping("/clients/referring-providers")
+public class ClientsReferringProvidersController {
+    private static final Logger logger = LoggerFactory.getLogger(ClientsReferringProvidersController.class);
 
     @Autowired
-    private ClientsFundersService clientsFundersService;
-
+    private ClientsReferringProvidersService clientsReferringProvidersService;
     @PostMapping("/new")
     public ResponseEntity<ApiResponse> ClientsInfoRegistration(
-            @Validated @RequestBody ClientsFundersDTO clientsFundersDTO,
+            @Validated @RequestBody ClientsReferringProvidersDTO clientsReferringProvidersDTO,
             HttpServletRequest request) {
 
         ApiResponse apiResponse;
         try {
-            logger.info("clientsFundersDTO: {}", clientsFundersDTO);
-            clientsFundersService.CreateClientsFunders(clientsFundersDTO);
-            apiResponse = ApiResponse.success("New client funder added successfully.");
+            logger.info("clientsReferringProvidersDTO: {}", clientsReferringProvidersDTO);
+            clientsReferringProvidersService.CreateClientsReferringProviders(clientsReferringProvidersDTO);
+            apiResponse = ApiResponse.success("New client referring provider added successfully.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
         } catch (Exception e) {
@@ -46,6 +45,5 @@ public class ClientsFundersController {
 
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
-
     }
 }
