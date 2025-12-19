@@ -61,7 +61,7 @@ public class ClientsContactsService {
                 return null;
             }
         }catch (Exception e) {
-            logger.error("Failed to get StaffsInfo: {}", e.getMessage(), e);
+            logger.error("Failed to get ClientsContacts: {}", e.getMessage(), e);
         }
         return null;
     }
@@ -83,6 +83,7 @@ public class ClientsContactsService {
                     clientsContactsDTO.getZipCode(),
                     clientsContactsDTO.getNotes()
             );
+            logger.info("ClientsContacts updated successfully.");
         }catch (Exception e) {
             logger.error("Failed to update ClientsContacts: {}", e.getMessage(), e);
         }

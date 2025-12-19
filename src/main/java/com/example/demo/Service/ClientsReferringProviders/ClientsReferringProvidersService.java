@@ -45,7 +45,7 @@ public class ClientsReferringProvidersService {
             clientsReferringProvidersRepository.save(clientsReferringProviders);
             logger.info("ClientsReferringProviders created successfully.");
         } catch (Exception e) {
-            logger.error("Failed to register ClientsInfo: {}", e.getMessage(), e);
+            logger.error("Failed to register ClientsReferringProviders: {}", e.getMessage(), e);
             throw e;
         }
     }
@@ -87,7 +87,7 @@ public class ClientsReferringProvidersService {
         String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientsReferringProviders.getModifiedAt());
         clientsReferringProvidersVO.setCreatedAt(formattedCreatedDateTime);
         clientsReferringProvidersVO.setModifiedAt(formattedModifiedDateTime);
-        logger.info("ClientsFundersVO converted successfully.");
+        logger.info("ClientsReferringProvidersVO converted successfully.");
         return clientsReferringProvidersVO;
     }
 }

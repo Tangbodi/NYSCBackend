@@ -31,7 +31,7 @@ public class StaffsInfoService {
 
     @Transactional
     public void CreateStaffsInfo(StaffsRegisterDTO staffsRegisterDTO) {
-        logger.info("Creating StaffInfo: {}" + staffsRegisterDTO.getStaffId());
+        logger.info("Creating StaffInfo: {}", staffsRegisterDTO.getStaffId());
         try {
             StaffsInfo staffsInfo = new StaffsInfo();
             staffsInfo.setId(staffsRegisterDTO.getStaffId());

@@ -117,8 +117,9 @@ public class ClientsInfoService {
                     clientsInfoDTO.getZipCode(),
                     clientsInfoDTO.getNotes()
             );
+            logger.info("ClientsInfo updated successfully.");
         }catch (Exception e) {
-            logger.error("Failed to update StaffsInfo: {}", e.getMessage(), e);
+            logger.error("Failed to update ClientsInfo: {}", e.getMessage(), e);
         }
     }
     public ClientsInfoVO ConvertToClientsInfoVO(ClientsInfo clientsInfo) {

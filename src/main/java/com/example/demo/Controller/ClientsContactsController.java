@@ -60,7 +60,7 @@ public class ClientsContactsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
     @PostMapping("/update")
-    public ResponseEntity<ApiResponse> UpdateClientsContacts(ClientsContactsDTO clientsContactsDTO, HttpServletRequest request){
+    public ResponseEntity<ApiResponse> UpdateClientsContacts(@Validated @RequestBody ClientsContactsDTO clientsContactsDTO, HttpServletRequest request){
         ApiResponse apiResponse;
         try{
             clientsContactsService.UpdateClientsContacts(clientsContactsDTO);
