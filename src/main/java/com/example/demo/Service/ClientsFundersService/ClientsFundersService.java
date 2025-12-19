@@ -115,6 +115,14 @@ public class ClientsFundersService {
         }
         return null;
     }
+
+    public void UpdateClientsFunders(ClientsFundersDTO clientsFundersDTO){
+        logger.info("Updating ClientsFunders: {}", "Funder ID:"+clientsFundersDTO.getFunderId(),"Client ID:"+clientsFundersDTO.getClientId());
+        try{
+
+
+        }
+    }
     public ClientsFundersVO ConvertToClientsFundersVO(ClientsFunders clientsFunders){
         logger.info("Converting to ClientsFundersVO: {}", clientsFunders.getId());
         ClientsFundersVO clientsFundersVO = new ClientsFundersVO();

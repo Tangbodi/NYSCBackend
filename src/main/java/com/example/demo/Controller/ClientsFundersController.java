@@ -60,4 +60,17 @@ public class ClientsFundersController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
+    @PostMapping("/update")
+    public ResponseEntity<ApiResponse> UpdateClientsFunders(@Validated @RequestBody ClientsFundersDTO clientsFundersDTO, HttpServletRequest request) {
+
+        ApiResponse apiResponse;
+        try{
+            ClientsFundersVO clientsFundersVO = clientsFundersService.GetClientsFunders(funderId);
+            apiResponse = ApiResponse.success(clientsFundersVO);
+        }catch (Exception e) {
+            logger.error("Failed to get", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
 }

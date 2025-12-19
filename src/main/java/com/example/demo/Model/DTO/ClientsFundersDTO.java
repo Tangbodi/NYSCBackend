@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Data
 public class ClientsFundersDTO {
+    private String funderId;
     @NotBlank(message = "clientId is required")
     private String clientId;
     @NotBlank(message = "Payer name is required.")

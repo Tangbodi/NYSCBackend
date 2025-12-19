@@ -45,6 +45,4 @@ public interface ClientsContactsRepository extends JpaRepository<ClientsContacts
             @Param("notes") String notes
     );
 
-
-
 }
