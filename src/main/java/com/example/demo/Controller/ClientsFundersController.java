@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Validated
 @RequestMapping("/clients/funders")
@@ -60,13 +62,26 @@ public class ClientsFundersController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse> GetAllFundersByClientId(@RequestParam(value = "client") String clientId, HttpServletRequest request) {
+
+        ApiResponse apiResponse;
+        try{
+            List<ClientsFundersVO> clientsFundersVO = clientsFundersService.GetAllFundersByClient(clientId);
+            apiResponse = ApiResponse.success(clientsFundersVO);
+        }catch (Exception e) {
+            logger.error("Failed to get", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
     @PostMapping("/update")
     public ResponseEntity<ApiResponse> UpdateClientsFunders(@Validated @RequestBody ClientsFundersDTO clientsFundersDTO, HttpServletRequest request) {
 
         ApiResponse apiResponse;
         try{
-            ClientsFundersVO clientsFundersVO = clientsFundersService.GetClientsFunders(funderId);
-            apiResponse = ApiResponse.success(clientsFundersVO);
+            clientsFundersService.UpdateClientsFunders(clientsFundersDTO);
+            apiResponse = ApiResponse.success("Client funder updated successfully.");
         }catch (Exception e) {
             logger.error("Failed to get", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());

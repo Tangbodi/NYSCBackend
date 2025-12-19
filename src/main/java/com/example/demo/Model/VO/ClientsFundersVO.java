@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Data
 public class ClientsFundersVO {
+    private String funderId;
     private String clientId;
     private String payerName;
     private String planName;

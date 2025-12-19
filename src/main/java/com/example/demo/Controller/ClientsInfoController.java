@@ -35,7 +35,7 @@ public class ClientsInfoController {
         try {
             logger.info("clientsInfoDTO: {}", clientsInfoDTO);
             clientsInfoService.RegisterClientsInfo(clientsInfoDTO);
-            apiResponse = ApiResponse.success("New client added successfully.");
+            apiResponse = ApiResponse.success("New client info added successfully.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
 
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class ClientsInfoController {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
                 clientsInfoService.UpdateClientsInfo(clientsInfoDTO);
-                apiResponse = ApiResponse.success("Clients updated successfully.");
+                apiResponse = ApiResponse.success("Client info updated successfully.");
             }
         } catch (Exception e) {
             logger.error("Update error: {}", e.getMessage(), e);

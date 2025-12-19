@@ -58,15 +58,16 @@ public class ClientsFundersService {
         }
     }
 
-    public List<ClientsFundersVO> GetAllClientsFunders(Long clientId){
+    public List<ClientsFundersVO> GetAllFundersByClient(String clientId){
         logger.info("Getting all ClientsFunders: {}");
         try{
-            List<Map<String,Object>> fundersList = clientsFundersRepository.findByClientId(clientId);
+            List<Map<String,Object>> fundersList = clientsFundersRepository.findByClientId(Long.valueOf(clientId));
             if (!fundersList.isEmpty()) {
                 logger.info("Found fundersList.");
                 List<ClientsFundersVO> clientsFundersVOList = new ArrayList<>();
                 for(Map<String,Object> funder: fundersList){
                     ClientsFundersVO clientsFundersVO = new ClientsFundersVO();
+                    clientsFundersVO.setFunderId(String.valueOf(funder.get("client_funder_id")));
                     clientsFundersVO.setClientId(String.valueOf(funder.get("client_id")));
                     clientsFundersVO.setPayerName(String.valueOf(funder.get("payer_name")));
                     clientsFundersVO.setPlanName(String.valueOf(funder.get("plan_name")));
@@ -119,13 +120,35 @@ public class ClientsFundersService {
     public void UpdateClientsFunders(ClientsFundersDTO clientsFundersDTO){
         logger.info("Updating ClientsFunders: {}", "Funder ID:"+clientsFundersDTO.getFunderId(),"Client ID:"+clientsFundersDTO.getClientId());
         try{
-
-
+            clientsFundersRepository.UpdateClientsFunderByClientIdAndFunderId(Long.valueOf(clientsFundersDTO.getClientId()),
+                    Long.valueOf(clientsFundersDTO.getFunderId()),
+                    clientsFundersDTO.getPayerName(),
+                    clientsFundersDTO.getPlanName(),
+                    clientsFundersDTO.getMemberId(),
+                    clientsFundersDTO.getGroupNumber(),
+                    clientsFundersDTO.getRelationshipToClient(),
+                    clientsFundersDTO.getPolicyHolderName(),
+                    clientsFundersDTO.getPolicyHolderPhone(),
+                    clientsFundersDTO.getPolicyHolderEmail(),
+                    clientsFundersDTO.getPolicyHolderAddress(),
+                    clientsFundersDTO.getPolicyHolderCity(),
+                    clientsFundersDTO.getPolicyHolderState(),
+                    clientsFundersDTO.getPolicyHolderZipCode(),
+                    clientsFundersDTO.getCoverageOrder(),
+                    clientsFundersDTO.getEffectiveStart(),
+                    clientsFundersDTO.getEffectiveEnd(),
+                    clientsFundersDTO.getIsActive(),
+                    clientsFundersDTO.getNotes()
+                    );
+            logger.info("ClientsFunders updated successfully.");
+        }catch (Exception e) {
+            logger.error("Failed to update ClientsFunders: {}", e.getMessage(), e);
         }
     }
     public ClientsFundersVO ConvertToClientsFundersVO(ClientsFunders clientsFunders){
         logger.info("Converting to ClientsFundersVO: {}", clientsFunders.getId());
         ClientsFundersVO clientsFundersVO = new ClientsFundersVO();
+        clientsFundersVO.setFunderId(String.valueOf(clientsFunders.getId()));
         clientsFundersVO.setClientId(String.valueOf(clientsFunders.getClientId()));
         clientsFundersVO.setPayerName(clientsFunders.getPayerName());
         clientsFundersVO.setPlanName(clientsFunders.getPlanName());

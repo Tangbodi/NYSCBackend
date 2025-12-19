@@ -22,35 +22,49 @@ public interface ClientsFundersRepository extends JpaRepository<ClientsFunders, 
     @Modifying
     @Transactional
     @Query(value = """
-        UPDATE clients_contacts 
-        SET first_name = :firstName,
-            last_name = :lastName,
-            middle_name = :middleName,
-            relationship_type = :relationshipType,
-            is_primary = :isPrimary,
-            phone = :phone,
-            email = :email,
-            address = :address,
-            city = :city,
-            state = :state,
-            zip_code = :zipCode,
-            notes = :notes,
-            modified_at = NOW()
-        WHERE client_id = :id
-        """, nativeQuery = true)
-    int UpdateClientsContacts(
-            @Param("id") Long id,
-            @Param("firstName") String firstName,
-            @Param("lastName") String lastName,
-            @Param("middleName") String middleName,
-            @Param("relationshipType") String relationshipType,
-            @Param("isPrimary") String isPrimary,
-            @Param("phone") String phone,
-            @Param("email") String email,
-            @Param("address") String address,
-            @Param("city") String city,
-            @Param("state") String state,
-            @Param("zipCode") String zipCode,
+    UPDATE clients_funders
+    SET payer_name = :payerName,
+        plan_name = :planName,
+        member_id = :memberId,
+        group_number = :groupNumber,
+        relationship_to_client = :relationshipToClient,
+        policy_holder_name = :policyHolderName,
+        policy_holder_phone = :policyHolderPhone,
+        policy_holder_email = :policyHolderEmail,
+        policy_holder_address = :policyHolderAddress,
+        policy_holder_city = :policyHolderCity,
+        policy_holder_state = :policyHolderState,
+        policy_holder_zip_code = :policyHolderZipCode,
+        coverage_order = :coverageOrder,
+        effective_start = :effectiveStart,
+        effective_end = :effectiveEnd,
+        is_active = :isActive,
+        notes = :notes,
+        modified_at = NOW()
+    WHERE client_id = :clientId
+      AND client_funder_id = :funderId
+    """, nativeQuery = true)
+    int UpdateClientsFunderByClientIdAndFunderId(
+            @Param("clientId") Long clientId,
+            @Param("funderId") Long funderId,
+            @Param("payerName") String payerName,
+            @Param("planName") String planName,
+            @Param("memberId") String memberId,
+            @Param("groupNumber") String groupNumber,
+            @Param("relationshipToClient") String relationshipToClient,
+            @Param("policyHolderName") String policyHolderName,
+            @Param("policyHolderPhone") String policyHolderPhone,
+            @Param("policyHolderEmail") String policyHolderEmail,
+            @Param("policyHolderAddress") String policyHolderAddress,
+            @Param("policyHolderCity") String policyHolderCity,
+            @Param("policyHolderState") String policyHolderState,
+            @Param("policyHolderZipCode") String policyHolderZipCode,
+            @Param("coverageOrder") String coverageOrder,
+            @Param("effectiveStart") String effectiveStart,
+            @Param("effectiveEnd") String effectiveEnd,
+            @Param("isActive") String isActive,
             @Param("notes") String notes
     );
+
+
 }

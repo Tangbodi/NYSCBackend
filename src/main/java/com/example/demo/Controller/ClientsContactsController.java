@@ -64,7 +64,7 @@ public class ClientsContactsController {
         ApiResponse apiResponse;
         try{
             clientsContactsService.UpdateClientsContacts(clientsContactsDTO);
-            apiResponse = ApiResponse.success("Clients updated successfully.");
+            apiResponse = ApiResponse.success("Client contact updated successfully.");
         }catch (Exception e) {
             logger.error("Failed to get", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
