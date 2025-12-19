@@ -10,11 +10,11 @@ import org.hibernate.validator.constraints.Length;
 public class ClientsReferringProvidersVO {
     private String providerId;
     private String clientId;
-    private String providerFirstName;
+    private String firstName;
 
-    private String providerLastName;
+    private String lastName;
 
-    private String providerMiddleName;
+    private String middleName;
     private String npiNumber;
     private String isActive;
     private String taxonomyCode;

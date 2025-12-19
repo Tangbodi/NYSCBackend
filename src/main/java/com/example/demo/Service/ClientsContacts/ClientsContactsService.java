@@ -87,6 +87,7 @@ public class ClientsContactsService {
             logger.error("Failed to update ClientsContacts: {}", e.getMessage(), e);
         }
     }
+
     public ClientsContactsVO ConvertToClientsContactsVO(ClientsContacts clientsContacts){
         logger.info("Converting to ClientsContactsVO: {}", clientsContacts.getId());
         ClientsContactsVO clientsContactsVO = new ClientsContactsVO();

@@ -15,14 +15,14 @@ public class ClientsReferringProvidersDTO implements Serializable {
     @NotBlank(message = "First name is required.")
     @Length(min = 1, max = 31, message = "First name length not eligible.")
     @ValidUsername
-    private String providerFirstName;
+    private String firstName;
     @NotBlank(message = "Last name is required.")
     @Length(min = 1, max = 31, message = "Last name length not eligible.")
     @ValidUsername
-    private String providerLastName;
+    private String lastName;
     @Length(min = 1, max = 31, message = "Middle name length not eligible.")
     @ValidUsername
-    private String providerMiddleName;
+    private String middleName;
     @Length(min = 1, max = 15, message = "NPI number length not eligible.")
     private String npiNumber;
     @NotBlank(message = "Status is required.")

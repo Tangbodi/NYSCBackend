@@ -27,9 +27,9 @@ public class ClientsReferringProvidersService {
             Long snowflakeId = Snowflake.generateUniqueId();
             clientsReferringProviders.setId(snowflakeId);
             clientsReferringProviders.setClientId(Long.valueOf(clientsReferringProvidersDTO.getClientId()));
-            clientsReferringProviders.setProviderLastName(clientsReferringProvidersDTO.getProviderLastName());
-            clientsReferringProviders.setProviderFirstName(clientsReferringProvidersDTO.getProviderFirstName());
-            clientsReferringProviders.setProviderMiddleName(clientsReferringProvidersDTO.getProviderMiddleName());
+            clientsReferringProviders.setProviderLastName(clientsReferringProvidersDTO.getLastName());
+            clientsReferringProviders.setProviderFirstName(clientsReferringProvidersDTO.getFirstName());
+            clientsReferringProviders.setProviderMiddleName(clientsReferringProvidersDTO.getMiddleName());
             clientsReferringProviders.setNpiNumber(clientsReferringProvidersDTO.getNpiNumber());
             clientsReferringProviders.setIsActive(clientsReferringProvidersDTO.getIsActive());
             clientsReferringProviders.setTaxonomyCode(clientsReferringProvidersDTO.getTaxonomyCode());
@@ -70,9 +70,9 @@ public class ClientsReferringProvidersService {
         ClientsReferringProvidersVO clientsReferringProvidersVO = new ClientsReferringProvidersVO();
         clientsReferringProvidersVO.setProviderId(String.valueOf(clientsReferringProviders.getId()));
         clientsReferringProvidersVO.setClientId(String.valueOf(clientsReferringProviders.getClientId()));
-        clientsReferringProvidersVO.setProviderFirstName(clientsReferringProviders.getProviderFirstName());
-        clientsReferringProvidersVO.setProviderLastName(clientsReferringProviders.getProviderLastName());
-        clientsReferringProvidersVO.setProviderMiddleName(clientsReferringProviders.getProviderMiddleName());
+        clientsReferringProvidersVO.setFirstName(clientsReferringProviders.getProviderFirstName());
+        clientsReferringProvidersVO.setLastName(clientsReferringProviders.getProviderLastName());
+        clientsReferringProvidersVO.setMiddleName(clientsReferringProviders.getProviderMiddleName());
         clientsReferringProvidersVO.setNpiNumber(clientsReferringProviders.getNpiNumber());
         clientsReferringProvidersVO.setIsActive(clientsReferringProviders.getIsActive());
         clientsReferringProvidersVO.setTaxonomyCode(clientsReferringProviders.getTaxonomyCode());
