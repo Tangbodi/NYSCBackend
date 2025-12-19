@@ -47,7 +47,7 @@ public class ClientsContactsController {
         }
 
     }
-    @GetMapping("/edit")
+    @GetMapping("/")
     public ResponseEntity<ApiResponse> GetClientsContacts(@RequestParam(value = "client") String clientId, HttpServletRequest request){
         ApiResponse apiResponse;
         try{
@@ -59,5 +59,16 @@ public class ClientsContactsController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
-
+    @PostMapping("/edit")
+    public ResponseEntity<ApiResponse> GetClientsContacts(HttpServletRequest request){
+        ApiResponse apiResponse;
+        try{
+            ClientsContactsVO clientsContactsVO = clientsContactsService.GetClientsContacts(clientId);
+            apiResponse = ApiResponse.success(clientsContactsVO);
+        }catch (Exception e) {
+            logger.error("Failed to get", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
 }
