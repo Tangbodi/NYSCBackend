@@ -47,7 +47,7 @@ public class ClientsContactsController {
         }
 
     }
-    @GetMapping("/")
+    @GetMapping("/edit")
     public ResponseEntity<ApiResponse> GetClientsContacts(@RequestParam(value = "client") String clientId, HttpServletRequest request){
         ApiResponse apiResponse;
         try{

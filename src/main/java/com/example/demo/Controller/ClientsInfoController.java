@@ -68,7 +68,7 @@ public class ClientsInfoController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
-    @GetMapping("/info/")
+    @GetMapping("/all")
     public ResponseEntity<ApiResponse> GetAllClientsInfo(HttpServletRequest request){
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
@@ -88,7 +88,7 @@ public class ClientsInfoController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PostMapping("/info/update")
+    @PostMapping("/edit")
     public ResponseEntity<ApiResponse> UpdateClientsInfo(
             @Validated @RequestBody ClientsInfoDTO clientsInfoDTO,
             HttpServletRequest request) {
