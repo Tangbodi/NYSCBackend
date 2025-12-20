@@ -88,7 +88,7 @@ public class ClientsInfoController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<ApiResponse> UpdateClientsInfo(
             @Validated @RequestBody ClientsInfoDTO clientsInfoDTO,
             HttpServletRequest request) {

@@ -75,7 +75,7 @@ public class ClientsFundersController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<ApiResponse> UpdateClientsFunders(@Validated @RequestBody ClientsFundersDTO clientsFundersDTO, HttpServletRequest request) {
 
         ApiResponse apiResponse;
