@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 @Data
 public class ClientsReferringProvidersDTO implements Serializable {
+    private String providerId;
     private String clientId;
     @NotBlank(message = "First name is required.")
     @Length(min = 1, max = 31, message = "First name length not eligible.")

@@ -76,13 +76,17 @@ public class StaffsInfoController {
             try {
                 staffsInfoDTO.setStaffId(userId);
                 if (staffsInfoService.UpdateStaffsInfo(staffsInfoDTO, request) != null) {
-                    apiResponse = ApiResponse.success("User info has been updated.");
+                    apiResponse = ApiResponse.success("User info updated successfully.");
                 } else {
                     apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "User info hasn't been updated.");
                 }
-            } catch (Exception e) {
-                logger.error("Failed to update user info", e.getMessage(), e);
-                apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+            }catch (Exception e) {
+                logger.error("Update error: {}", e.getMessage(), e);
+
+                apiResponse = ApiResponse.error(
+                        ReturnCode.RC500.getCode(),
+                        "Error: " + e.getMessage()
+                );
             }
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);

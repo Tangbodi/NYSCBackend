@@ -65,6 +65,31 @@ public class ClientsReferringProvidersService {
         }
         return null;
     }
+    public void UpdateClientsReferringProviders(ClientsReferringProvidersDTO clientsReferringProvidersDTO){
+        logger.info("Updating ClientsReferringProviders: {}", "Provider ID:"+clientsReferringProvidersDTO.getProviderId(),"Client ID:"+clientsReferringProvidersDTO.getClientId());
+        try{
+            clientsReferringProvidersRepository.UpdateClientsReferringProviderByClientIdAndProviderId(
+                    Long.valueOf(clientsReferringProvidersDTO.getProviderId()),
+                    Long.valueOf(clientsReferringProvidersDTO.getClientId()),
+                    clientsReferringProvidersDTO.getFirstName(),
+                    clientsReferringProvidersDTO.getLastName(),
+                    clientsReferringProvidersDTO.getMiddleName(),
+                    clientsReferringProvidersDTO.getNpiNumber(),
+                    clientsReferringProvidersDTO.getIsActive(),
+                    clientsReferringProvidersDTO.getTaxonomyCode(),
+                    clientsReferringProvidersDTO.getPhone(),
+                    clientsReferringProvidersDTO.getFax(),
+                    clientsReferringProvidersDTO.getAddress(),
+                    clientsReferringProvidersDTO.getCity(),
+                    clientsReferringProvidersDTO.getState(),
+                    clientsReferringProvidersDTO.getZipCode(),
+                    clientsReferringProvidersDTO.getNotes()
+            );
+            logger.info("ClientsReferringProviders updated successfully.");
+        }catch (Exception e) {
+            logger.error("Failed to update ClientsReferringProviders: {}", e.getMessage(), e);
+        }
+    }
     public ClientsReferringProvidersVO ConvertToClientsReferringProvidersVO(ClientsReferringProviders clientsReferringProviders){
         logger.info("Converting to ClientsReferringProvidersVO: {}", clientsReferringProviders.getId());
         ClientsReferringProvidersVO clientsReferringProvidersVO = new ClientsReferringProvidersVO();
