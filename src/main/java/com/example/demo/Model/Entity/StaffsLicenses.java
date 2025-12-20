@@ -35,9 +35,11 @@ public class StaffsLicenses {
     @Size(max = 63)
     @Column(name = "notes", length = 63)
     private String notes;
-    @Column(name = "issue_date")
+    @Size(max = 15)
+    @Column(name = "issue_date", length = 15)
     private String issueDate;
-    @Column(name = "expired_date")
+    @Size(max = 15)
+    @Column(name = "expired_date", length = 15)
     private String expiredDate;
     @NotNull
     @Column(name = "created_at", nullable = false)
