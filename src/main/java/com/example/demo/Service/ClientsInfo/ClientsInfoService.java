@@ -95,7 +95,7 @@ public class ClientsInfoService {
                 return Collections.emptyList();
             }
         }catch (Exception e) {
-            logger.error("Failed to update StaffsInfo: {}", e.getMessage(), e);
+            logger.error("Failed to get StaffsInfo: {}", e.getMessage(), e);
         }
         return Collections.emptyList();
     }

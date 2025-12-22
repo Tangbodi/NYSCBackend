@@ -59,9 +59,9 @@ public class ClientsFundersService {
     }
 
     public List<ClientsFundersVO> GetAllFundersByClient(String clientId){
-        logger.info("Getting all ClientsFunders: {}");
+        logger.info("Getting all funders by clientId: {}");
         try{
-            List<Map<String,Object>> fundersList = clientsFundersRepository.findByClientId(Long.valueOf(clientId));
+            List<Map<String,Object>> fundersList = clientsFundersRepository.findFundersByClientId(Long.valueOf(clientId));
             if (!fundersList.isEmpty()) {
                 logger.info("Found fundersList.");
                 List<ClientsFundersVO> clientsFundersVOList = new ArrayList<>();
@@ -92,11 +92,11 @@ public class ClientsFundersService {
                 }
                 return clientsFundersVOList;
             }else{
-                logger.info("No ClientsFunders found.");
+                logger.info("No fundersList found.");
                 return Collections.emptyList();
             }
         }catch (Exception e) {
-            logger.error("Failed to update ClientsFunders: {}", e.getMessage(), e);
+            logger.error("Failed to get fundersList: {}", e.getMessage(), e);
         }
         return Collections.emptyList();
     }

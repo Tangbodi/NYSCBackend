@@ -63,12 +63,12 @@ public class ClientsFundersController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse> GetAllFundersByClientId(@RequestParam(value = "client") String clientId, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse> GetAllFundersByClient(@RequestParam(value = "client") String clientId, HttpServletRequest request) {
 
         ApiResponse apiResponse;
         try{
-            List<ClientsFundersVO> clientsFundersVO = clientsFundersService.GetAllFundersByClient(clientId);
-            apiResponse = ApiResponse.success(clientsFundersVO);
+            List<ClientsFundersVO> clientsFundersVOList = clientsFundersService.GetAllFundersByClient(clientId);
+            apiResponse = ApiResponse.success(clientsFundersVOList);
         }catch (Exception e) {
             logger.error("Failed to get", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());

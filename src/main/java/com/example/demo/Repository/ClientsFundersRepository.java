@@ -17,7 +17,7 @@ public interface ClientsFundersRepository extends JpaRepository<ClientsFunders, 
     @Query(value = "SELECT *\n" +
             "FROM nysc.clients_funders cf\n" +
             "WHERE client_id = :id", nativeQuery = true)
-    List<Map<String, Object>> findByClientId(@Param("id") Long clientId);
+    List<Map<String, Object>> findFundersByClientId(@Param("id") Long clientId);
 
     @Modifying
     @Transactional
