@@ -8,6 +8,7 @@ import com.example.demo.Repository.StaffsLicensesRepository;
 import com.example.demo.Service.ClientsReferringProviders.ClientsReferringProvidersService;
 import com.example.demo.Util.DateTimeConverter;
 import com.example.demo.Util.Snowflake;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class StaffsLicensesService {
     @Autowired
     private StaffsLicensesRepository staffsLicensesRepository;
 
+    @Transactional
     public void CreateStaffsLicenses(StaffsLicensesDTO staffsLicensesDTO){
         logger.info("Creating StaffsLicenses: {}");
         try{
@@ -93,6 +95,23 @@ public class StaffsLicensesService {
             logger.error("Failed to get StaffsLicenses: {}", e.getMessage(), e);
         }
         return null;
+    }
+    @Transactional
+    public void UpdateStaffsLicenses(StaffsLicensesDTO staffsLicensesDTO){
+        logger.info("Updating StaffsLicenses: {}", "License ID:"+staffsLicensesDTO.getLicenseId(),"Staff ID:"+staffsLicensesDTO.getStaffId());
+
+        try{
+            staffsLicensesRepository.updateStaffLicenseByStaffIdAndLicenseId(Long.valueOf(staffsLicensesDTO.getLicenseId()), Long.valueOf(staffsLicensesDTO.getStaffId()),
+                    staffsLicensesDTO.getLicenseName(),
+                    staffsLicensesDTO.getLicenseNumber(),
+                    staffsLicensesDTO.getLicenseState(),
+                    staffsLicensesDTO.getIssueDate(),
+                    staffsLicensesDTO.getExpiredDate(),
+                    staffsLicensesDTO.getNotes()
+            );
+        }catch (Exception e) {
+            logger.error("Failed to update StaffsLicenses: {}", e.getMessage(), e);
+        }
     }
     public StaffsLicensesVO ConvertToStaffsLicensesVO(StaffsLicenses staffsLicenses){
         logger.info("Converting to StaffsLicensesVO.");

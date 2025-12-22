@@ -72,4 +72,21 @@ public class StaffsLicensesController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse> UpdateStaffsLicenses(@Validated @RequestBody StaffsLicensesDTO staffsLicensesDTO, HttpServletRequest request) {
+
+        ApiResponse apiResponse;
+        try{
+            staffsLicensesService.UpdateStaffsLicenses(staffsLicensesDTO);
+            apiResponse = ApiResponse.success("Staff license updated successfully.");
+        }catch (Exception e) {
+            logger.error("Update error: {}", e.getMessage(), e);
+
+            apiResponse = ApiResponse.error(
+                    ReturnCode.RC500.getCode(),
+                    "Error: " + e.getMessage()
+            );
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
 }

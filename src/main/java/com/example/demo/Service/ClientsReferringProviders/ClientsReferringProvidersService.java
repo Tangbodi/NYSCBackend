@@ -7,6 +7,7 @@ import com.example.demo.Repository.ClientsReferringProvidersRepository;
 import com.example.demo.Service.ClientsInfo.ClientsInfoService;
 import com.example.demo.Util.DateTimeConverter;
 import com.example.demo.Util.Snowflake;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class ClientsReferringProvidersService {
     @Autowired
     private ClientsReferringProvidersRepository clientsReferringProvidersRepository;
 
+    @Transactional
     public void CreateClientsReferringProviders(ClientsReferringProvidersDTO clientsReferringProvidersDTO){
         logger.info("Creating ClientsReferringProviders: {}");
         try{
@@ -65,6 +67,7 @@ public class ClientsReferringProvidersService {
         }
         return null;
     }
+    @Transactional
     public void UpdateClientsReferringProviders(ClientsReferringProvidersDTO clientsReferringProvidersDTO){
         logger.info("Updating ClientsReferringProviders: {}", "Provider ID:"+clientsReferringProvidersDTO.getProviderId(),"Client ID:"+clientsReferringProvidersDTO.getClientId());
         try{

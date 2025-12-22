@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.Length;
 import java.io.Serializable;
 @Data
 public class StaffsLicensesDTO implements Serializable {
+
+    private String licenseId;
     @NotBlank(message = "staffId is required")
     private String staffId;
     @Length(min = 0, max = 31, message = "License name length not eligible.")

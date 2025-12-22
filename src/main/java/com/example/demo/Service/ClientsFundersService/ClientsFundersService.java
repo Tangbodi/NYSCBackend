@@ -116,7 +116,7 @@ public class ClientsFundersService {
         }
         return null;
     }
-
+    @Transactional
     public void UpdateClientsFunders(ClientsFundersDTO clientsFundersDTO){
         logger.info("Updating ClientsFunders: {}", "Funder ID:"+clientsFundersDTO.getFunderId(),"Client ID:"+clientsFundersDTO.getClientId());
         try{

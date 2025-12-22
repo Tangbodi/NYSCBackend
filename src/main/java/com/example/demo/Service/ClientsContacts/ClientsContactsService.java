@@ -65,6 +65,7 @@ public class ClientsContactsService {
         }
         return null;
     }
+    @Transactional
     public void UpdateClientsContacts(ClientsContactsDTO clientsContactsDTO){
         logger.info("Updating ClientsContacts: {}", clientsContactsDTO.getClientId());
         try{
