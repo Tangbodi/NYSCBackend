@@ -11,9 +11,7 @@ public class ClientsReferringProvidersVO {
     private String providerId;
     private String clientId;
     private String firstName;
-
     private String lastName;
-
     private String middleName;
     private String npiNumber;
     private String isActive;
