@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("/clients/info")
+@RequestMapping("/Clients")
 public class ClientsInfoController {
     private static final Logger logger = LoggerFactory.getLogger(ClientsInfoController.class);
     @Autowired
@@ -26,7 +26,7 @@ public class ClientsInfoController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
-    @PostMapping("/new")
+    @PostMapping("/add")
     public ResponseEntity<ApiResponse> NewClientsInfo(
             @Validated @RequestBody ClientsInfoDTO clientsInfoDTO,
             HttpServletRequest request) {

@@ -19,14 +19,14 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("/clients/funders")
+@RequestMapping("/ClientFunders")
 public class ClientsFundersController {
     private static final Logger logger = LoggerFactory.getLogger(ClientsFundersController.class);
 
     @Autowired
     private ClientsFundersService clientsFundersService;
 
-    @PostMapping("/new")
+    @PostMapping("/add")
     public ResponseEntity<ApiResponse> NewClientsFunders(
             @Validated @RequestBody ClientsFundersDTO clientsFundersDTO,
             HttpServletRequest request) {
