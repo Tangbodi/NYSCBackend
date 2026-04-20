@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Validated
-@RequestMapping("/clients/referring-providers")
+@RequestMapping("/ClientReferringProviders")
 public class ClientsReferringProvidersController {
     private static final Logger logger = LoggerFactory.getLogger(ClientsReferringProvidersController.class);
 
     @Autowired
     private ClientsReferringProvidersService clientsReferringProvidersService;
-    @PostMapping("/new")
+    @PostMapping("/add")
     public ResponseEntity<ApiResponse> NewClientsReferringProviders(
             @Validated @RequestBody ClientsReferringProvidersDTO clientsReferringProvidersDTO,
             HttpServletRequest request) {
