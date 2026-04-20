@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Validated
-@RequestMapping("/clients/contacts")
+@RequestMapping("/ClientContacts")
 public class ClientsContactsController {
     private static final Logger logger = LoggerFactory.getLogger(ClientsContactsController.class);
 
     @Autowired
     private ClientsContactsService clientsContactsService;
-    @PostMapping("/new")
+    @PostMapping("/add")
     public ResponseEntity<ApiResponse> NewClientsContacts(
             @Validated @RequestBody ClientsContactsDTO clientsContactsDTO,
             HttpServletRequest request) {
