@@ -12,7 +12,12 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Configuration
 @ComponentScan({"com.example.demo","Controller","Service","Util"})
 @SpringBootApplication
-public class NyscApplication{
+public class NyscApplication extends SpringBootServletInitializer {
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(NyscApplication.class);
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(NyscApplication.class, args);
