@@ -4,7 +4,7 @@ import com.example.demo.Model.DTO.ClientsInfoDTO;
 import com.example.demo.Model.Entity.ClientsInfo;
 import com.example.demo.Model.VO.ClientsInfoVO;
 import com.example.demo.Repository.ClientsInfoRepository;
-import com.example.demo.Service.ClientsContacts.ClientsContactsService;
+import com.example.demo.Service.ClientsContacts.ClientContactsService;
 import com.example.demo.Util.DateTimeConverter;
 import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
@@ -17,7 +17,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static java.lang.Long.valueOf;
 
@@ -28,7 +27,7 @@ public class ClientsInfoService {
     @Autowired
     private ClientsInfoRepository clientsInfoRepository;
     @Autowired
-    private ClientsContactsService clientsContactsService;
+    private ClientContactsService clientContactsService;
     @Transactional
     public void RegisterClientsInfo(ClientsInfoDTO clientsInfoDTO) {
         logger.info("Registering ClientsInfo: {}", clientsInfoDTO.getFirstName() + "." + clientsInfoDTO.getLastName());

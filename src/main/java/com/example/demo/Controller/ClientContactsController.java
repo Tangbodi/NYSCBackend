@@ -1,0 +1,75 @@
+package com.example.demo.Controller;
+
+import com.example.demo.Constant.Enum.ReturnCode;
+import com.example.demo.Model.DTO.ClientContactsDTO;
+import com.example.demo.Model.VO.ClientContactsVO;
+import com.example.demo.Service.ClientsContacts.ClientContactsService;
+import com.example.demo.Util.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@Validated
+@RequestMapping("/ClientContacts")
+public class ClientContactsController {
+    private static final Logger logger = LoggerFactory.getLogger(ClientContactsController.class);
+
+    @Autowired
+    private ClientContactsService clientContactsService;
+    @PostMapping("/add")
+    public ResponseEntity<ApiResponse> NewClientsContacts(
+            @Validated @RequestBody ClientContactsDTO clientContactsDTO,
+            HttpServletRequest request) {
+
+        ApiResponse apiResponse;
+        try {
+            logger.info("clientsContactsDTO: {}", clientContactsDTO);
+            clientContactsService.CreateClientsContacts(clientContactsDTO);
+            apiResponse = ApiResponse.success("New client contact added successfully.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage(), e);
+
+            // Return *exact* message in API response
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(),
+                    "Error: " + e.getMessage());
+
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+
+    }
+    @GetMapping("/")
+    public ResponseEntity<ApiResponse> GetClientsContacts(@RequestParam(value = "client") String clientId, HttpServletRequest request){
+        ApiResponse apiResponse;
+        try{
+            ClientContactsVO clientContactsVO = clientContactsService.GetClientsContacts(clientId);
+            apiResponse = ApiResponse.success(clientContactsVO);
+        }catch (Exception e) {
+            logger.error("Failed to get", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse> UpdateClientsContacts(@Validated @RequestBody ClientContactsDTO clientContactsDTO, HttpServletRequest request){
+        ApiResponse apiResponse;
+        try{
+            clientContactsService.UpdateClientsContacts(clientContactsDTO);
+            apiResponse = ApiResponse.success("Client contact updated successfully.");
+        }catch (Exception e) {
+            logger.error("Update error: {}", e.getMessage(), e);
+
+            apiResponse = ApiResponse.error(
+                    ReturnCode.RC500.getCode(),
+                    "Error: " + e.getMessage()
+            );
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+}
