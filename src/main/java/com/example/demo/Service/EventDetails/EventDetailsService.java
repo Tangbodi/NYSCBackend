@@ -1,11 +1,15 @@
 package com.example.demo.Service.EventDetails;
 
 import com.example.demo.Model.DTO.EventDetailsDTO;
+import com.example.demo.Model.DTO.EventUpdateDTO;
+import com.example.demo.Model.Entity.EventAuditTrail;
 import com.example.demo.Model.Entity.EventDetails;
+import com.example.demo.Model.VO.EventAuditTrailVO;
 import com.example.demo.Model.VO.EventDetailsVO;
 import com.example.demo.Model.Entity.ClientContacts;
 import com.example.demo.Model.Entity.StaffsInfo;
 import com.example.demo.Repository.ClientContactsRepository;
+import com.example.demo.Repository.EventAuditTrailRepository;
 import com.example.demo.Repository.EventDetailsRepository;
 import com.example.demo.Repository.StaffsInfoRepository;
 import com.example.demo.Util.DateTimeConverter;
@@ -31,6 +35,8 @@ public class EventDetailsService {
     private ClientContactsRepository clientContactsRepository;
     @Autowired
     private StaffsInfoRepository staffsInfoRepository;
+    @Autowired
+    private EventAuditTrailRepository eventAuditTrailRepository;
 
     @Transactional
     public void CreateEvent(EventDetailsDTO dto, Long staffId) {
@@ -40,6 +46,7 @@ public class EventDetailsService {
             Long snowflakeId = Snowflake.generateUniqueId();
             event.setId(snowflakeId);
             event.setClientId(Long.valueOf(dto.getClientId()));
+            event.setStaffId(Long.valueOf(dto.getStaffId()));
             event.setType(dto.getType());
             event.setDate(dto.getDate());
             event.setStartTime(dto.getStartTime());
@@ -57,13 +64,7 @@ public class EventDetailsService {
             }
             event.setClientContactReminders(phone);
             event.setPlaceOfService(dto.getPlaceOfService());
-            String lastModifiedBy = "";
-            StaffsInfo staff = staffsInfoRepository.findById(staffId).orElse(null);
-            if (staff != null) {
-                lastModifiedBy = staff.getStaffFirstName() + " " + staff.getStaffLastName();
-            } else {
-                logger.warn("Staff not found for staffId: {}", staffId);
-            }
+            String lastModifiedBy = resolveStaffName(staffId);
             event.setLastModifiedBy(lastModifiedBy);
             event.setTag(emptyIfNull(dto.getTag()));
             event.setStaffReminders(emptyIfNull(dto.getStaffReminders()));
@@ -75,6 +76,48 @@ public class EventDetailsService {
             logger.info("EventDetails created successfully.");
         } catch (Exception e) {
             logger.error("Failed to create EventDetails: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Transactional
+    public void UpdateEvent(String eventId, EventUpdateDTO eventUpdateDTO, Long staffId) {
+        logger.info("Updating EventDetails: {}", eventId);
+        try {
+            Long id = Long.valueOf(eventId);
+            EventDetails existing = eventDetailsRepository.findById(id).orElse(null);
+            if (existing == null) {
+                throw new RuntimeException("Event not found for id: " + eventId);
+            }
+
+            String modifiedBy = resolveStaffName(staffId);
+            Instant now = Instant.now();
+
+            // Record audit trail for every changed field
+            recordAuditTrail(existing, eventUpdateDTO, id, modifiedBy, now);
+
+            // Persist the update
+            eventDetailsRepository.UpdateEventDetails(
+                    id,
+                    eventUpdateDTO.getType(),
+                    eventUpdateDTO.getDate(),
+                    eventUpdateDTO.getStartTime(),
+                    eventUpdateDTO.getEndTime(),
+                    eventUpdateDTO.getPayCode(),
+                    eventUpdateDTO.getClientName(),
+                    eventUpdateDTO.getStaffMember(),
+                    eventUpdateDTO.getService(),
+                    eventUpdateDTO.getPlaceOfService(),
+                    modifiedBy,
+                    emptyIfNull(eventUpdateDTO.getTag()),
+                    emptyIfNull(eventUpdateDTO.getStaffReminders()),
+                    emptyIfNull(eventUpdateDTO.getVerifications()),
+                    emptyIfNull(eventUpdateDTO.getCancellations()),
+                    now
+            );
+            logger.info("EventDetails updated successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to update EventDetails: {}", e.getMessage(), e);
             throw e;
         }
     }
@@ -99,12 +142,106 @@ public class EventDetailsService {
         return Collections.emptyList();
     }
 
+    public List<EventDetailsVO> GetEventsByStaffId(String staffId) {
+        logger.info("Getting EventDetails for staff: {}", staffId);
+        try {
+            List<EventDetails> events = eventDetailsRepository.findByStaffId(Long.valueOf(staffId));
+            if (!events.isEmpty()) {
+                List<EventDetailsVO> voList = new ArrayList<>();
+                for (EventDetails event : events) {
+                    voList.add(ConvertToVO(event));
+                }
+                return voList;
+            } else {
+                logger.info("No EventDetails found for staff: {}", staffId);
+                return Collections.emptyList();
+            }
+        } catch (Exception e) {
+            logger.error("Failed to get EventDetails by staff: {}", e.getMessage(), e);
+        }
+        return Collections.emptyList();
+    }
+
+    public List<EventAuditTrailVO> GetAuditTrail(String eventId) {
+        logger.info("Getting audit trail for event: {}", eventId);
+        try {
+            List<EventAuditTrail> trails = eventAuditTrailRepository
+                    .findByEventIdOrderByModifiedAtDesc(Long.valueOf(eventId));
+            if (!trails.isEmpty()) {
+                List<EventAuditTrailVO> voList = new ArrayList<>();
+                for (EventAuditTrail trail : trails) {
+                    voList.add(ConvertAuditToVO(trail));
+                }
+                return voList;
+            } else {
+                logger.info("No audit trail found for event: {}", eventId);
+                return Collections.emptyList();
+            }
+        } catch (Exception e) {
+            logger.error("Failed to get audit trail: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     // ── helpers ──────────────────────────────────────────────────────────────
+
+    private void recordAuditTrail(EventDetails existing, EventUpdateDTO dto,
+                                  Long eventId, String modifiedBy, Instant now) {
+        List<EventAuditTrail> trails = new ArrayList<>();
+
+        checkAndAdd(trails, eventId, "type",            existing.getType(),                     dto.getType(),                     modifiedBy, now);
+        checkAndAdd(trails, eventId, "date",            existing.getDate(),                     dto.getDate(),                     modifiedBy, now);
+        checkAndAdd(trails, eventId, "startTime",       existing.getStartTime(),                dto.getStartTime(),                modifiedBy, now);
+        checkAndAdd(trails, eventId, "endTime",         existing.getEndTime(),                  dto.getEndTime(),                  modifiedBy, now);
+        checkAndAdd(trails, eventId, "payCode",         existing.getPayCode(),                  dto.getPayCode(),                  modifiedBy, now);
+        checkAndAdd(trails, eventId, "clientName",      existing.getClientName(),               dto.getClientName(),               modifiedBy, now);
+        checkAndAdd(trails, eventId, "staffMember",     existing.getStaffMember(),              dto.getStaffMember(),              modifiedBy, now);
+        checkAndAdd(trails, eventId, "service",         existing.getService(),                  dto.getService(),                  modifiedBy, now);
+        checkAndAdd(trails, eventId, "placeOfService",  existing.getPlaceOfService(),           dto.getPlaceOfService(),           modifiedBy, now);
+        checkAndAdd(trails, eventId, "tag",             emptyIfNull(existing.getTag()),         emptyIfNull(dto.getTag()),         modifiedBy, now);
+        checkAndAdd(trails, eventId, "staffReminders",  emptyIfNull(existing.getStaffReminders()), emptyIfNull(dto.getStaffReminders()), modifiedBy, now);
+        checkAndAdd(trails, eventId, "verifications",   emptyIfNull(existing.getVerifications()), emptyIfNull(dto.getVerifications()), modifiedBy, now);
+        checkAndAdd(trails, eventId, "cancellations",   emptyIfNull(existing.getCancellations()), emptyIfNull(dto.getCancellations()), modifiedBy, now);
+
+        if (!trails.isEmpty()) {
+            eventAuditTrailRepository.saveAll(trails);
+            logger.info("Saved {} audit trail record(s) for event: {}", trails.size(), eventId);
+        } else {
+            logger.info("No field changes detected for event: {}", eventId);
+        }
+    }
+
+    private void checkAndAdd(List<EventAuditTrail> trails, Long eventId,
+                             String fieldName, String oldVal, String newVal,
+                             String modifiedBy, Instant now) {
+        String safeOld = emptyIfNull(oldVal);
+        String safeNew = emptyIfNull(newVal);
+        if (!safeOld.equals(safeNew)) {
+            EventAuditTrail trail = new EventAuditTrail();
+            trail.setEventId(eventId);
+            trail.setFieldName(fieldName);
+            trail.setOldValue(safeOld);
+            trail.setNewValue(safeNew);
+            trail.setModifiedBy(modifiedBy);
+            trail.setModifiedAt(now);
+            trails.add(trail);
+        }
+    }
+
+    private String resolveStaffName(Long staffId) {
+        StaffsInfo staff = staffsInfoRepository.findById(staffId).orElse(null);
+        if (staff != null) {
+            return staff.getStaffFirstName() + " " + staff.getStaffLastName();
+        }
+        logger.warn("Staff not found for staffId: {}", staffId);
+        return "";
+    }
 
     private EventDetailsVO ConvertToVO(EventDetails event) {
         EventDetailsVO vo = new EventDetailsVO();
         vo.setEventId(String.valueOf(event.getId()));
         vo.setClientId(String.valueOf(event.getClientId()));
+        vo.setStaffId(String.valueOf(event.getStaffId()));
         vo.setType(event.getType());
         vo.setDate(event.getDate());
         vo.setStartTime(event.getStartTime());
@@ -122,6 +259,18 @@ public class EventDetailsService {
         vo.setCancellations(event.getCancellations());
         vo.setCreatedAt(DateTimeConverter.DateTimeConvertFromInstant(event.getCreatedAt()));
         vo.setModifiedAt(DateTimeConverter.DateTimeConvertFromInstant(event.getModifiedAt()));
+        return vo;
+    }
+
+    private EventAuditTrailVO ConvertAuditToVO(EventAuditTrail trail) {
+        EventAuditTrailVO vo = new EventAuditTrailVO();
+        vo.setAuditId(String.valueOf(trail.getId()));
+        vo.setEventId(String.valueOf(trail.getEventId()));
+        vo.setFieldName(trail.getFieldName());
+        vo.setOldValue(trail.getOldValue());
+        vo.setNewValue(trail.getNewValue());
+        vo.setModifiedBy(trail.getModifiedBy());
+        vo.setModifiedAt(DateTimeConverter.DateTimeConvertFromInstant(trail.getModifiedAt()));
         return vo;
     }
 

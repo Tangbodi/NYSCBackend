@@ -7,13 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import java.io.Serializable;
 
 @Data
-public class EventDetailsDTO implements Serializable {
-
-    @NotBlank(message = "Client ID is required.")
-    private String clientId;
-
-    @NotBlank(message = "Staff ID is required.")
-    private String staffId;
+public class EventUpdateDTO implements Serializable {
 
     @NotBlank(message = "Type is required.")
     @Length(min = 1, max = 15, message = "Type length not eligible.")

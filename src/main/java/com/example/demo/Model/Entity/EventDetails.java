@@ -27,6 +27,10 @@ public class EventDetails {
     @Column(name = "client_id", nullable = false)
     private Long clientId;
 
+    @NotNull
+    @Column(name = "staff_id", nullable = false)
+    private Long staffId;
+
     @Size(max = 15)
     @NotNull
     @Column(name = "type", nullable = false, length = 15)

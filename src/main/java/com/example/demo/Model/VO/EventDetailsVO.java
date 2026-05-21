@@ -6,6 +6,7 @@ import lombok.Data;
 public class EventDetailsVO {
     private String eventId;
     private String clientId;
+    private String staffId;
     private String type;
     private String date;
     private String startTime;
