@@ -2,7 +2,9 @@ package com.example.demo.Repository;
 
 import com.example.demo.Model.Entity.ClientStaffId;
 import com.example.demo.Model.Entity.ClientStaffAssignments;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -35,4 +37,9 @@ public interface ClientStaffAssignmentsRepository extends JpaRepository<ClientSt
     List<Map<String, Object>> findAllStaffIdsByClientId(
             @Param("clientId") Long clientId
     );
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM client_staff_assignments WHERE client_id = :clientId", nativeQuery = true)
+    void deleteByClientId(@Param("clientId") Long clientId);
 }

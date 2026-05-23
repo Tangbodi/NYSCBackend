@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public interface ClientFundersRepository extends JpaRepository<ClientFunders, Long> {
@@ -76,5 +77,9 @@ public interface ClientFundersRepository extends JpaRepository<ClientFunders, Lo
             @Param("insuranceId") String insuranceId
     );
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM client_funders WHERE client_id = :clientId", nativeQuery = true)
+    void deleteByClientId(@Param("clientId") Long clientId);
 
 }

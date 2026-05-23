@@ -10,6 +10,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientContactsRepository extends JpaRepository<ClientContacts, Long> {
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM client_contacts WHERE client_id = :clientId", nativeQuery = true)
+    void deleteByClientId(@Param("clientId") Long clientId);
     @Modifying
     @Transactional
     @Query(value = """

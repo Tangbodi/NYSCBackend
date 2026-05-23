@@ -49,4 +49,9 @@ public interface ClientReferringProvidersRepository extends JpaRepository<Client
             @Param("notes") String notes
     );
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM client_referring_providers WHERE client_id = :clientId", nativeQuery = true)
+    void deleteByClientId(@Param("clientId") Long clientId);
+
 }

@@ -1,6 +1,7 @@
 package com.example.demo.Repository;
 
 import com.example.demo.Model.Entity.EventDetails;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,11 @@ public interface EventDetailsRepository extends JpaRepository<EventDetails, Long
     List<EventDetails> findByClientId(Long clientId);
 
     List<EventDetails> findByStaffId(Long staffId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM event_details WHERE client_id = :clientId", nativeQuery = true)
+    void deleteByClientId(@Param("clientId") Long clientId);
 
     @Modifying
     @Query(value = "UPDATE event_details SET " +

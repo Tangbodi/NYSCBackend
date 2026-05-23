@@ -2,9 +2,9 @@ package com.example.demo.Service.ClientsInfo;
 
 import com.example.demo.Model.DTO.ClientsInfoDTO;
 import com.example.demo.Model.Entity.ClientsInfo;
+import com.example.demo.Model.Entity.EventDetails;
 import com.example.demo.Model.VO.ClientsInfoVO;
-import com.example.demo.Repository.ClientsInfoRepository;
-import com.example.demo.Service.ClientsContacts.ClientContactsService;
+import com.example.demo.Repository.*;
 import com.example.demo.Util.DateTimeConverter;
 import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.Long.valueOf;
 
@@ -27,7 +28,19 @@ public class ClientsInfoService {
     @Autowired
     private ClientsInfoRepository clientsInfoRepository;
     @Autowired
-    private ClientContactsService clientContactsService;
+    private ClientContactsRepository clientContactsRepository;
+    @Autowired
+    private ClientFundersRepository clientFundersRepository;
+    @Autowired
+    private ClientReferringProvidersRepository clientReferringProvidersRepository;
+    @Autowired
+    private ClientStaffAssignmentsRepository clientStaffAssignmentsRepository;
+    @Autowired
+    private ClientProgramAssignmentsRepository clientProgramAssignmentsRepository;
+    @Autowired
+    private EventDetailsRepository eventDetailsRepository;
+    @Autowired
+    private EventAuditTrailRepository eventAuditTrailRepository;
     @Transactional
     public void RegisterClientsInfo(ClientsInfoDTO clientsInfoDTO) {
         logger.info("Registering ClientsInfo: {}", clientsInfoDTO.getFirstName() + "." + clientsInfoDTO.getLastName());
@@ -123,16 +136,53 @@ public class ClientsInfoService {
     }
     @Transactional
     public void DeleteClientsInfo(String clientId) {
-        logger.info("Deleting ClientsInfo: {}", clientId);
+        logger.info("Deleting client and all related data for clientId: {}", clientId);
         try {
             Long id = Long.valueOf(clientId);
             if (!clientsInfoRepository.existsById(id)) {
                 throw new RuntimeException("Client not found for id: " + clientId);
             }
+
+            // 1. Delete event audit trails first (depends on event_details)
+            List<EventDetails> events = eventDetailsRepository.findByClientId(id);
+            if (!events.isEmpty()) {
+                List<Long> eventIds = events.stream()
+                        .map(EventDetails::getId)
+                        .collect(Collectors.toList());
+                eventAuditTrailRepository.deleteByEventIdIn(eventIds);
+                logger.info("Deleted audit trails for {} events.", eventIds.size());
+            }
+
+            // 2. Delete event details
+            eventDetailsRepository.deleteByClientId(id);
+            logger.info("Deleted event details for clientId: {}", id);
+
+            // 3. Delete client contacts
+            clientContactsRepository.deleteByClientId(id);
+            logger.info("Deleted client contacts for clientId: {}", id);
+
+            // 4. Delete client funders
+            clientFundersRepository.deleteByClientId(id);
+            logger.info("Deleted client funders for clientId: {}", id);
+
+            // 5. Delete client referring providers
+            clientReferringProvidersRepository.deleteByClientId(id);
+            logger.info("Deleted client referring providers for clientId: {}", id);
+
+            // 6. Delete client staff assignments
+            clientStaffAssignmentsRepository.deleteByClientId(id);
+            logger.info("Deleted client staff assignments for clientId: {}", id);
+
+            // 7. Delete client program assignments
+            clientProgramAssignmentsRepository.deleteByClientId(id);
+            logger.info("Deleted client program assignments for clientId: {}", id);
+
+            // 8. Delete the client record itself
             clientsInfoRepository.deleteById(id);
-            logger.info("ClientsInfo deleted successfully.");
+            logger.info("Client {} and all related data deleted successfully.", id);
+
         } catch (Exception e) {
-            logger.error("Failed to delete ClientsInfo: {}", e.getMessage(), e);
+            logger.error("Failed to delete client {}: {}", clientId, e.getMessage(), e);
             throw e;
         }
     }
