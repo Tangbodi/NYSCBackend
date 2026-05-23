@@ -92,6 +92,22 @@ public class ClientReferringProvidersService {
             logger.error("Failed to update ClientsReferringProviders: {}", e.getMessage(), e);
         }
     }
+    @Transactional
+    public void DeleteClientsReferringProviders(String providerId) {
+        logger.info("Deleting ClientsReferringProviders: {}", providerId);
+        try {
+            Long id = Long.valueOf(providerId);
+            if (!clientReferringProvidersRepository.existsById(id)) {
+                throw new RuntimeException("Referring provider not found for id: " + providerId);
+            }
+            clientReferringProvidersRepository.deleteById(id);
+            logger.info("ClientsReferringProviders deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete ClientsReferringProviders: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public ClientReferringProvidersVO ConvertToClientsReferringProvidersVO(ClientReferringProviders clientReferringProviders){
         logger.info("Converting to ClientsReferringProvidersVO: {}", clientReferringProviders.getId());
         ClientReferringProvidersVO clientReferringProvidersVO = new ClientReferringProvidersVO();

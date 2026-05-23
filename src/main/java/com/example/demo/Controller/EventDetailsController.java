@@ -136,4 +136,24 @@ public class EventDetailsController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> DeleteEvent(
+            @RequestParam(value = "event") String eventId,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            eventDetailsService.DeleteEvent(eventId);
+            apiResponse = ApiResponse.success("Event deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Delete error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
 }

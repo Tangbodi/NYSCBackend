@@ -100,6 +100,22 @@ public class ServiceLinesService {
         }
     }
 
+    @Transactional
+    public void DeleteServiceLine(String serviceId) {
+        logger.info("Deleting ServiceLine: {}", serviceId);
+        try {
+            Integer id = Integer.valueOf(serviceId);
+            if (!serviceLinesRepository.existsById(id)) {
+                throw new RuntimeException("Service line not found for id: " + serviceId);
+            }
+            serviceLinesRepository.deleteById(id);
+            logger.info("ServiceLine deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete ServiceLine: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     // ── helpers ──────────────────────────────────────────────────────────────
 
     private ServiceLinesVO ConvertToVO(ServiceLines serviceLine) {

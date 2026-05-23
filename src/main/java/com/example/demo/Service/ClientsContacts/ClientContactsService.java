@@ -112,6 +112,22 @@ public class ClientContactsService {
         clientContactsVO.setModifiedAt(formattedModifiedDateTime);
         return clientContactsVO;
     }
+    @Transactional
+    public void DeleteClientsContacts(String clientId) {
+        logger.info("Deleting ClientsContacts: {}", clientId);
+        try {
+            Long id = Long.valueOf(clientId);
+            if (!clientContactsRepository.existsById(id)) {
+                throw new RuntimeException("Client contacts not found for id: " + clientId);
+            }
+            clientContactsRepository.deleteById(id);
+            logger.info("ClientsContacts deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete ClientsContacts: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     private String emptyIfNull(String s) {
         return s == null ? "" : s;
     }

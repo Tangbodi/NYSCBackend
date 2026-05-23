@@ -51,6 +51,24 @@ public class ClientStaffAssignmentsService {
             throw e;
         }
     }
+    @Transactional
+    public void RemoveClientStaffAssignment(ClientStaffAssignmentsDTO dto) {
+        logger.info("Removing ClientStaffAssignment: client={} staff={}", dto.getClientId(), dto.getStaffId());
+        try {
+            ClientStaffId id = new ClientStaffId();
+            id.setClientId(Long.valueOf(dto.getClientId()));
+            id.setStaffId(Long.valueOf(dto.getStaffId()));
+            if (!clientStaffAssignmentsRepository.existsById(id)) {
+                throw new RuntimeException("Assignment not found.");
+            }
+            clientStaffAssignmentsRepository.deleteById(id);
+            logger.info("ClientStaffAssignment removed successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to remove ClientStaffAssignment: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public List<Map<String, Object>> GetAllClientStaffAssignments(HttpServletRequest request){
         logger.info("Getting All ClientStaffAssignments: {}");
         //find all clients

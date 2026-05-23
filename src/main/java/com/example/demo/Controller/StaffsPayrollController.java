@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.StaffsPayrollDTO;
 import com.example.demo.Model.VO.StaffsPayrollVO;
+import com.example.demo.Service.StaffsLogin.StaffsLoginService;
 import com.example.demo.Service.StaffsPayroll.StaffsPayrollService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,8 @@ public class StaffsPayrollController {
     private static final Logger logger = LoggerFactory.getLogger(StaffsPayrollController.class);
     @Autowired
     private StaffsPayrollService staffsPayrollService;
+    @Autowired
+    private StaffsLoginService staffsLoginService;
 
     @GetMapping("/payroll")
     public ResponseEntity<ApiResponse> GetStaffsPayroll(HttpServletRequest request) {
@@ -66,6 +69,30 @@ public class StaffsPayrollController {
                 logger.error("Failed to update StaffsPayroll", e.getMessage(), e);
                 apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
             }
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+
+    @DeleteMapping("/payroll/delete")
+    public ResponseEntity<ApiResponse> DeleteStaffsPayroll(
+            @RequestParam(value = "staff") String staffId,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long sessionStaffId = (Long) request.getSession().getAttribute("staffId");
+        if (sessionStaffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            if (!staffsLoginService.CheckIsAdmin(sessionStaffId)) {
+                apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
+            } else {
+                staffsPayrollService.DeleteStaffsPayroll(staffId);
+                apiResponse = ApiResponse.success("Staff payroll deleted successfully.");
+            }
+        } catch (Exception e) {
+            logger.error("Delete error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }

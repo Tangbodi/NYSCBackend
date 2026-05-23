@@ -151,6 +151,22 @@ public class ClientFundersService {
         return null;
     }
 
+    @Transactional
+    public void DeleteClientsFunders(String id) {
+        logger.info("Deleting ClientsFunders: {}", id);
+        try {
+            Long lid = Long.valueOf(id);
+            if (!clientFundersRepository.existsById(lid)) {
+                throw new RuntimeException("Client funder not found for id: " + id);
+            }
+            clientFundersRepository.deleteById(lid);
+            logger.info("ClientsFunders deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete ClientsFunders: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     private String nullSafe(Object value) {
         return value == null ? "" : String.valueOf(value);
     }

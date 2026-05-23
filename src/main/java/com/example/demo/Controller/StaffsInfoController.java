@@ -4,6 +4,7 @@ import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.StaffsInfoDTO;
 import com.example.demo.Model.VO.StaffsInfoVO;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
+import com.example.demo.Service.StaffsLogin.StaffsLoginService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public class StaffsInfoController {
 
     @Autowired
     private StaffsInfoService staffsInfoService;
+    @Autowired
+    private StaffsLoginService staffsLoginService;
 
     @GetMapping("/")
     public ResponseEntity<ApiResponse> GetStaffsInfo(@RequestParam(value = "staff") String staffId, HttpServletRequest request) {
@@ -88,6 +91,30 @@ public class StaffsInfoController {
                         "Error: " + e.getMessage()
                 );
             }
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> DeleteStaffsInfo(
+            @RequestParam(value = "staff") String staffId,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long sessionStaffId = (Long) request.getSession().getAttribute("staffId");
+        if (sessionStaffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            if (!staffsLoginService.CheckIsAdmin(sessionStaffId)) {
+                apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
+            } else {
+                staffsInfoService.DeleteStaffsInfo(staffId);
+                apiResponse = ApiResponse.success("Staff deleted successfully.");
+            }
+        } catch (Exception e) {
+            logger.error("Delete error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }

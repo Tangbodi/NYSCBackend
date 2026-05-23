@@ -74,6 +74,22 @@ public class StaffsPayrollService {
         }
     }
     @Transactional
+    public void DeleteStaffsPayroll(String staffId) {
+        logger.info("Deleting StaffsPayroll: {}", staffId);
+        try {
+            Long id = Long.valueOf(staffId);
+            if (!staffsPayrollRepository.existsById(id)) {
+                throw new RuntimeException("Payroll not found for staffId: " + staffId);
+            }
+            staffsPayrollRepository.deleteById(id);
+            logger.info("StaffsPayroll deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete StaffsPayroll: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Transactional
     public StaffsPayrollVO ConvertToStaffsPayrollVO(StaffsPayroll savedStaffsPayroll){
         logger.info("Converting to StaffsPayrollVO: {}");
         try{

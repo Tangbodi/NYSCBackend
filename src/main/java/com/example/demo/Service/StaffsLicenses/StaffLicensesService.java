@@ -111,6 +111,22 @@ public class StaffLicensesService {
             logger.error("Failed to update StaffsLicenses: {}", e.getMessage(), e);
         }
     }
+    @Transactional
+    public void DeleteStaffLicense(String licenseId) {
+        logger.info("Deleting StaffLicense: {}", licenseId);
+        try {
+            Long id = Long.valueOf(licenseId);
+            if (!staffLicensesRepository.existsById(id)) {
+                throw new RuntimeException("License not found for id: " + licenseId);
+            }
+            staffLicensesRepository.deleteById(id);
+            logger.info("StaffLicense deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete StaffLicense: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public StaffLicensesVO ConvertToStaffsLicensesVO(StaffLicenses staffLicenses){
         logger.info("Converting to StaffsLicensesVO.");
         StaffLicensesVO staffLicensesVO = new StaffLicensesVO();

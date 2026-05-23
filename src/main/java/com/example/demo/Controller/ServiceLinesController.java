@@ -116,4 +116,28 @@ public class ServiceLinesController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> DeleteServiceLine(
+            @RequestParam(value = "service") String serviceId,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            if (!staffsLoginService.CheckIsAdmin(staffId)) {
+                apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
+            } else {
+                serviceLinesService.DeleteServiceLine(serviceId);
+                apiResponse = ApiResponse.success("Service line deleted successfully.");
+            }
+        } catch (Exception e) {
+            logger.error("Delete error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
 }

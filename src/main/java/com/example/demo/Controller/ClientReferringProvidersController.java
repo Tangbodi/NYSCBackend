@@ -4,6 +4,7 @@ import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.ClientReferringProvidersDTO;
 import com.example.demo.Model.VO.ClientReferringProvidersVO;
 import com.example.demo.Service.ClientsReferringProviders.ClientReferringProvidersService;
+import com.example.demo.Service.StaffsLogin.StaffsLoginService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -21,6 +22,8 @@ public class ClientReferringProvidersController {
 
     @Autowired
     private ClientReferringProvidersService clientReferringProvidersService;
+    @Autowired
+    private StaffsLoginService staffsLoginService;
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> NewClientsReferringProviders(
             @Validated @RequestBody ClientReferringProvidersDTO clientReferringProvidersDTO,
@@ -65,11 +68,31 @@ public class ClientReferringProvidersController {
             apiResponse = ApiResponse.success("Client referring provider updated successfully.");
         }catch (Exception e) {
             logger.error("Update error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
 
-            apiResponse = ApiResponse.error(
-                    ReturnCode.RC500.getCode(),
-                    "Error: " + e.getMessage()
-            );
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> DeleteClientsReferringProviders(
+            @RequestParam(value = "provider") String providerId,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            if (!staffsLoginService.CheckIsAdmin(staffId)) {
+                apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
+            } else {
+                clientReferringProvidersService.DeleteClientsReferringProviders(providerId);
+                apiResponse = ApiResponse.success("Referring provider deleted successfully.");
+            }
+        } catch (Exception e) {
+            logger.error("Delete error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }

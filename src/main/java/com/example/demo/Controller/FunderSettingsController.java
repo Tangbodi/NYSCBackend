@@ -116,4 +116,28 @@ public class FunderSettingsController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> DeleteFunderSettings(
+            @RequestParam(value = "funder") String funderId,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            if (!staffsLoginService.CheckIsAdmin(staffId)) {
+                apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
+            } else {
+                funderSettingsService.DeleteFunderSettings(funderId);
+                apiResponse = ApiResponse.success("Funder settings deleted successfully.");
+            }
+        } catch (Exception e) {
+            logger.error("Delete error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
 }

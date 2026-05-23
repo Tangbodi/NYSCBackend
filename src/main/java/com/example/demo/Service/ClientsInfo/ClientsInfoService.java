@@ -121,6 +121,22 @@ public class ClientsInfoService {
             logger.error("Failed to update ClientsInfo: {}", e.getMessage(), e);
         }
     }
+    @Transactional
+    public void DeleteClientsInfo(String clientId) {
+        logger.info("Deleting ClientsInfo: {}", clientId);
+        try {
+            Long id = Long.valueOf(clientId);
+            if (!clientsInfoRepository.existsById(id)) {
+                throw new RuntimeException("Client not found for id: " + clientId);
+            }
+            clientsInfoRepository.deleteById(id);
+            logger.info("ClientsInfo deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete ClientsInfo: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public ClientsInfoVO ConvertToClientsInfoVO(ClientsInfo clientsInfo) {
         logger.info("Converting to ClientsInfoVO: {}", clientsInfo.getId());
 

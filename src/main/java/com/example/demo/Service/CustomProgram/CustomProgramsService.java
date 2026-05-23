@@ -140,6 +140,23 @@ public class CustomProgramsService {
         }
     }
 
+    @Transactional
+    public void DeleteCustomProgram(String programId) {
+        logger.info("Deleting CustomProgram: {}", programId);
+        try {
+            Long id = Long.valueOf(programId);
+            if (!customProgramsRepository.existsById(id)) {
+                throw new RuntimeException("Program not found for id: " + programId);
+            }
+            programTargetRepository.deleteByProgramId(id);
+            customProgramsRepository.deleteById(id);
+            logger.info("CustomProgram and its targets deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete CustomProgram: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     // ── helpers ──────────────────────────────────────────────────────────────
 
     private void saveTargets(Long programId, List<ProgramTargetDTO> dtoList) {

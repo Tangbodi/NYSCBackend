@@ -102,6 +102,23 @@ public class FunderSettingsService {
             logger.info("FunderSettings updated successfully.");
         } catch (Exception e) {
             logger.error("Failed to update FunderSettings: {}", e.getMessage(), e);
+
+            throw e;
+        }
+    }
+
+    @Transactional
+    public void DeleteFunderSettings(String funderId) {
+        logger.info("Deleting FunderSettings: {}", funderId);
+        try {
+            Integer id = Integer.valueOf(funderId);
+            if (!funderSettingsRepository.existsById(id)) {
+                throw new RuntimeException("Funder not found for id: " + funderId);
+            }
+            funderSettingsRepository.deleteById(id);
+            logger.info("FunderSettings deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete FunderSettings: {}", e.getMessage(), e);
             throw e;
         }
     }

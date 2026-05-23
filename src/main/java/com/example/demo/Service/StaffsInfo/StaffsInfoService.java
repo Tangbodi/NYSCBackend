@@ -164,6 +164,22 @@ public class StaffsInfoService {
         }
         return null;
     }
+    @Transactional
+    public void DeleteStaffsInfo(String staffId) {
+        logger.info("Deleting StaffsInfo: {}", staffId);
+        try {
+            Long id = Long.valueOf(staffId);
+            if (!staffsInfoRepository.existsById(id)) {
+                throw new RuntimeException("Staff not found for id: " + staffId);
+            }
+            staffsInfoRepository.deleteById(id);
+            logger.info("StaffsInfo deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete StaffsInfo: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public StaffsInfoVO ConvertToStaffsInfoVO( StaffsInfo staffsInfo, HttpServletRequest request){
         logger.info("Converting to StaffsInfoVO: {}", staffsInfo.getId());
         StaffsInfoVO staffsInfoVO = new StaffsInfoVO();

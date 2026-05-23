@@ -4,6 +4,7 @@ import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.SessionNotesDTO;
 import com.example.demo.Model.VO.SessionNotesVO;
 import com.example.demo.Service.SessionNotes.SessionNotesService;
+import com.example.demo.Service.StaffsLogin.StaffsLoginService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -21,6 +22,8 @@ public class SessionNotesController {
 
     @Autowired
     private SessionNotesService sessionNotesService;
+    @Autowired
+    private StaffsLoginService staffsLoginService;
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> CreateSessionNote(
@@ -89,6 +92,30 @@ public class SessionNotesController {
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> DeleteSessionNote(
+            @RequestParam(value = "session") String sessionId,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            if (!staffsLoginService.CheckIsAdmin(staffId)) {
+                apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
+            } else {
+                sessionNotesService.DeleteSessionNote(sessionId);
+                apiResponse = ApiResponse.success("Session note deleted successfully.");
+            }
+        } catch (Exception e) {
+            logger.error("Delete error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }

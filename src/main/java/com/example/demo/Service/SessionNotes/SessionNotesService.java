@@ -78,6 +78,22 @@ public class SessionNotesService {
         }
     }
 
+    @Transactional
+    public void DeleteSessionNote(String sessionId) {
+        logger.info("Deleting session note: {}", sessionId);
+        try {
+            Long id = Long.valueOf(sessionId);
+            if (!sessionNotesRepository.existsById(id)) {
+                throw new RuntimeException("Session note not found for id: " + sessionId);
+            }
+            sessionNotesRepository.deleteById(id);
+            logger.info("Session note deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete session note: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public SessionNotesVO GetSessionNote(String sessionId) {
         logger.info("Getting session note: {}", sessionId);
         try {

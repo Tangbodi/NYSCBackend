@@ -162,6 +162,22 @@ public class EventDetailsService {
         return Collections.emptyList();
     }
 
+    @Transactional
+    public void DeleteEvent(String eventId) {
+        logger.info("Deleting EventDetails: {}", eventId);
+        try {
+            Long id = Long.valueOf(eventId);
+            if (!eventDetailsRepository.existsById(id)) {
+                throw new RuntimeException("Event not found for id: " + eventId);
+            }
+            eventDetailsRepository.deleteById(id);
+            logger.info("EventDetails deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to delete EventDetails: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public List<EventAuditTrailVO> GetAuditTrail(String eventId) {
         logger.info("Getting audit trail for event: {}", eventId);
         try {

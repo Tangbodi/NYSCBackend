@@ -4,6 +4,7 @@ import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.ClientContactsDTO;
 import com.example.demo.Model.VO.ClientContactsVO;
 import com.example.demo.Service.ClientsContacts.ClientContactsService;
+import com.example.demo.Service.StaffsLogin.StaffsLoginService;
 import com.example.demo.Util.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -21,6 +22,8 @@ public class ClientContactsController {
 
     @Autowired
     private ClientContactsService clientContactsService;
+    @Autowired
+    private StaffsLoginService staffsLoginService;
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> NewClientsContacts(
             @Validated @RequestBody ClientContactsDTO clientContactsDTO,
@@ -69,6 +72,30 @@ public class ClientContactsController {
                     ReturnCode.RC500.getCode(),
                     "Error: " + e.getMessage()
             );
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> DeleteClientsContacts(
+            @RequestParam(value = "client") String clientId,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            if (!staffsLoginService.CheckIsAdmin(staffId)) {
+                apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
+            } else {
+                clientContactsService.DeleteClientsContacts(clientId);
+                apiResponse = ApiResponse.success("Client contact deleted successfully.");
+            }
+        } catch (Exception e) {
+            logger.error("Delete error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }

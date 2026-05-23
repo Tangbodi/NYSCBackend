@@ -64,4 +64,24 @@ public class ClientStaffAssignmentsController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
+
+    @DeleteMapping("/unassign")
+    public ResponseEntity<ApiResponse> RemoveClientStaffAssignment(
+            @Validated @RequestBody ClientStaffAssignmentsDTO dto,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            clientStaffAssignmentsService.RemoveClientStaffAssignment(dto);
+            apiResponse = ApiResponse.success("Staff unassigned successfully.");
+        } catch (Exception e) {
+            logger.error("Unassign error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
 }
