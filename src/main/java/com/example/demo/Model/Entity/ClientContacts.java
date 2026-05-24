@@ -28,10 +28,6 @@ public class ClientContacts {
     @NotNull
     @Column(name = "last_name", nullable = false, length = 31)
     private String lastName;
-    @Size(max = 31)
-    @NotNull
-    @Column(name = "middle_name", nullable = false, length = 31)
-    private String middleName;
     @Size(max = 63)
     @NotNull
     @Column(name = "email", nullable = false, length = 63)
@@ -62,11 +58,6 @@ public class ClientContacts {
     @NotNull
     @Column(name = "zip_code", nullable = false, length = 15)
     private String zipCode;
-
-    @Size(max = 63)
-    @NotNull
-    @Column(name = "notes", nullable = false, length = 63)
-    private String notes;
 
     @NotNull
     @Column(name = "created_at", nullable = false)

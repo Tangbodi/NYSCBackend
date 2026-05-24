@@ -2,12 +2,12 @@ package com.example.demo.Service.ClientsFundersService;
 
 import com.example.demo.Model.DTO.ClientFundersDTO;
 import com.example.demo.Model.Entity.ClientFunders;
+import com.example.demo.Model.Entity.ClientFunderId;
 import com.example.demo.Model.VO.ClientFundersVO;
 import com.example.demo.Model.VO.ClientServicesVO;
 import com.example.demo.Model.VO.ServiceLinesVO;
 import com.example.demo.Repository.ClientFundersRepository;
 import com.example.demo.Util.DateTimeConverter;
-import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,44 +20,78 @@ import java.util.*;
 @Service
 public class ClientFundersService {
     private static final Logger logger = LoggerFactory.getLogger(ClientFundersService.class);
+
     @Autowired
     private ClientFundersRepository clientFundersRepository;
 
     @Transactional
-    public void CreateClientsFunders(ClientFundersDTO clientFundersDTO){
-        logger.info("Creating ClientsFunders: {}");
-        try{
-            ClientFunders clientFunders = new ClientFunders();
+    public void CreateClientsFunders(ClientFundersDTO dto) {
+        logger.info("Creating ClientsFunders for clientId: {}, funderId: {}", dto.getClientId(), dto.getFunderId());
+        try {
+            ClientFunderId key = new ClientFunderId();
+            key.setClientId(Long.valueOf(dto.getClientId()));
+            key.setFunderId(Integer.valueOf(dto.getFunderId()));
 
-            clientFunders.setClientId(Long.valueOf(clientFundersDTO.getClientId()));
-            clientFunders.setFunderId(Integer.valueOf(clientFundersDTO.getFunderId()));
-            clientFunders.setInsuranceId(clientFundersDTO.getInsuranceId());
+            ClientFunders clientFunders = new ClientFunders();
+            clientFunders.setId(key);
+            clientFunders.setInsuranceId(dto.getInsuranceId());
+            clientFunders.setRelationship(dto.getRelationship());
+            clientFunders.setStartDate(dto.getStartDate());
+            clientFunders.setEndDate(dto.getEndDate());
+            clientFunders.setFirstName(dto.getFirstName());
+            clientFunders.setLastName(dto.getLastName());
+            clientFunders.setCoverageType(dto.getCoverageType());
             clientFunders.setCreatedAt(Instant.now());
             clientFunders.setModifiedAt(Instant.now());
             clientFundersRepository.save(clientFunders);
             logger.info("ClientsFunders created successfully.");
-
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Failed to create ClientsFunders: {}", e.getMessage(), e);
             throw e;
         }
     }
 
-    public List<ClientFundersVO> GetAllFundersByClient(String clientId){
+    public ClientFundersVO GetClientsFunders(String clientId, String funderId) {
+        logger.info("Getting ClientsFunders for clientId: {}, funderId: {}", clientId, funderId);
+        try {
+            ClientFunderId key = new ClientFunderId();
+            key.setClientId(Long.valueOf(clientId));
+            key.setFunderId(Integer.valueOf(funderId));
+
+            ClientFunders clientFunders = clientFundersRepository.findById(key).orElse(null);
+            if (clientFunders != null) {
+                logger.info("Found ClientsFunders.");
+                return ConvertToClientsFundersVO(clientFunders);
+            } else {
+                logger.info("No ClientsFunders found.");
+                return null;
+            }
+        } catch (Exception e) {
+            logger.error("Failed to find ClientsFunders: {}", e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public List<ClientFundersVO> GetAllFundersByClient(String clientId) {
         logger.info("Getting all funders by clientId: {}", clientId);
-        try{
-            List<Map<String,Object>> fundersList = clientFundersRepository.findFundersByClientId(Long.valueOf(clientId));
+        try {
+            List<Map<String, Object>> fundersList = clientFundersRepository.findFundersByClientId(Long.valueOf(clientId));
             if (!fundersList.isEmpty()) {
                 logger.info("Found fundersList.");
                 List<ClientFundersVO> clientFundersVOList = new ArrayList<>();
-                for(Map<String,Object> row : fundersList){
+                for (Map<String, Object> row : fundersList) {
                     ClientFundersVO vo = new ClientFundersVO();
 
                     // client_funders
-                    vo.setId(nullSafe(row.get("id")));
                     vo.setClientId(nullSafe(row.get("client_id")));
                     vo.setFunderId(nullSafe(row.get("funder_id")));
                     vo.setInsuranceId(nullSafe(row.get("insurance_id")));
+                    vo.setRelationship(nullSafe(row.get("relationship")));
+                    vo.setStartDate(nullSafe(row.get("start_date")));
+                    vo.setEndDate(nullSafe(row.get("end_date")));
+                    vo.setFirstName(nullSafe(row.get("first_name")));
+                    vo.setLastName(nullSafe(row.get("last_name")));
+                    vo.setCoverageType(nullSafe(row.get("coverage_type")));
 
                     // clients_info
                     vo.setClientFirstName(nullSafe(row.get("client_first_name")));
@@ -84,45 +118,38 @@ public class ClientFundersService {
                     clientFundersVOList.add(vo);
                 }
                 return clientFundersVOList;
-            }else{
+            } else {
                 logger.info("No fundersList found.");
                 return Collections.emptyList();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Failed to get fundersList: {}", e.getMessage(), e);
         }
         return Collections.emptyList();
     }
-    public ClientFundersVO GetClientsFunders(String funderId){
-        logger.info("Getting ClientsFunders: {}", funderId);
-        try{
-            ClientFunders clientFunders = clientFundersRepository.findById(Long.valueOf(funderId)).orElse(null);
-            if(clientFunders != null){
-                logger.info("Found ClientsFunders.");
-                return ConvertToClientsFundersVO(clientFunders);
-            }else{
-                logger.info("No ClientsFunders found.");
-                return null;
-            }
-        }catch (Exception e) {
-            logger.error("Failed to find ClientsFunders: {}", e.getMessage(), e);
-        }
-        return null;
-    }
+
     @Transactional
-    public void UpdateClientsFunders(ClientFundersDTO clientFundersDTO){
-        logger.info("Updating ClientsFunders: {}", "Funder ID:"+ clientFundersDTO.getFunderId(),"Client ID:"+ clientFundersDTO.getClientId());
-        try{
+    public void UpdateClientsFunders(ClientFundersDTO dto) {
+        logger.info("Updating ClientsFunders clientId: {}, funderId: {}", dto.getClientId(), dto.getFunderId());
+        try {
             clientFundersRepository.UpdateClientsFunderByClientIdAndFunderId(
-                    Long.valueOf(clientFundersDTO.getClientId()),
-                    Integer.valueOf(clientFundersDTO.getFunderId()),
-                    clientFundersDTO.getInsuranceId()
-                    );
+                    Long.valueOf(dto.getClientId()),
+                    Integer.valueOf(dto.getFunderId()),
+                    dto.getInsuranceId(),
+                    dto.getRelationship(),
+                    dto.getStartDate(),
+                    dto.getEndDate(),
+                    dto.getFirstName(),
+                    dto.getLastName(),
+                    dto.getCoverageType()
+            );
             logger.info("ClientsFunders updated successfully.");
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Failed to update ClientsFunders: {}", e.getMessage(), e);
+            throw e;
         }
     }
+
     public ClientServicesVO GetAllServicesByClient(String clientId) {
         logger.info("Getting all services for client: {}", clientId);
         try {
@@ -152,14 +179,13 @@ public class ClientFundersService {
     }
 
     @Transactional
-    public void DeleteClientsFunders(String id) {
-        logger.info("Deleting ClientsFunders: {}", id);
+    public void DeleteClientsFunders(String clientId, String funderId) {
+        logger.info("Deleting ClientsFunders clientId: {}, funderId: {}", clientId, funderId);
         try {
-            Long lid = Long.valueOf(id);
-            if (!clientFundersRepository.existsById(lid)) {
-                throw new RuntimeException("Client funder not found for id: " + id);
-            }
-            clientFundersRepository.deleteById(lid);
+            clientFundersRepository.deleteByClientIdAndFunderId(
+                    Long.valueOf(clientId),
+                    Integer.valueOf(funderId)
+            );
             logger.info("ClientsFunders deleted successfully.");
         } catch (Exception e) {
             logger.error("Failed to delete ClientsFunders: {}", e.getMessage(), e);
@@ -167,21 +193,23 @@ public class ClientFundersService {
         }
     }
 
-    private String nullSafe(Object value) {
-        return value == null ? "" : String.valueOf(value);
+    public ClientFundersVO ConvertToClientsFundersVO(ClientFunders clientFunders) {
+        ClientFundersVO vo = new ClientFundersVO();
+        vo.setClientId(String.valueOf(clientFunders.getId().getClientId()));
+        vo.setFunderId(String.valueOf(clientFunders.getId().getFunderId()));
+        vo.setInsuranceId(clientFunders.getInsuranceId());
+        vo.setRelationship(clientFunders.getRelationship());
+        vo.setStartDate(clientFunders.getStartDate());
+        vo.setEndDate(clientFunders.getEndDate());
+        vo.setFirstName(clientFunders.getFirstName());
+        vo.setLastName(clientFunders.getLastName());
+        vo.setCoverageType(clientFunders.getCoverageType());
+        vo.setCreatedAt(DateTimeConverter.DateTimeConvertFromInstant(clientFunders.getCreatedAt()));
+        vo.setModifiedAt(DateTimeConverter.DateTimeConvertFromInstant(clientFunders.getModifiedAt()));
+        return vo;
     }
 
-    public ClientFundersVO ConvertToClientsFundersVO(ClientFunders clientFunders){
-        logger.info("Converting to ClientsFundersVO: {}", clientFunders.getId());
-        ClientFundersVO clientFundersVO = new ClientFundersVO();
-        clientFundersVO.setFunderId(String.valueOf(clientFunders.getId()));
-        clientFundersVO.setClientId(String.valueOf(clientFunders.getClientId()));
-        clientFundersVO.setInsuranceId(clientFundersVO.getInsuranceId());
-        String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientFunders.getCreatedAt());
-        String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientFunders.getModifiedAt());
-        clientFundersVO.setCreatedAt(formattedCreatedDateTime);
-        clientFundersVO.setModifiedAt(formattedModifiedDateTime);
-        logger.info("ClientsFundersVO converted successfully.");
-        return clientFundersVO;
+    private String nullSafe(Object value) {
+        return value == null ? "" : String.valueOf(value);
     }
 }

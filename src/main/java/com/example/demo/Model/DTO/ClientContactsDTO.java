@@ -21,9 +21,6 @@ public class ClientContactsDTO implements Serializable {
     @Length(min = 1, max = 31, message = "Last name length not eligible.")
     @ValidUsername
     private String lastName;
-    @Length(min = 1, max = 31, message = "Middle name length not eligible.")
-    @ValidUsername
-    private String middleName;
     @NotBlank
     @NotBlank(message = "Status is required.")
     @Length(min = 1, max = 2, message = "Status length not eligible.")
@@ -43,8 +40,6 @@ public class ClientContactsDTO implements Serializable {
     private String state;
     @Length(min = 1, max = 15, message = "Zip code length not eligible.")
     private String zipCode;
-    @Length(min = 1, max = 63, message = "Notes length not eligible.")
-    private String notes;
     @NotBlank
     @Length(min = 1, max = 15, message = "Relationship type length not eligible")
     private String relationshipType;

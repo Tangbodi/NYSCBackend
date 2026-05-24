@@ -43,7 +43,5 @@ public class ClientReferringProvidersDTO implements Serializable {
     private String state;
     @Length(min = 1, max = 15, message = "Zip code length not eligible.")
     private String zipCode;
-    @Length(min = 1, max = 63, message = "Notes length not eligible.")
-    private String notes;
 
 }

@@ -51,13 +51,16 @@ public class ClientFundersController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<ApiResponse> GetClientsFunders(@RequestParam(value = "funder") String funderId, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse> GetClientsFunders(
+            @RequestParam(value = "client") String clientId,
+            @RequestParam(value = "funder") String funderId,
+            HttpServletRequest request) {
 
         ApiResponse apiResponse;
-        try{
-            ClientFundersVO clientFundersVO = clientFundersService.GetClientsFunders(funderId);
+        try {
+            ClientFundersVO clientFundersVO = clientFundersService.GetClientsFunders(clientId, funderId);
             apiResponse = ApiResponse.success(clientFundersVO);
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Failed to get", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
         }
@@ -111,7 +114,8 @@ public class ClientFundersController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse> DeleteClientsFunders(
-            @RequestParam(value = "id") String id,
+            @RequestParam(value = "client") String clientId,
+            @RequestParam(value = "funder") String funderId,
             HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
@@ -123,7 +127,7 @@ public class ClientFundersController {
             if (!staffsLoginService.CheckIsAdmin(staffId)) {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
-                clientFundersService.DeleteClientsFunders(id);
+                clientFundersService.DeleteClientsFunders(clientId, funderId);
                 apiResponse = ApiResponse.success("Client funder deleted successfully.");
             }
         } catch (Exception e) {

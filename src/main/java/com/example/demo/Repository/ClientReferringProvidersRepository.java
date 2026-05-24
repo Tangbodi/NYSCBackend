@@ -26,7 +26,6 @@ public interface ClientReferringProvidersRepository extends JpaRepository<Client
             city = :city,
             state = :state,
             zip_code = :zipCode,
-            notes = :notes,
             modified_at = NOW()
         WHERE referring_provider_id = :providerId
           AND client_id = :clientId
@@ -45,8 +44,7 @@ public interface ClientReferringProvidersRepository extends JpaRepository<Client
             @Param("address") String address,
             @Param("city") String city,
             @Param("state") String state,
-            @Param("zipCode") String zipCode,
-            @Param("notes") String notes
+            @Param("zipCode") String zipCode
     );
 
     @Modifying

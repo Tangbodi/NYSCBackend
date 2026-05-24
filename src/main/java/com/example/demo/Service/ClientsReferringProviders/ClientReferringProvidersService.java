@@ -40,7 +40,6 @@ public class ClientReferringProvidersService {
             clientReferringProviders.setZipCode(clientReferringProvidersDTO.getZipCode());
             clientReferringProviders.setPhone(clientReferringProvidersDTO.getPhone());
             clientReferringProviders.setFax(clientReferringProvidersDTO.getFax());
-            clientReferringProviders.setNotes(clientReferringProvidersDTO.getNotes());
             clientReferringProviders.setCreatedAt(Instant.now());
             clientReferringProviders.setModifiedAt(Instant.now());
             clientReferringProvidersRepository.save(clientReferringProviders);
@@ -84,8 +83,7 @@ public class ClientReferringProvidersService {
                     clientReferringProvidersDTO.getAddress(),
                     clientReferringProvidersDTO.getCity(),
                     clientReferringProvidersDTO.getState(),
-                    clientReferringProvidersDTO.getZipCode(),
-                    clientReferringProvidersDTO.getNotes()
+                    clientReferringProvidersDTO.getZipCode()
             );
             logger.info("ClientsReferringProviders updated successfully.");
         }catch (Exception e) {
@@ -125,7 +123,6 @@ public class ClientReferringProvidersService {
         clientReferringProvidersVO.setCity(clientReferringProviders.getCity());
         clientReferringProvidersVO.setState(clientReferringProviders.getState());
         clientReferringProvidersVO.setZipCode(clientReferringProviders.getZipCode());
-        clientReferringProvidersVO.setNotes(clientReferringProviders.getNotes());
         String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientReferringProviders.getCreatedAt());
         String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientReferringProviders.getModifiedAt());
         clientReferringProvidersVO.setCreatedAt(formattedCreatedDateTime);

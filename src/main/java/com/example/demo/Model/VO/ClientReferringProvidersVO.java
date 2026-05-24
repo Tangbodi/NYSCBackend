@@ -18,7 +18,6 @@ public class ClientReferringProvidersVO {
     private String city;
     private String state;
     private String zipCode;
-    private String notes;
     private String createdAt;
     private String modifiedAt;
 

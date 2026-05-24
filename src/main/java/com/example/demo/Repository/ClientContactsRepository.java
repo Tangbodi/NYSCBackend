@@ -18,10 +18,9 @@ public interface ClientContactsRepository extends JpaRepository<ClientContacts, 
     @Modifying
     @Transactional
     @Query(value = """
-        UPDATE client_contacts 
+        UPDATE client_contacts
         SET first_name = :firstName,
             last_name = :lastName,
-            middle_name = :middleName,
             relationship_type = :relationshipType,
             is_primary = :isPrimary,
             phone = :phone,
@@ -30,7 +29,6 @@ public interface ClientContactsRepository extends JpaRepository<ClientContacts, 
             city = :city,
             state = :state,
             zip_code = :zipCode,
-            notes = :notes,
             modified_at = NOW()
         WHERE client_id = :id
         """, nativeQuery = true)
@@ -38,7 +36,6 @@ public interface ClientContactsRepository extends JpaRepository<ClientContacts, 
             @Param("id") Long id,
             @Param("firstName") String firstName,
             @Param("lastName") String lastName,
-            @Param("middleName") String middleName,
             @Param("relationshipType") String relationshipType,
             @Param("isPrimary") String isPrimary,
             @Param("phone") String phone,
@@ -46,8 +43,7 @@ public interface ClientContactsRepository extends JpaRepository<ClientContacts, 
             @Param("address") String address,
             @Param("city") String city,
             @Param("state") String state,
-            @Param("zipCode") String zipCode,
-            @Param("notes") String notes
+            @Param("zipCode") String zipCode
     );
 
 }

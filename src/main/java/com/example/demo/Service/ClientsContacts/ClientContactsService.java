@@ -29,7 +29,6 @@ public class ClientContactsService {
             clientContacts.setId(Long.valueOf(clientContactsDTO.getClientId()));
             clientContacts.setFirstName(clientContactsDTO.getFirstName());
             clientContacts.setLastName(clientContactsDTO.getLastName());
-            clientContacts.setMiddleName(emptyIfNull(clientContactsDTO.getMiddleName()));
             clientContacts.setRelationshipType(clientContactsDTO.getRelationshipType());
             clientContacts.setIsPrimary(emptyIfNull(clientContactsDTO.getIsPrimary()));
             clientContacts.setPhone(clientContactsDTO.getPhone());
@@ -38,7 +37,6 @@ public class ClientContactsService {
             clientContacts.setCity(clientContactsDTO.getCity());
             clientContacts.setState(clientContactsDTO.getState());
             clientContacts.setZipCode(clientContactsDTO.getZipCode());
-            clientContacts.setNotes(emptyIfNull(clientContactsDTO.getNotes()));
             clientContacts.setCreatedAt(Instant.now());
             clientContacts.setModifiedAt(Instant.now());
             clientContactsRepository.save(clientContacts);
@@ -73,7 +71,6 @@ public class ClientContactsService {
                     Long.valueOf(clientContactsDTO.getClientId()),
                     clientContactsDTO.getFirstName(),
                     clientContactsDTO.getLastName(),
-                    clientContactsDTO.getMiddleName(),
                     clientContactsDTO.getRelationshipType(),
                     clientContactsDTO.getIsPrimary(),
                     clientContactsDTO.getPhone(),
@@ -81,8 +78,7 @@ public class ClientContactsService {
                     clientContactsDTO.getAddress(),
                     clientContactsDTO.getCity(),
                     clientContactsDTO.getState(),
-                    clientContactsDTO.getZipCode(),
-                    clientContactsDTO.getNotes()
+                    clientContactsDTO.getZipCode()
             );
             logger.info("ClientsContacts updated successfully.");
         }catch (Exception e) {
@@ -95,8 +91,7 @@ public class ClientContactsService {
         ClientContactsVO clientContactsVO = new ClientContactsVO();
         clientContactsVO.setClientId(String.valueOf(clientContacts.getId()));
         clientContactsVO.setFirstName(clientContacts.getFirstName());
-        clientContactsVO.setLastName(clientContacts.getFirstName());
-        clientContactsVO.setMiddleName(clientContacts.getMiddleName());
+        clientContactsVO.setLastName(clientContacts.getLastName());
         clientContactsVO.setRelationshipType(clientContacts.getRelationshipType());
         clientContactsVO.setIsPrimary(clientContacts.getIsPrimary());
         clientContactsVO.setPhone(clientContacts.getPhone());
@@ -105,7 +100,6 @@ public class ClientContactsService {
         clientContactsVO.setCity(clientContacts.getCity());
         clientContactsVO.setState(clientContacts.getState());
         clientContactsVO.setZipCode(clientContacts.getZipCode());
-        clientContactsVO.setNotes(clientContacts.getNotes());
         String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientContacts.getCreatedAt());
         String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientContacts.getModifiedAt());
         clientContactsVO.setCreatedAt(formattedCreatedDateTime);

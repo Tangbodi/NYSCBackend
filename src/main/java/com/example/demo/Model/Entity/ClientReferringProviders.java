@@ -60,9 +60,6 @@ public class ClientReferringProviders {
     @Column(name = "zip_code", length = 15)
     private String zipCode;
 
-    @Size(max = 63)
-    @Column(name = "notes", length = 63)
-    private String notes;
     @Size(max = 11)
     @Column(name = "phone", length = 11)
     private String phone;

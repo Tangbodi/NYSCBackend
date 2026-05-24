@@ -1,6 +1,7 @@
 package com.example.demo.Repository;
 
 import com.example.demo.Model.Entity.ClientFunders;
+import com.example.demo.Model.Entity.ClientFunderId;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,16 +11,21 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
-public interface ClientFundersRepository extends JpaRepository<ClientFunders, Long> {
+public interface ClientFundersRepository extends JpaRepository<ClientFunders, ClientFunderId> {
+
     @Query(value = """
         SELECT
-            cf.id,
             cf.client_id,
             cf.funder_id,
             cf.insurance_id,
+            cf.relationship,
+            cf.start_date,
+            cf.end_date,
+            cf.first_name,
+            cf.last_name,
+            cf.coverage_type,
             cf.created_at,
             cf.modified_at,
             ci.client_first_name,
@@ -65,16 +71,28 @@ public interface ClientFundersRepository extends JpaRepository<ClientFunders, Lo
     @Modifying
     @Transactional
     @Query(value = """
-    UPDATE clients_funders
-    SET insurance_id = :insuranceId,
-        modified_at = NOW()
-    WHERE client_id = :clientId
-      AND funder_id = :funderId
-    """, nativeQuery = true)
+        UPDATE client_funders
+        SET insurance_id = :insuranceId,
+            relationship = :relationship,
+            start_date = :startDate,
+            end_date = :endDate,
+            first_name = :firstName,
+            last_name = :lastName,
+            coverage_type = :coverageType,
+            modified_at = NOW()
+        WHERE client_id = :clientId
+          AND funder_id = :funderId
+        """, nativeQuery = true)
     int UpdateClientsFunderByClientIdAndFunderId(
             @Param("clientId") Long clientId,
             @Param("funderId") Integer funderId,
-            @Param("insuranceId") String insuranceId
+            @Param("insuranceId") String insuranceId,
+            @Param("relationship") String relationship,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate,
+            @Param("firstName") String firstName,
+            @Param("lastName") String lastName,
+            @Param("coverageType") String coverageType
     );
 
     @Modifying
@@ -82,4 +100,8 @@ public interface ClientFundersRepository extends JpaRepository<ClientFunders, Lo
     @Query(value = "DELETE FROM client_funders WHERE client_id = :clientId", nativeQuery = true)
     void deleteByClientId(@Param("clientId") Long clientId);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM client_funders WHERE client_id = :clientId AND funder_id = :funderId", nativeQuery = true)
+    void deleteByClientIdAndFunderId(@Param("clientId") Long clientId, @Param("funderId") Integer funderId);
 }
