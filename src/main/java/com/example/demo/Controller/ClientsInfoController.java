@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -124,7 +125,7 @@ public class ClientsInfoController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse> DeleteClientsInfo(
-            @RequestParam(value = "client") String clientId,
+            @RequestBody Map<String, String> body,
             HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
@@ -136,7 +137,7 @@ public class ClientsInfoController {
             if (!staffsLoginService.CheckIsAdmin(staffId)) {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
-                clientsInfoService.DeleteClientsInfo(clientId);
+                clientsInfoService.DeleteClientsInfo(body.get("clientId"));
                 apiResponse = ApiResponse.success("Client deleted successfully.");
             }
         } catch (Exception e) {

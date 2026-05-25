@@ -96,7 +96,6 @@ public class ClientFundersService {
                     // clients_info
                     vo.setClientFirstName(nullSafe(row.get("client_first_name")));
                     vo.setClientLastName(nullSafe(row.get("client_last_name")));
-                    vo.setClientMiddleName(nullSafe(row.get("client_middle_name")));
                     vo.setDateOfBirth(nullSafe(row.get("date_of_birth")));
                     vo.setGender(nullSafe(row.get("gender")));
                     vo.setStatus(nullSafe(row.get("status")));

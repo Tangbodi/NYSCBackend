@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @Validated
 @RequestMapping("/SessionNotes")
@@ -98,7 +100,7 @@ public class SessionNotesController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse> DeleteSessionNote(
-            @RequestParam(value = "session") String sessionId,
+            @RequestBody Map<String, String> body,
             HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
@@ -110,7 +112,7 @@ public class SessionNotesController {
             if (!staffsLoginService.CheckIsAdmin(staffId)) {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
-                sessionNotesService.DeleteSessionNote(sessionId);
+                sessionNotesService.DeleteSessionNote(body.get("sessionId"));
                 apiResponse = ApiResponse.success("Session note deleted successfully.");
             }
         } catch (Exception e) {

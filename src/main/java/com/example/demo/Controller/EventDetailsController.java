@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -139,7 +140,7 @@ public class EventDetailsController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse> DeleteEvent(
-            @RequestParam(value = "event") String eventId,
+            @RequestBody Map<String, String> body,
             HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
@@ -148,7 +149,7 @@ public class EventDetailsController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
         try {
-            eventDetailsService.DeleteEvent(eventId);
+            eventDetailsService.DeleteEvent(body.get("eventId"));
             apiResponse = ApiResponse.success("Event deleted successfully.");
         } catch (Exception e) {
             logger.error("Delete error: {}", e.getMessage(), e);

@@ -18,7 +18,6 @@ public class ClientFundersVO {
     // clients_info
     private String clientFirstName;
     private String clientLastName;
-    private String clientMiddleName;
     private String dateOfBirth;
     private String gender;
     private String status;

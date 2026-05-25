@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -120,7 +121,7 @@ public class CustomProgramsController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse> DeleteCustomProgram(
-            @RequestParam(value = "program") String programId,
+            @RequestBody Map<String, String> body,
             HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
@@ -132,7 +133,7 @@ public class CustomProgramsController {
             if (!staffsLoginService.CheckIsAdmin(staffId)) {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
-                customProgramsService.DeleteCustomProgram(programId);
+                customProgramsService.DeleteCustomProgram(body.get("programId"));
                 apiResponse = ApiResponse.success("Custom program deleted successfully.");
             }
         } catch (Exception e) {

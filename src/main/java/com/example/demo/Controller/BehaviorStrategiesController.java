@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -97,7 +98,7 @@ public class BehaviorStrategiesController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse> DeleteStrategy(
-            @RequestParam(value = "strategy") String strategyId,
+            @RequestBody Map<String, String> body,
             HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
@@ -109,7 +110,7 @@ public class BehaviorStrategiesController {
             if (!staffsLoginService.CheckIsAdmin(staffId)) {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
-                behaviorStrategiesService.DeleteStrategy(strategyId);
+                behaviorStrategiesService.DeleteStrategy(body.get("strategyId"));
                 apiResponse = ApiResponse.success("Behavior strategy deleted successfully.");
             }
         } catch (Exception e) {

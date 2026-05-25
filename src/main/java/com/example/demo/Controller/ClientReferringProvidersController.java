@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @Validated
 @RequestMapping("/ClientReferringProviders")
@@ -24,49 +26,62 @@ public class ClientReferringProvidersController {
     private ClientReferringProvidersService clientReferringProvidersService;
     @Autowired
     private StaffsLoginService staffsLoginService;
+
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> NewClientsReferringProviders(
             @Validated @RequestBody ClientReferringProvidersDTO clientReferringProvidersDTO,
             HttpServletRequest request) {
-
         ApiResponse apiResponse;
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
         try {
             logger.info("clientsReferringProvidersDTO: {}", clientReferringProvidersDTO);
             clientReferringProvidersService.CreateClientsReferringProviders(clientReferringProvidersDTO);
             apiResponse = ApiResponse.success("New client referring provider added successfully.");
-            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
 
-            // Return *exact* message in API response
-            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(),
-                    "Error: " + e.getMessage());
-
+    @GetMapping("/")
+    public ResponseEntity<ApiResponse> GetClientsReferringProviders(
+            @RequestParam(value = "provider") String providerId,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
-    }
-    @GetMapping("/")
-    public ResponseEntity<ApiResponse> GetClientsReferringProviders(@RequestParam(value = "provider") String providerId, HttpServletRequest request) {
-
-        ApiResponse apiResponse;
-        try{
+        try {
             ClientReferringProvidersVO clientReferringProvidersVO = clientReferringProvidersService.GetClientsReferringProviders(providerId);
             apiResponse = ApiResponse.success(clientReferringProvidersVO);
-        }catch (Exception e) {
-            logger.error("Failed to get", e.getMessage(), e);
+        } catch (Exception e) {
+            logger.error("Failed to get: {}", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
-    @PutMapping("/update")
-    public ResponseEntity<ApiResponse> UpdateClientsReferringProviders(@Validated @RequestBody ClientReferringProvidersDTO clientReferringProvidersDTO, HttpServletRequest request) {
 
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse> UpdateClientsReferringProviders(
+            @Validated @RequestBody ClientReferringProvidersDTO clientReferringProvidersDTO,
+            HttpServletRequest request) {
         ApiResponse apiResponse;
-        try{
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
             clientReferringProvidersService.UpdateClientsReferringProviders(clientReferringProvidersDTO);
             apiResponse = ApiResponse.success("Client referring provider updated successfully.");
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Update error: {}", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
         }
@@ -75,7 +90,7 @@ public class ClientReferringProvidersController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse> DeleteClientsReferringProviders(
-            @RequestParam(value = "provider") String providerId,
+            @RequestBody Map<String, String> body,
             HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
@@ -87,7 +102,7 @@ public class ClientReferringProvidersController {
             if (!staffsLoginService.CheckIsAdmin(staffId)) {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
-                clientReferringProvidersService.DeleteClientsReferringProviders(providerId);
+                clientReferringProvidersService.DeleteClientsReferringProviders(body.get("providerId"));
                 apiResponse = ApiResponse.success("Referring provider deleted successfully.");
             }
         } catch (Exception e) {

@@ -39,9 +39,6 @@ public class ClientReferringProviders {
     @NotNull
     @Column(name = "is_active", nullable = false, length = 1)
     private String isActive;
-    @Size(max = 31)
-    @Column(name = "provider_middle_name", length = 31)
-    private String providerMiddleName;
     @NotNull
     @Size(max = 31)
     @Column(name = "taxonomy_code", length = 31)

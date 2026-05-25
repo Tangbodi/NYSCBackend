@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @Validated
 @RequestMapping("/staffs")
@@ -75,7 +77,7 @@ public class StaffsPayrollController {
 
     @DeleteMapping("/payroll/delete")
     public ResponseEntity<ApiResponse> DeleteStaffsPayroll(
-            @RequestParam(value = "staff") String staffId,
+            @RequestBody Map<String, String> body,
             HttpServletRequest request) {
         ApiResponse apiResponse;
         Long sessionStaffId = (Long) request.getSession().getAttribute("staffId");
@@ -87,7 +89,7 @@ public class StaffsPayrollController {
             if (!staffsLoginService.CheckIsAdmin(sessionStaffId)) {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
-                staffsPayrollService.DeleteStaffsPayroll(staffId);
+                staffsPayrollService.DeleteStaffsPayroll(body.get("staffId"));
                 apiResponse = ApiResponse.success("Staff payroll deleted successfully.");
             }
         } catch (Exception e) {
