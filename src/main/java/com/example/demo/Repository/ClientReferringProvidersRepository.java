@@ -16,7 +16,6 @@ public interface ClientReferringProvidersRepository extends JpaRepository<Client
         UPDATE client_referring_providers
         SET provider_first_name = :firstName,
             provider_last_name = :lastName,
-            provider_middle_name = :middleName,
             npi_number = :npiNumber,
             is_active = :isActive,
             taxonomy_code = :taxonomyCode,
@@ -35,7 +34,6 @@ public interface ClientReferringProvidersRepository extends JpaRepository<Client
             @Param("clientId") Long clientId,
             @Param("firstName") String firstName,
             @Param("lastName") String lastName,
-            @Param("middleName") String middleName,
             @Param("npiNumber") String npiNumber,
             @Param("isActive") String isActive,
             @Param("taxonomyCode") String taxonomyCode,

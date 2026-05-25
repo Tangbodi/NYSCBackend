@@ -30,7 +30,6 @@ public class ClientReferringProvidersService {
             clientReferringProviders.setClientId(Long.valueOf(clientReferringProvidersDTO.getClientId()));
             clientReferringProviders.setProviderLastName(clientReferringProvidersDTO.getLastName());
             clientReferringProviders.setProviderFirstName(clientReferringProvidersDTO.getFirstName());
-            clientReferringProviders.setProviderMiddleName(clientReferringProvidersDTO.getMiddleName());
             clientReferringProviders.setNpiNumber(clientReferringProvidersDTO.getNpiNumber());
             clientReferringProviders.setIsActive(clientReferringProvidersDTO.getIsActive());
             clientReferringProviders.setTaxonomyCode(clientReferringProvidersDTO.getTaxonomyCode());
@@ -74,7 +73,6 @@ public class ClientReferringProvidersService {
                     Long.valueOf(clientReferringProvidersDTO.getClientId()),
                     clientReferringProvidersDTO.getFirstName(),
                     clientReferringProvidersDTO.getLastName(),
-                    clientReferringProvidersDTO.getMiddleName(),
                     clientReferringProvidersDTO.getNpiNumber(),
                     clientReferringProvidersDTO.getIsActive(),
                     clientReferringProvidersDTO.getTaxonomyCode(),
@@ -113,7 +111,6 @@ public class ClientReferringProvidersService {
         clientReferringProvidersVO.setClientId(String.valueOf(clientReferringProviders.getClientId()));
         clientReferringProvidersVO.setFirstName(clientReferringProviders.getProviderFirstName());
         clientReferringProvidersVO.setLastName(clientReferringProviders.getProviderLastName());
-        clientReferringProvidersVO.setMiddleName(clientReferringProviders.getProviderMiddleName());
         clientReferringProvidersVO.setNpiNumber(clientReferringProviders.getNpiNumber());
         clientReferringProvidersVO.setIsActive(clientReferringProviders.getIsActive());
         clientReferringProvidersVO.setTaxonomyCode(clientReferringProviders.getTaxonomyCode());
