@@ -4,11 +4,10 @@ import lombok.Data;
 
 @Data
 public class ClientReferringProvidersVO {
-    private String providerId;
     private String clientId;
+    private String npiNumber;
     private String firstName;
     private String lastName;
-    private String npiNumber;
     private String isActive;
     private String taxonomyCode;
     private String phone;

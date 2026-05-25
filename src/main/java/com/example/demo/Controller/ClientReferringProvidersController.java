@@ -39,8 +39,12 @@ public class ClientReferringProvidersController {
         }
         try {
             logger.info("clientsReferringProvidersDTO: {}", clientReferringProvidersDTO);
-            clientReferringProvidersService.CreateClientsReferringProviders(clientReferringProvidersDTO);
-            apiResponse = ApiResponse.success("New client referring provider added successfully.");
+            boolean created = clientReferringProvidersService.CreateClientsReferringProviders(clientReferringProvidersDTO);
+            if (created) {
+                apiResponse = ApiResponse.success("New client referring provider added successfully.");
+            } else {
+                apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(), "Client is already linked with NPI number: " + clientReferringProvidersDTO.getNpiNumber());
+            }
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
@@ -50,7 +54,8 @@ public class ClientReferringProvidersController {
 
     @GetMapping("/")
     public ResponseEntity<ApiResponse> GetClientsReferringProviders(
-            @RequestParam(value = "provider") String providerId,
+            @RequestParam(value = "client") String clientId,
+            @RequestParam(value = "npi") String npiNumber,
             HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
@@ -59,7 +64,7 @@ public class ClientReferringProvidersController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
         try {
-            ClientReferringProvidersVO clientReferringProvidersVO = clientReferringProvidersService.GetClientsReferringProviders(providerId);
+            ClientReferringProvidersVO clientReferringProvidersVO = clientReferringProvidersService.GetClientsReferringProviders(clientId, npiNumber);
             apiResponse = ApiResponse.success(clientReferringProvidersVO);
         } catch (Exception e) {
             logger.error("Failed to get: {}", e.getMessage(), e);
@@ -102,7 +107,7 @@ public class ClientReferringProvidersController {
             if (!staffsLoginService.CheckIsAdmin(staffId)) {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
-                clientReferringProvidersService.DeleteClientsReferringProviders(body.get("providerId"));
+                clientReferringProvidersService.DeleteClientsReferringProviders(body.get("clientId"), body.get("npiNumber"));
                 apiResponse = ApiResponse.success("Referring provider deleted successfully.");
             }
         } catch (Exception e) {

@@ -2,10 +2,10 @@ package com.example.demo.Service.ClientsReferringProviders;
 
 import com.example.demo.Model.DTO.ClientReferringProvidersDTO;
 import com.example.demo.Model.Entity.ClientReferringProviders;
+import com.example.demo.Model.Entity.ClientReferringProviderId;
 import com.example.demo.Model.VO.ClientReferringProvidersVO;
 import com.example.demo.Repository.ClientReferringProvidersRepository;
 import com.example.demo.Util.DateTimeConverter;
-import com.example.demo.Util.Snowflake;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,86 +17,97 @@ import java.time.Instant;
 @Service
 public class ClientReferringProvidersService {
     private static final Logger logger = LoggerFactory.getLogger(ClientReferringProvidersService.class);
+
     @Autowired
     private ClientReferringProvidersRepository clientReferringProvidersRepository;
 
     @Transactional
-    public void CreateClientsReferringProviders(ClientReferringProvidersDTO clientReferringProvidersDTO){
-        logger.info("Creating ClientsReferringProviders: {}");
-        try{
-            ClientReferringProviders clientReferringProviders = new ClientReferringProviders();
-            Long snowflakeId = Snowflake.generateUniqueId();
-            clientReferringProviders.setId(snowflakeId);
-            clientReferringProviders.setClientId(Long.valueOf(clientReferringProvidersDTO.getClientId()));
-            clientReferringProviders.setProviderLastName(clientReferringProvidersDTO.getLastName());
-            clientReferringProviders.setProviderFirstName(clientReferringProvidersDTO.getFirstName());
-            clientReferringProviders.setNpiNumber(clientReferringProvidersDTO.getNpiNumber());
-            clientReferringProviders.setIsActive(clientReferringProvidersDTO.getIsActive());
-            clientReferringProviders.setTaxonomyCode(clientReferringProvidersDTO.getTaxonomyCode());
-            clientReferringProviders.setAddress(clientReferringProvidersDTO.getAddress());
-            clientReferringProviders.setCity(clientReferringProvidersDTO.getCity());
-            clientReferringProviders.setState(clientReferringProvidersDTO.getState());
-            clientReferringProviders.setZipCode(clientReferringProvidersDTO.getZipCode());
-            clientReferringProviders.setPhone(clientReferringProvidersDTO.getPhone());
-            clientReferringProviders.setFax(clientReferringProvidersDTO.getFax());
-            clientReferringProviders.setCreatedAt(Instant.now());
-            clientReferringProviders.setModifiedAt(Instant.now());
-            clientReferringProvidersRepository.save(clientReferringProviders);
+    public boolean CreateClientsReferringProviders(ClientReferringProvidersDTO dto) {
+        logger.info("Creating ClientsReferringProviders for clientId: {}, npiNumber: {}", dto.getClientId(), dto.getNpiNumber());
+        try {
+            ClientReferringProviderId key = new ClientReferringProviderId();
+            key.setClientId(Long.valueOf(dto.getClientId()));
+            key.setNpiNumber(dto.getNpiNumber());
+
+            if (clientReferringProvidersRepository.existsById(key)) {
+                logger.info("Client {} is already linked with NPI number {}.", dto.getClientId(), dto.getNpiNumber());
+                return false;
+            }
+
+            ClientReferringProviders entity = new ClientReferringProviders();
+            entity.setId(key);
+            entity.setProviderFirstName(dto.getFirstName());
+            entity.setProviderLastName(dto.getLastName());
+            entity.setIsActive(dto.getIsActive());
+            entity.setTaxonomyCode(dto.getTaxonomyCode());
+            entity.setAddress(dto.getAddress());
+            entity.setCity(dto.getCity());
+            entity.setState(dto.getState());
+            entity.setZipCode(dto.getZipCode());
+            entity.setPhone(dto.getPhone());
+            entity.setFax(dto.getFax());
+            entity.setCreatedAt(Instant.now());
+            entity.setModifiedAt(Instant.now());
+            clientReferringProvidersRepository.save(entity);
             logger.info("ClientsReferringProviders created successfully.");
+            return true;
         } catch (Exception e) {
-            logger.error("Failed to register ClientsReferringProviders: {}", e.getMessage(), e);
+            logger.error("Failed to create ClientsReferringProviders: {}", e.getMessage(), e);
             throw e;
         }
     }
-    public ClientReferringProvidersVO GetClientsReferringProviders(String providerId){
-        logger.info("Getting ClientsReferringProviders: {}", providerId);
-        try{
-            ClientReferringProviders clientReferringProviders = clientReferringProvidersRepository.findById(Long.valueOf(providerId)).orElse(null);
-            if(clientReferringProviders !=null){
+
+    public ClientReferringProvidersVO GetClientsReferringProviders(String clientId, String npiNumber) {
+        logger.info("Getting ClientsReferringProviders for clientId: {}, npiNumber: {}", clientId, npiNumber);
+        try {
+            ClientReferringProviderId key = new ClientReferringProviderId();
+            key.setClientId(Long.valueOf(clientId));
+            key.setNpiNumber(npiNumber);
+
+            ClientReferringProviders entity = clientReferringProvidersRepository.findById(key).orElse(null);
+            if (entity != null) {
                 logger.info("Found ClientsReferringProviders.");
-                return ConvertToClientsReferringProvidersVO(clientReferringProviders);
-            }else{
+                return ConvertToClientsReferringProvidersVO(entity);
+            } else {
                 logger.info("No ClientsReferringProviders found.");
                 return null;
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Failed to find ClientsReferringProviders: {}", e.getMessage(), e);
         }
         return null;
     }
+
     @Transactional
-    public void UpdateClientsReferringProviders(ClientReferringProvidersDTO clientReferringProvidersDTO){
-        logger.info("Updating ClientsReferringProviders: {}", "Provider ID:"+ clientReferringProvidersDTO.getProviderId(),"Client ID:"+ clientReferringProvidersDTO.getClientId());
-        try{
-            clientReferringProvidersRepository.UpdateClientsReferringProviderByClientIdAndProviderId(
-                    Long.valueOf(clientReferringProvidersDTO.getProviderId()),
-                    Long.valueOf(clientReferringProvidersDTO.getClientId()),
-                    clientReferringProvidersDTO.getFirstName(),
-                    clientReferringProvidersDTO.getLastName(),
-                    clientReferringProvidersDTO.getNpiNumber(),
-                    clientReferringProvidersDTO.getIsActive(),
-                    clientReferringProvidersDTO.getTaxonomyCode(),
-                    clientReferringProvidersDTO.getPhone(),
-                    clientReferringProvidersDTO.getFax(),
-                    clientReferringProvidersDTO.getAddress(),
-                    clientReferringProvidersDTO.getCity(),
-                    clientReferringProvidersDTO.getState(),
-                    clientReferringProvidersDTO.getZipCode()
+    public void UpdateClientsReferringProviders(ClientReferringProvidersDTO dto) {
+        logger.info("Updating ClientsReferringProviders for clientId: {}, npiNumber: {}", dto.getClientId(), dto.getNpiNumber());
+        try {
+            clientReferringProvidersRepository.UpdateClientsReferringProvider(
+                    Long.valueOf(dto.getClientId()),
+                    dto.getNpiNumber(),
+                    dto.getFirstName(),
+                    dto.getLastName(),
+                    dto.getIsActive(),
+                    dto.getTaxonomyCode(),
+                    dto.getPhone(),
+                    dto.getFax(),
+                    dto.getAddress(),
+                    dto.getCity(),
+                    dto.getState(),
+                    dto.getZipCode()
             );
             logger.info("ClientsReferringProviders updated successfully.");
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Failed to update ClientsReferringProviders: {}", e.getMessage(), e);
+            throw e;
         }
     }
+
     @Transactional
-    public void DeleteClientsReferringProviders(String providerId) {
-        logger.info("Deleting ClientsReferringProviders: {}", providerId);
+    public void DeleteClientsReferringProviders(String clientId, String npiNumber) {
+        logger.info("Deleting ClientsReferringProviders for clientId: {}, npiNumber: {}", clientId, npiNumber);
         try {
-            Long id = Long.valueOf(providerId);
-            if (!clientReferringProvidersRepository.existsById(id)) {
-                throw new RuntimeException("Referring provider not found for id: " + providerId);
-            }
-            clientReferringProvidersRepository.deleteById(id);
+            clientReferringProvidersRepository.deleteByClientIdAndNpiNumber(Long.valueOf(clientId), npiNumber);
             logger.info("ClientsReferringProviders deleted successfully.");
         } catch (Exception e) {
             logger.error("Failed to delete ClientsReferringProviders: {}", e.getMessage(), e);
@@ -104,27 +115,22 @@ public class ClientReferringProvidersService {
         }
     }
 
-    public ClientReferringProvidersVO ConvertToClientsReferringProvidersVO(ClientReferringProviders clientReferringProviders){
-        logger.info("Converting to ClientsReferringProvidersVO: {}", clientReferringProviders.getId());
-        ClientReferringProvidersVO clientReferringProvidersVO = new ClientReferringProvidersVO();
-        clientReferringProvidersVO.setProviderId(String.valueOf(clientReferringProviders.getId()));
-        clientReferringProvidersVO.setClientId(String.valueOf(clientReferringProviders.getClientId()));
-        clientReferringProvidersVO.setFirstName(clientReferringProviders.getProviderFirstName());
-        clientReferringProvidersVO.setLastName(clientReferringProviders.getProviderLastName());
-        clientReferringProvidersVO.setNpiNumber(clientReferringProviders.getNpiNumber());
-        clientReferringProvidersVO.setIsActive(clientReferringProviders.getIsActive());
-        clientReferringProvidersVO.setTaxonomyCode(clientReferringProviders.getTaxonomyCode());
-        clientReferringProvidersVO.setPhone(clientReferringProviders.getPhone());
-        clientReferringProvidersVO.setFax(clientReferringProviders.getFax());
-        clientReferringProvidersVO.setAddress(clientReferringProviders.getAddress());
-        clientReferringProvidersVO.setCity(clientReferringProviders.getCity());
-        clientReferringProvidersVO.setState(clientReferringProviders.getState());
-        clientReferringProvidersVO.setZipCode(clientReferringProviders.getZipCode());
-        String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientReferringProviders.getCreatedAt());
-        String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(clientReferringProviders.getModifiedAt());
-        clientReferringProvidersVO.setCreatedAt(formattedCreatedDateTime);
-        clientReferringProvidersVO.setModifiedAt(formattedModifiedDateTime);
-        logger.info("ClientsReferringProvidersVO converted successfully.");
-        return clientReferringProvidersVO;
+    public ClientReferringProvidersVO ConvertToClientsReferringProvidersVO(ClientReferringProviders entity) {
+        ClientReferringProvidersVO vo = new ClientReferringProvidersVO();
+        vo.setClientId(String.valueOf(entity.getId().getClientId()));
+        vo.setNpiNumber(entity.getId().getNpiNumber());
+        vo.setFirstName(entity.getProviderFirstName());
+        vo.setLastName(entity.getProviderLastName());
+        vo.setIsActive(entity.getIsActive());
+        vo.setTaxonomyCode(entity.getTaxonomyCode());
+        vo.setPhone(entity.getPhone());
+        vo.setFax(entity.getFax());
+        vo.setAddress(entity.getAddress());
+        vo.setCity(entity.getCity());
+        vo.setState(entity.getState());
+        vo.setZipCode(entity.getZipCode());
+        vo.setCreatedAt(DateTimeConverter.DateTimeConvertFromInstant(entity.getCreatedAt()));
+        vo.setModifiedAt(DateTimeConverter.DateTimeConvertFromInstant(entity.getModifiedAt()));
+        return vo;
     }
 }
