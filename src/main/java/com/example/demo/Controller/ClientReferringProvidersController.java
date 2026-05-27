@@ -3,6 +3,8 @@ package com.example.demo.Controller;
 import com.example.demo.Constant.Enum.ReturnCode;
 import com.example.demo.Model.DTO.ClientReferringProvidersDTO;
 import com.example.demo.Model.VO.ClientReferringProvidersVO;
+
+import java.util.List;
 import com.example.demo.Service.ClientsReferringProviders.ClientReferringProvidersService;
 import com.example.demo.Service.StaffsLogin.StaffsLoginService;
 import com.example.demo.Util.ApiResponse;
@@ -53,9 +55,8 @@ public class ClientReferringProvidersController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<ApiResponse> GetClientsReferringProviders(
+    public ResponseEntity<ApiResponse> GetAllClientsReferringProviders(
             @RequestParam(value = "client") String clientId,
-            @RequestParam(value = "npi") String npiNumber,
             HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
@@ -64,8 +65,8 @@ public class ClientReferringProvidersController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
         try {
-            ClientReferringProvidersVO clientReferringProvidersVO = clientReferringProvidersService.GetClientsReferringProviders(clientId, npiNumber);
-            apiResponse = ApiResponse.success(clientReferringProvidersVO);
+            List<ClientReferringProvidersVO> list = clientReferringProvidersService.GetAllClientsReferringProviders(clientId);
+            apiResponse = ApiResponse.success(list);
         } catch (Exception e) {
             logger.error("Failed to get: {}", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());

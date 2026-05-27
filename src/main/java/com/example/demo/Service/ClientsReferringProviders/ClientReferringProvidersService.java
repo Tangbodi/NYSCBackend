@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientReferringProvidersService {
@@ -76,6 +79,24 @@ public class ClientReferringProvidersService {
             logger.error("Failed to find ClientsReferringProviders: {}", e.getMessage(), e);
         }
         return null;
+    }
+
+    public List<ClientReferringProvidersVO> GetAllClientsReferringProviders(String clientId) {
+        logger.info("Getting all referring providers for clientId: {}", clientId);
+        try {
+            List<ClientReferringProviders> list = clientReferringProvidersRepository.findAllByClientId(Long.valueOf(clientId));
+            if (!list.isEmpty()) {
+                return list.stream()
+                        .map(this::ConvertToClientsReferringProvidersVO)
+                        .collect(Collectors.toList());
+            } else {
+                logger.info("No referring providers found for clientId: {}", clientId);
+                return Collections.emptyList();
+            }
+        } catch (Exception e) {
+            logger.error("Failed to get referring providers: {}", e.getMessage(), e);
+        }
+        return Collections.emptyList();
     }
 
     @Transactional

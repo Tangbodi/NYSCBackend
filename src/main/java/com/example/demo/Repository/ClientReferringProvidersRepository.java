@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ClientReferringProvidersRepository extends JpaRepository<ClientReferringProviders, ClientReferringProviderId> {
 
@@ -44,6 +46,9 @@ public interface ClientReferringProvidersRepository extends JpaRepository<Client
             @Param("state") String state,
             @Param("zipCode") String zipCode
     );
+
+    @Query(value = "SELECT * FROM client_referring_providers WHERE client_id = :clientId", nativeQuery = true)
+    List<ClientReferringProviders> findAllByClientId(@Param("clientId") Long clientId);
 
     @Modifying
     @Transactional
