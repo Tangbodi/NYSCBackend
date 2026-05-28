@@ -22,9 +22,9 @@ public class FileCabinet {
     @Column(name = "client_id", nullable = false)
     private Long clientId;
 
-    @Size(max = 127)
+    @Size(max = 255)
     @NotNull
-    @Column(name = "file_name", nullable = false, length = 127)
+    @Column(name = "file_name", nullable = false, length = 255)
     private String fileName;
 
     @Size(max = 63)
@@ -34,14 +34,14 @@ public class FileCabinet {
     @Column(name = "file_type", length = 31)
     private String fileType;
 
-    @Size(max = 127)
+    @Size(max = 512)
     @NotNull
-    @Column(name = "file_path", nullable = false, length = 127)
+    @Column(name = "file_path", nullable = false, length = 512)
     private String filePath;
 
-    @Size(max = 127)
+    @Size(max = 512)
     @NotNull
-    @Column(name = "file_url", nullable = false, length = 127)
+    @Column(name = "file_url", nullable = false, length = 512)
     private String fileUrl;
 
     @NotNull
