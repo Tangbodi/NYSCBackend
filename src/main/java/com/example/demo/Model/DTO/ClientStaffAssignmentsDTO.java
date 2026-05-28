@@ -1,17 +1,14 @@
 package com.example.demo.Model.DTO;
 
-import com.example.demo.Annotation.ValidUserId;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class ClientStaffAssignmentsDTO {
 
-    @NotNull
-    @ValidUserId
+    @NotBlank(message = "clientId is required.")
     private String clientId;
-    @NotNull
-    @ValidUserId
+    @NotBlank(message = "staffId is required.")
     private String staffId;
 
 }

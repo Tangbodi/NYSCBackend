@@ -27,6 +27,10 @@ public class ClientReferringProviders {
     @Column(name = "provider_first_name", nullable = false, length = 31)
     private String providerFirstName;
 
+    @Size(max = 31)
+    @Column(name = "provider_middle_name", length = 31)
+    private String providerMiddleName;
+
     @Size(max = 1)
     @NotNull
     @Column(name = "is_active", nullable = false, length = 1)

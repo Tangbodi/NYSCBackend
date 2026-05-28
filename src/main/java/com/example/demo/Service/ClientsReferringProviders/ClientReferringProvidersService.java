@@ -40,6 +40,7 @@ public class ClientReferringProvidersService {
             ClientReferringProviders entity = new ClientReferringProviders();
             entity.setId(key);
             entity.setProviderFirstName(dto.getFirstName());
+            entity.setProviderMiddleName(dto.getMiddleName());
             entity.setProviderLastName(dto.getLastName());
             entity.setIsActive(dto.getIsActive());
             entity.setTaxonomyCode(dto.getTaxonomyCode());
@@ -107,6 +108,7 @@ public class ClientReferringProvidersService {
                     Long.valueOf(dto.getClientId()),
                     dto.getNpiNumber(),
                     dto.getFirstName(),
+                    dto.getMiddleName(),
                     dto.getLastName(),
                     dto.getIsActive(),
                     dto.getTaxonomyCode(),
@@ -141,6 +143,7 @@ public class ClientReferringProvidersService {
         vo.setClientId(String.valueOf(entity.getId().getClientId()));
         vo.setNpiNumber(entity.getId().getNpiNumber());
         vo.setFirstName(entity.getProviderFirstName());
+        vo.setMiddleName(entity.getProviderMiddleName());
         vo.setLastName(entity.getProviderLastName());
         vo.setIsActive(entity.getIsActive());
         vo.setTaxonomyCode(entity.getTaxonomyCode());

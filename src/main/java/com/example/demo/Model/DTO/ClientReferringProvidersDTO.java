@@ -15,6 +15,8 @@ public class ClientReferringProvidersDTO implements Serializable {
     @Length(min = 1, max = 31, message = "First name length not eligible.")
     @ValidUsername
     private String firstName;
+    @Length(max = 31, message = "Middle name length not eligible.")
+    private String middleName;
     @NotBlank(message = "Last name is required.")
     @Length(min = 1, max = 31, message = "Last name length not eligible.")
     @ValidUsername

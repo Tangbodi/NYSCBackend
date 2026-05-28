@@ -52,17 +52,19 @@ public class ClientStaffAssignmentsService {
         }
     }
     @Transactional
-    public void RemoveClientStaffAssignment(ClientStaffAssignmentsDTO dto) {
+    public boolean RemoveClientStaffAssignment(ClientStaffAssignmentsDTO dto) {
         logger.info("Removing ClientStaffAssignment: client={} staff={}", dto.getClientId(), dto.getStaffId());
         try {
-            ClientStaffId id = new ClientStaffId();
-            id.setClientId(Long.valueOf(dto.getClientId()));
-            id.setStaffId(Long.valueOf(dto.getStaffId()));
-            if (!clientStaffAssignmentsRepository.existsById(id)) {
-                throw new RuntimeException("Assignment not found.");
+            int deleted = clientStaffAssignmentsRepository.deleteByClientIdAndStaffId(
+                    Long.valueOf(dto.getClientId()),
+                    Long.valueOf(dto.getStaffId())
+            );
+            if (deleted == 0) {
+                logger.warn("No assignment found for client={} staff={}", dto.getClientId(), dto.getStaffId());
+                return false;
             }
-            clientStaffAssignmentsRepository.deleteById(id);
             logger.info("ClientStaffAssignment removed successfully.");
+            return true;
         } catch (Exception e) {
             logger.error("Failed to remove ClientStaffAssignment: {}", e.getMessage(), e);
             throw e;

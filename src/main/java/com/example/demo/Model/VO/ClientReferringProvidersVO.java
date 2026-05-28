@@ -7,6 +7,7 @@ public class ClientReferringProvidersVO {
     private String clientId;
     private String npiNumber;
     private String firstName;
+    private String middleName;
     private String lastName;
     private String isActive;
     private String taxonomyCode;

@@ -60,7 +60,6 @@ public class StaffsInfo {
     private String staffMiddleName;
 
     @Size(max = 15)
-    @NotNull
     @Column(name = "employee_type", nullable = false, length = 15)
     private String employeeType;
 

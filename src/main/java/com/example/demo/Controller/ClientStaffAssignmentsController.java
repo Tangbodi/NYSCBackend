@@ -76,8 +76,12 @@ public class ClientStaffAssignmentsController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
         try {
-            clientStaffAssignmentsService.RemoveClientStaffAssignment(dto);
-            apiResponse = ApiResponse.success("Staff unassigned successfully.");
+            boolean removed = clientStaffAssignmentsService.RemoveClientStaffAssignment(dto);
+            if (removed) {
+                apiResponse = ApiResponse.success("Staff unassigned successfully.");
+            } else {
+                apiResponse = ApiResponse.error(ReturnCode.RC404.getCode(), "Assignment not found.");
+            }
         } catch (Exception e) {
             logger.error("Unassign error: {}", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());

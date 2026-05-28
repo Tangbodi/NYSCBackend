@@ -40,6 +40,11 @@ public interface ClientStaffAssignmentsRepository extends JpaRepository<ClientSt
 
     @Modifying
     @Transactional
+    @Query(value = "DELETE FROM client_staff_assignments WHERE client_id = :clientId AND staff_id = :staffId", nativeQuery = true)
+    int deleteByClientIdAndStaffId(@Param("clientId") Long clientId, @Param("staffId") Long staffId);
+
+    @Modifying
+    @Transactional
     @Query(value = "DELETE FROM client_staff_assignments WHERE client_id = :clientId", nativeQuery = true)
     void deleteByClientId(@Param("clientId") Long clientId);
 }
