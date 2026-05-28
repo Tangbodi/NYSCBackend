@@ -84,6 +84,36 @@ public class FileCabinetService {
         return savedFiles;
     }
 
+    @Transactional
+    public boolean DeleteFile(String fileId) {
+        logger.info("Deleting file with fileId: {}", fileId);
+        try {
+            Integer id = Integer.valueOf(fileId);
+            FileCabinet record = fileCabinetRepository.findById(id).orElse(null);
+            if (record == null) {
+                logger.warn("File record not found for fileId: {}", fileId);
+                return false;
+            }
+
+            // Delete physical file from disk
+            Path filePath = Paths.get(record.getFilePath());
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+                logger.info("File deleted from disk: {}", filePath);
+            } else {
+                logger.warn("File not found on disk, removing DB record only: {}", filePath);
+            }
+
+            // Delete DB record
+            fileCabinetRepository.deleteById(id);
+            logger.info("File record deleted from DB: {}", fileId);
+            return true;
+        } catch (Exception e) {
+            logger.error("Failed to delete file {}: {}", fileId, e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<FileCabinetVO> GetFilesByClient(String clientId) {
         logger.info("Getting files for clientId: {}", clientId);
         try {

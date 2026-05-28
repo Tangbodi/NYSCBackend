@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/FileCabinet")
@@ -49,6 +50,30 @@ public class FileCabinetController {
         } catch (Exception e) {
             logger.error("Failed to upload files: {}", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Failed to upload files: " + e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> DeleteFile(
+            @RequestBody Map<String, String> body,
+            HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long staffId = (Long) request.getSession().getAttribute("staffId");
+        if (staffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            boolean deleted = fileCabinetService.DeleteFile(body.get("fileId"));
+            if (deleted) {
+                apiResponse = ApiResponse.success("File deleted successfully.");
+            } else {
+                apiResponse = ApiResponse.error(ReturnCode.RC404.getCode(), "File not found.");
+            }
+        } catch (Exception e) {
+            logger.error("Failed to delete file: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Failed to delete file: " + e.getMessage());
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
