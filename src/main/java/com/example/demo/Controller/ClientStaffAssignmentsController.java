@@ -35,8 +35,12 @@ public class ClientStaffAssignmentsController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }else{
             try{
-                clientStaffAssignmentsService.CreateClientStaffAssignments(clientStaffAssignmentsDTO);
-                apiResponse = ApiResponse.success("ClientStaffAssignments created successfully.");
+                boolean created = clientStaffAssignmentsService.CreateClientStaffAssignments(clientStaffAssignmentsDTO);
+                if (created) {
+                    apiResponse = ApiResponse.success("Staff assigned to client successfully.");
+                } else {
+                    apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(), "This staff is already assigned to the client.");
+                }
             }catch (Exception e) {
                 logger.error("Failed to create", e.getMessage(), e);
                 apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());

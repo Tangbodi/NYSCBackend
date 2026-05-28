@@ -33,18 +33,25 @@ public class ClientStaffAssignmentsService {
     @Autowired
     private StaffsInfoService staffsInfoService;
     @Transactional
-    public void CreateClientStaffAssignments(ClientStaffAssignmentsDTO clientStaffAssignmentsDTO){
-        logger.info("Creating ClientStaffAssignments: {}", clientStaffAssignmentsDTO.getClientId() + "&"+clientStaffAssignmentsDTO.getStaffId());
+    public boolean CreateClientStaffAssignments(ClientStaffAssignmentsDTO clientStaffAssignmentsDTO){
+        logger.info("Creating ClientStaffAssignments: client={} staff={}", clientStaffAssignmentsDTO.getClientId(), clientStaffAssignmentsDTO.getStaffId());
         try {
             ClientStaffId clientStaffId = new ClientStaffId();
-            ClientStaffAssignments clientStaffAssignments = new ClientStaffAssignments();
             clientStaffId.setClientId(Long.valueOf(clientStaffAssignmentsDTO.getClientId()));
             clientStaffId.setStaffId(Long.valueOf(clientStaffAssignmentsDTO.getStaffId()));
+
+            if (clientStaffAssignmentsRepository.existsById(clientStaffId)) {
+                logger.info("Assignment already exists for client={} staff={}", clientStaffAssignmentsDTO.getClientId(), clientStaffAssignmentsDTO.getStaffId());
+                return false;
+            }
+
+            ClientStaffAssignments clientStaffAssignments = new ClientStaffAssignments();
             clientStaffAssignments.setId(clientStaffId);
             clientStaffAssignments.setCreatedAt(Instant.now());
             clientStaffAssignments.setModifiedAt(Instant.now());
             clientStaffAssignmentsRepository.save(clientStaffAssignments);
             logger.info("ClientStaffAssignments created successfully.");
+            return true;
         }
         catch (Exception e) {
             logger.error("Failed to create ClientStaffAssignments: {}", e.getMessage(), e);

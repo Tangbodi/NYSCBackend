@@ -18,9 +18,8 @@ public class DateTimeConverter {
         return formattedDateTime;
     }
     public static String DateTimeConvertFromInstant(Instant instant) {
-        //Convert the Instant to a ZonedDateTime with a specific time zone
-        //ZoneId zoneId = ZoneId.of("UTC");
-        ZoneId zoneId = ZoneId.systemDefault();
+        //Convert the Instant to a ZonedDateTime with New York time zone
+        ZoneId zoneId = ZoneId.of("America/New_York");
         ZonedDateTime zonedDateTime = instant.atZone(zoneId);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String formattedDateTime = formatter.format(zonedDateTime);
