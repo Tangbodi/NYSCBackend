@@ -50,5 +50,13 @@ public class StaffsRegisterDTO implements Serializable {
     @NotBlank(message = "Status is required.")
     @Length(min = 1, max = 2, message = "Status length not eligible.")
     private String status;
+    @Length(max = 63, message = "Address length not eligible.")
+    private String address;
+    @Length(max = 15, message = "City length not eligible.")
+    private String city;
+    @Length(max = 7, message = "State length not eligible.")
+    private String state;
+    @Length(max = 15, message = "Zip code length not eligible.")
+    private String zipCode;
 
 }

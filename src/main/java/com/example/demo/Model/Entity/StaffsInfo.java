@@ -68,6 +68,22 @@ public class StaffsInfo {
     @Column(name = "supervisor", nullable = false, length = 63)
     private String supervisor;
 
+    @Size(max = 63)
+    @Column(name = "address", length = 63)
+    private String address;
+
+    @Size(max = 15)
+    @Column(name = "city", length = 15)
+    private String city;
+
+    @Size(max = 7)
+    @Column(name = "state", length = 7)
+    private String state;
+
+    @Size(max = 15)
+    @Column(name = "zip_code", length = 15)
+    private String zipCode;
+
     @NotNull
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

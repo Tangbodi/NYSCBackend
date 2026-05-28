@@ -46,6 +46,10 @@ public class StaffsInfoService {
             staffsInfo.setPhone(staffsRegisterDTO.getPhone());
             staffsInfo.setSupervisor(emptyIfNull(staffsRegisterDTO.getSupervisor()));
             staffsInfo.setTitle(staffsRegisterDTO.getTitle());
+            staffsInfo.setAddress(staffsRegisterDTO.getAddress());
+            staffsInfo.setCity(staffsRegisterDTO.getCity());
+            staffsInfo.setState(staffsRegisterDTO.getState());
+            staffsInfo.setZipCode(staffsRegisterDTO.getZipCode());
             staffsInfo.setCreatedAt(Instant.now());
             staffsInfo.setModifiedAt(Instant.now());
             logger.info("Saving StaffsInfo:{}", staffsInfo.getUsername());
@@ -150,6 +154,10 @@ public class StaffsInfoService {
                 staffsInfo.setSupervisor(staffsInfoDTO.getSupervisor());
                 staffsInfo.setTitle(staffsInfoDTO.getTitle());
                 staffsInfo.setStatus(staffsInfoDTO.getStatus());
+                staffsInfo.setAddress(staffsInfoDTO.getAddress());
+                staffsInfo.setCity(staffsInfoDTO.getCity());
+                staffsInfo.setState(staffsInfoDTO.getState());
+                staffsInfo.setZipCode(staffsInfoDTO.getZipCode());
                 staffsInfo.setModifiedAt(Instant.now());
                 staffsInfoRepository.save(staffsInfo);
                 logger.info("StaffsInfo updated successfully.");
@@ -200,6 +208,10 @@ public class StaffsInfoService {
         staffsInfoVO.setEmployeeType(staffsInfo.getEmployeeType());
         staffsInfoVO.setSupervisor(staffsInfo.getSupervisor());
         staffsInfoVO.setStatus(staffsInfo.getStatus());
+        staffsInfoVO.setAddress(staffsInfo.getAddress());
+        staffsInfoVO.setCity(staffsInfo.getCity());
+        staffsInfoVO.setState(staffsInfo.getState());
+        staffsInfoVO.setZipCode(staffsInfo.getZipCode());
         String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getCreatedAt());
         String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getModifiedAt());
         staffsInfoVO.setCreatedAt(formattedCreatedDateTime);

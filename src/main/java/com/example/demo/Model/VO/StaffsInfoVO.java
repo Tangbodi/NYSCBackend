@@ -18,6 +18,10 @@ public class StaffsInfoVO {
     private String phone;
     private String title;
     private String status;
+    private String address;
+    private String city;
+    private String state;
+    private String zipCode;
     private String JSESSIONID;
     private String createdAt;
     private String modifiedAt;
