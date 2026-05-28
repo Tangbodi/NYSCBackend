@@ -5,7 +5,7 @@ import com.example.demo.Model.Entity.StaffLicenses;
 import com.example.demo.Model.VO.StaffLicensesVO;
 import com.example.demo.Repository.StaffLicensesRepository;
 import com.example.demo.Util.DateTimeConverter;
-import com.example.demo.Util.Snowflake;
+
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class StaffLicensesService {
         logger.info("Creating StaffsLicenses: {}");
         try{
             StaffLicenses staffLicenses = new StaffLicenses();
-            Long snowflakeId = Snowflake.generateUniqueId();
+            Long snowflakeId = System.currentTimeMillis();
             staffLicenses.setId(snowflakeId);
             staffLicenses.setStaffId(Long.valueOf(staffLicensesDTO.getStaffId()));
             staffLicenses.setLicenseName(staffLicensesDTO.getLicenseName());

@@ -6,7 +6,7 @@ import com.example.demo.Model.Entity.EventDetails;
 import com.example.demo.Model.VO.ClientsInfoVO;
 import com.example.demo.Repository.*;
 import com.example.demo.Util.DateTimeConverter;
-import com.example.demo.Util.Snowflake;
+
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ public class ClientsInfoService {
 
         try {
             logger.info("Creating UUID for ClientsInfo: {}", clientsInfoDTO.getFirstName());
-            Long snowflakeId = Snowflake.generateUniqueId();
+            Long snowflakeId = System.currentTimeMillis();
 
             logger.info("Creating ClientsInfo:{}", clientsInfoDTO.getFirstName());
             ClientsInfo clientsInfo = new ClientsInfo();

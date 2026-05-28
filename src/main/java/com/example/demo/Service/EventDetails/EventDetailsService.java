@@ -13,7 +13,7 @@ import com.example.demo.Repository.EventAuditTrailRepository;
 import com.example.demo.Repository.EventDetailsRepository;
 import com.example.demo.Repository.StaffsInfoRepository;
 import com.example.demo.Util.DateTimeConverter;
-import com.example.demo.Util.Snowflake;
+
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ public class EventDetailsService {
         logger.info("Creating EventDetails for client: {}", dto.getClientId());
         try {
             EventDetails event = new EventDetails();
-            Long snowflakeId = Snowflake.generateUniqueId();
+            Long snowflakeId = System.currentTimeMillis();
             event.setId(snowflakeId);
             event.setClientId(Long.valueOf(dto.getClientId()));
             event.setStaffId(Long.valueOf(dto.getStaffId()));

@@ -5,7 +5,7 @@ import com.example.demo.Model.DTO.StaffsRegisterDTO;
 import com.example.demo.Repository.StaffsLoginRepository;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
 import com.example.demo.Service.StaffsPayroll.StaffsPayrollService;
-import com.example.demo.Util.Snowflake;
+
 import jakarta.transaction.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class StaffsRegistrationService {
 
         try {
             logger.info("Creating UUID for StaffsLogin: {}", staffsRegisterDTO.getUsername());
-            Long snowflakeId = Snowflake.generateUniqueId();
+            Long snowflakeId = System.currentTimeMillis();
             staffsRegisterDTO.setStaffId(snowflakeId);
 
             logger.info("Creating StaffsLogin:{}", staffsRegisterDTO.getUsername());
