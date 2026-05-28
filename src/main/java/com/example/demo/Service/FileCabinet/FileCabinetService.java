@@ -1,8 +1,10 @@
 package com.example.demo.Service.FileCabinet;
 
+import com.example.demo.Model.Entity.ClientsInfo;
 import com.example.demo.Model.Entity.FileCabinet;
 import com.example.demo.Model.Entity.StaffsInfo;
 import com.example.demo.Model.VO.FileCabinetVO;
+import com.example.demo.Repository.ClientsInfoRepository;
 import com.example.demo.Repository.FileCabinetRepository;
 import com.example.demo.Repository.StaffsInfoRepository;
 import com.example.demo.Util.DateTimeConverter;
@@ -32,13 +34,18 @@ public class FileCabinetService {
     private FileCabinetRepository fileCabinetRepository;
     @Autowired
     private StaffsInfoRepository staffsInfoRepository;
+    @Autowired
+    private ClientsInfoRepository clientsInfoRepository;
 
     @Transactional
-    public List<FileCabinetVO> SaveFiles(String clientId, MultipartFile[] files, Long staffId) throws IOException {
+    public List<FileCabinetVO> SaveFiles(String clientId, String tag, MultipartFile[] files, Long staffId) throws IOException {
         logger.info("Saving {} file(s) for clientId: {}, uploadedBy staffId: {}", files.length, clientId, staffId);
 
+        // Resolve client name for folder
+        String folderName = resolveClientFolderName(clientId);
+
         // Create client directory if it doesn't exist
-        String clientDirPath = TOMCAT_CLIENT_FILES_PATH + clientId + "/";
+        String clientDirPath = TOMCAT_CLIENT_FILES_PATH + folderName + "/";
         File clientDir = new File(clientDirPath);
         if (!clientDir.exists()) {
             clientDir.mkdirs();
@@ -64,11 +71,12 @@ public class FileCabinetService {
 
             String fileType = file.getContentType() != null ? file.getContentType() : "application/octet-stream";
             String filePath = clientDirPath + uniqueFilename;
-            String fileUrl  = CLIENT_FILES_URL + "/" + clientId + "/" + uniqueFilename;
+            String fileUrl  = CLIENT_FILES_URL + "/" + folderName + "/" + uniqueFilename;
 
             FileCabinet record = new FileCabinet();
             record.setClientId(Long.valueOf(clientId));
             record.setFileName(originalFilename);
+            record.setTag(tag);
             record.setFileType(fileType);
             record.setFilePath(filePath);
             record.setFileUrl(fileUrl);
@@ -134,6 +142,7 @@ public class FileCabinetService {
         vo.setFileId(String.valueOf(file.getId()));
         vo.setClientId(String.valueOf(file.getClientId()));
         vo.setFileName(file.getFileName());
+        vo.setTag(file.getTag());
         vo.setFileType(file.getFileType());
         vo.setFilePath(file.getFilePath());
         vo.setFileUrl(file.getFileUrl());
@@ -141,6 +150,20 @@ public class FileCabinetService {
         vo.setCreatedAt(DateTimeConverter.DateTimeConvertFromInstant(file.getCreatedAt()));
         vo.setModifiedAt(DateTimeConverter.DateTimeConvertFromInstant(file.getModifiedAt()));
         return vo;
+    }
+
+    private String resolveClientFolderName(String clientId) {
+        try {
+            ClientsInfo client = clientsInfoRepository.findById(Long.valueOf(clientId)).orElse(null);
+            if (client != null) {
+                String name = client.getClientFirstName() + "_" + client.getClientLastName();
+                // Sanitize: keep only letters, digits, underscores and hyphens
+                return name.replaceAll("[^a-zA-Z0-9_\\-]", "_");
+            }
+        } catch (Exception e) {
+            logger.warn("Could not resolve client name for clientId {}, falling back to ID: {}", clientId, e.getMessage());
+        }
+        return clientId;
     }
 
     private String resolveStaffName(Long staffId) {

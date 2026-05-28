@@ -28,6 +28,7 @@ public class FileCabinetController {
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> UploadFiles(
             @RequestParam("clientId") String clientId,
+            @RequestParam(value = "tag", required = false) String tag,
             @RequestParam("files") MultipartFile[] files,
             HttpServletRequest request) {
         ApiResponse apiResponse;
@@ -45,7 +46,7 @@ public class FileCabinetController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
         try {
-            List<FileCabinetVO> saved = fileCabinetService.SaveFiles(clientId, files, staffId);
+            List<FileCabinetVO> saved = fileCabinetService.SaveFiles(clientId, tag, files, staffId);
             apiResponse = ApiResponse.success(saved);
         } catch (Exception e) {
             logger.error("Failed to upload files: {}", e.getMessage(), e);

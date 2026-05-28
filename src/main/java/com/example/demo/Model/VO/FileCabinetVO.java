@@ -7,6 +7,7 @@ public class FileCabinetVO {
     private String fileId;
     private String clientId;
     private String fileName;
+    private String tag;
     private String fileType;
     private String filePath;
     private String fileUrl;

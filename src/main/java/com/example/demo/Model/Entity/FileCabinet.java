@@ -27,6 +27,10 @@ public class FileCabinet {
     @Column(name = "file_name", nullable = false, length = 127)
     private String fileName;
 
+    @Size(max = 63)
+    @Column(name = "tag", length = 63)
+    private String tag;
+
     @Column(name = "file_type", length = 31)
     private String fileType;
 
