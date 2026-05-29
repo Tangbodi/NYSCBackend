@@ -18,6 +18,8 @@ public interface EventDetailsRepository extends JpaRepository<EventDetails, Long
 
     List<EventDetails> findByStaffId(Long staffId);
 
+    List<EventDetails> findByDate(String date);
+
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM event_details WHERE client_id = :clientId", nativeQuery = true)
