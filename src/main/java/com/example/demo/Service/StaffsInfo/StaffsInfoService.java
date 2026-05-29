@@ -41,10 +41,10 @@ public class StaffsInfoService {
             staffsInfo.setEmployeeType(staffsRegisterDTO.getEmployeeType());
             staffsInfo.setStaffFirstName(staffsRegisterDTO.getFirstName());
             staffsInfo.setStaffLastName(staffsRegisterDTO.getLastName());
-            staffsInfo.setStaffMiddleName(emptyIfNull(staffsRegisterDTO.getMiddleName()));
+            staffsInfo.setStaffMiddleName(staffsRegisterDTO.getMiddleName());
             staffsInfo.setStatus(staffsRegisterDTO.getStatus());
             staffsInfo.setPhone(staffsRegisterDTO.getPhone());
-            staffsInfo.setSupervisor(emptyIfNull(staffsRegisterDTO.getSupervisor()));
+            staffsInfo.setSupervisor(staffsRegisterDTO.getSupervisor());
             staffsInfo.setTitle(staffsRegisterDTO.getTitle());
             staffsInfo.setAddress(staffsRegisterDTO.getAddress());
             staffsInfo.setCity(staffsRegisterDTO.getCity());
@@ -153,7 +153,6 @@ public class StaffsInfoService {
                 staffsInfo.setPhone(staffsInfoDTO.getPhone());
                 staffsInfo.setSupervisor(staffsInfoDTO.getSupervisor());
                 staffsInfo.setTitle(staffsInfoDTO.getTitle());
-                staffsInfo.setStatus(staffsInfoDTO.getStatus());
                 staffsInfo.setAddress(staffsInfoDTO.getAddress());
                 staffsInfo.setCity(staffsInfoDTO.getCity());
                 staffsInfo.setState(staffsInfoDTO.getState());

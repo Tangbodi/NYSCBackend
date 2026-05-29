@@ -69,28 +69,25 @@ public class StaffsInfoController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PostMapping(value = "/update")
-    public ResponseEntity UpdateStaffsInfo( @Validated @RequestBody StaffsInfoDTO staffsInfoDTO,
-                                          HttpServletRequest request) {
+    @PutMapping(value = "/update")
+    public ResponseEntity UpdateStaffsInfo(@Validated @RequestBody StaffsInfoDTO staffsInfoDTO,
+                                           HttpServletRequest request) {
         Long userId = (Long) request.getSession().getAttribute("staffId");
         ApiResponse apiResponse;
         if (userId == null) {
             apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+        } else if (!staffsLoginService.CheckIsAdmin(userId)) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
         } else {
             try {
-                staffsInfoDTO.setStaffId(userId);
                 if (staffsInfoService.UpdateStaffsInfo(staffsInfoDTO, request) != null) {
                     apiResponse = ApiResponse.success("User info updated successfully.");
                 } else {
                     apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "User info hasn't been updated.");
                 }
-            }catch (Exception e) {
+            } catch (Exception e) {
                 logger.error("Update error: {}", e.getMessage(), e);
-
-                apiResponse = ApiResponse.error(
-                        ReturnCode.RC500.getCode(),
-                        "Error: " + e.getMessage()
-                );
+                apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
             }
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);

@@ -55,17 +55,15 @@ public class StaffsInfo {
     private String status;
 
     @Size(max = 31)
-    @NotNull
-    @Column(name = "staff_middle_name", nullable = false, length = 31)
+    @Column(name = "staff_middle_name", length = 31)
     private String staffMiddleName;
 
     @Size(max = 15)
-    @Column(name = "employee_type", nullable = false, length = 15)
+    @Column(name = "employee_type",length = 15)
     private String employeeType;
 
     @Size(max = 63)
-    @NotNull
-    @Column(name = "supervisor", nullable = false, length = 63)
+    @Column(name = "supervisor", length = 63)
     private String supervisor;
 
     @Size(max = 63)

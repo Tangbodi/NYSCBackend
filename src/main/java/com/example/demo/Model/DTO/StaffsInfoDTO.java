@@ -29,11 +29,11 @@ public class StaffsInfoDTO implements Serializable {
     @ValidUsername
     private String lastName;
     @ValidUsername
-    @Length(min = 1, max = 31, message = "Middle name length not eligible.")
+    @Length(max = 31, message = "Middle name length not eligible.")
     private String middleName;
-    @Length(min = 1, max = 15, message = "Employee type length not eligible.")
+    @Length(max = 15, message = "Employee type length not eligible.")
     private String employeeType;
-    @Length(min = 1, max = 31, message = "Supervisor length not eligible.")
+    @Length(max = 63, message = "Supervisor length not eligible.")
     private String supervisor;
     @ValidPhone
     private String phone;
