@@ -2,6 +2,8 @@ package com.example.demo.Service.StaffsRegister;
 
 import com.example.demo.Controller.StaffsLoginController;
 import com.example.demo.Model.DTO.StaffsRegisterDTO;
+import com.example.demo.Model.Entity.BCBAInfo;
+import com.example.demo.Repository.BCBAInfoRepository;
 import com.example.demo.Repository.StaffsLoginRepository;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
 import com.example.demo.Service.StaffsPayroll.StaffsPayrollService;
@@ -23,6 +25,8 @@ public class StaffsRegistrationService {
     private StaffsLoginRepository staffsLoginRepository;
     @Autowired
     private StaffsPayrollService staffsPayrollService;
+    @Autowired
+    private BCBAInfoRepository bcbaInfoRepository;
     @Transactional
     public void RegisterStaffsLogin(StaffsRegisterDTO staffsRegisterDTO) {
         logger.info("Registering StaffsLogin: {}", staffsRegisterDTO.getUsername());
@@ -53,6 +57,19 @@ public class StaffsRegistrationService {
 
             staffsInfoService.CreateStaffsInfo(staffsRegisterDTO);
             staffsPayrollService.CreateStaffsPayroll(snowflakeId);
+
+            // If title is BCBA, also register in bcba_info
+            if ("BCBA".equalsIgnoreCase(staffsRegisterDTO.getTitle())) {
+                logger.info("Title is BCBA — registering staff {} in bcba_info.", snowflakeId);
+                BCBAInfo bcbaInfo = new BCBAInfo();
+                bcbaInfo.setId(snowflakeId);
+                bcbaInfo.setNpiNumber("");
+                bcbaInfo.setMedicaidId("");
+                bcbaInfo.setCreatedAt(Instant.now());
+                bcbaInfo.setModifiedAt(Instant.now());
+                bcbaInfoRepository.save(bcbaInfo);
+                logger.info("Staff registered in bcba_info successfully.");
+            }
 
         }catch (Exception e) {
             logger.error("Failed to register StaffsLogin: {}", e.getMessage(), e);

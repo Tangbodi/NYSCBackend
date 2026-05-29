@@ -41,9 +41,6 @@ public class StaffsPayroll {
     @Column(name = "effective_end_date", length = 15)
     private String effectiveEndDate;
 
-    @Size(max = 63)
-    @Column(name = "notes", nullable = false, length = 63)
-    private String notes;
     @NotNull
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

@@ -64,8 +64,7 @@ public class StaffsPayrollService {
                     hourlyRate,
                     staffsPayrollDTO.getPayCode(),
                     staffsPayrollDTO.getEffectiveStartDate(),
-                    staffsPayrollDTO.getEffectiveEndDate(),
-                    staffsPayrollDTO.getNotes()
+                    staffsPayrollDTO.getEffectiveEndDate()
             );
             logger.info("StaffsPayroll updated successfully.");
         }catch (Exception e) {

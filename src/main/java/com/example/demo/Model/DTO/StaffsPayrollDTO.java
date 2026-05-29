@@ -14,7 +14,5 @@ public class StaffsPayrollDTO implements Serializable {
     private String payCode;
     private String effectiveStartDate;
     private String effectiveEndDate;
-    @Length(min = 1, max = 63, message = "Notes length not eligible.")
-    private String notes;
 
 }
