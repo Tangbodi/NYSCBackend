@@ -1,7 +1,6 @@
 package com.example.demo.Model.DTO;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -10,8 +9,8 @@ import java.io.Serializable;
 @Data
 public class SessionNotesDTO implements Serializable {
 
-    @NotNull(message = "Session ID is required.")
-    private Long sessionId;
+    @NotBlank(message = "Session ID is required.")
+    private String sessionId;
 
     @NotBlank(message = "Template is required.")
     @Length(min = 1, max = 63, message = "Template length not eligible.")

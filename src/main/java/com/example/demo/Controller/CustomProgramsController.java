@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @Validated
-@RequestMapping("/CustomPrograms")
+@RequestMapping("/custom-programs")
 public class CustomProgramsController {
     private static final Logger logger = LoggerFactory.getLogger(CustomProgramsController.class);
 
@@ -28,7 +28,7 @@ public class CustomProgramsController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> NewCustomProgram(
             @Validated @RequestBody CustomProgramsDTO customProgramsDTO,
             HttpServletRequest request) {
@@ -92,7 +92,7 @@ public class CustomProgramsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateCustomProgram(
             @RequestParam(value = "program") String programId,
             @Validated @RequestBody CustomProgramsDTO customProgramsDTO,
@@ -119,7 +119,7 @@ public class CustomProgramsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteCustomProgram(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

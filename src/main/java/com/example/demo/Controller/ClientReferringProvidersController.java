@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @Validated
-@RequestMapping("/ClientReferringProviders")
+@RequestMapping("/client-referring-providers")
 public class ClientReferringProvidersController {
     private static final Logger logger = LoggerFactory.getLogger(ClientReferringProvidersController.class);
 
@@ -29,7 +29,7 @@ public class ClientReferringProvidersController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> NewClientsReferringProviders(
             @Validated @RequestBody ClientReferringProvidersDTO clientReferringProvidersDTO,
             HttpServletRequest request) {
@@ -74,7 +74,7 @@ public class ClientReferringProvidersController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateClientsReferringProviders(
             @Validated @RequestBody ClientReferringProvidersDTO clientReferringProvidersDTO,
             HttpServletRequest request) {
@@ -94,7 +94,7 @@ public class ClientReferringProvidersController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteClientsReferringProviders(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

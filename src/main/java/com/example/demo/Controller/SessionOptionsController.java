@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Validated
-@RequestMapping("/SessionOptions")
+@RequestMapping("/session-options")
 public class SessionOptionsController {
     private static final Logger logger = LoggerFactory.getLogger(SessionOptionsController.class);
 
     @Autowired
     private SessionOptionsService sessionOptionsService;
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<ApiResponse> GetAllSessionOptions(HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");

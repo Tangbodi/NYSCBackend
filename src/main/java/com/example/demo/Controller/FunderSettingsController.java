@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @Validated
-@RequestMapping("/FunderSettings")
+@RequestMapping("/funder-settings")
 public class FunderSettingsController {
     private static final Logger logger = LoggerFactory.getLogger(FunderSettingsController.class);
 
@@ -28,7 +28,7 @@ public class FunderSettingsController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> CreateFunderSettings(
             @Validated @RequestBody FunderSettingsDTO dto,
             HttpServletRequest request) {
@@ -91,7 +91,7 @@ public class FunderSettingsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateFunderSettings(
             @RequestParam(value = "funder") String funderId,
             @Validated @RequestBody FunderSettingsDTO dto,
@@ -118,7 +118,7 @@ public class FunderSettingsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteFunderSettings(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

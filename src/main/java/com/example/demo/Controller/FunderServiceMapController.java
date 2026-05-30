@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Validated
-@RequestMapping("/FunderServiceMap")
+@RequestMapping("/funder-service-map")
 public class FunderServiceMapController {
     private static final Logger logger = LoggerFactory.getLogger(FunderServiceMapController.class);
 
     @Autowired
     private FunderServiceMapService funderServiceMapService;
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> AddServiceToFunder(
             @Validated @RequestBody FunderServiceMapDTO dto,
             HttpServletRequest request) {
@@ -66,7 +66,7 @@ public class FunderServiceMapController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/remove")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> RemoveServiceFromFunder(
             @Validated @RequestBody FunderServiceMapDTO dto,
             HttpServletRequest request) {

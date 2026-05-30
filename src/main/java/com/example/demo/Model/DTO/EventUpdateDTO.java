@@ -9,6 +9,9 @@ import java.io.Serializable;
 @Data
 public class EventUpdateDTO implements Serializable {
 
+    @NotBlank(message = "Event ID is required.")
+    private String eventId;
+
     @NotBlank(message = "Type is required.")
     @Length(min = 1, max = 15, message = "Type length not eligible.")
     private String type;

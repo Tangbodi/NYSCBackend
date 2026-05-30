@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @Validated
-@RequestMapping("/ClientContacts")
+@RequestMapping("/client-contacts")
 public class ClientContactsController {
     private static final Logger logger = LoggerFactory.getLogger(ClientContactsController.class);
 
@@ -26,7 +26,7 @@ public class ClientContactsController {
     private ClientContactsService clientContactsService;
     @Autowired
     private StaffsLoginService staffsLoginService;
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> NewClientsContacts(
             @Validated @RequestBody ClientContactsDTO clientContactsDTO,
             HttpServletRequest request) {
@@ -61,7 +61,7 @@ public class ClientContactsController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateClientsContacts(@Validated @RequestBody ClientContactsDTO clientContactsDTO, HttpServletRequest request){
         ApiResponse apiResponse;
         try{
@@ -78,7 +78,7 @@ public class ClientContactsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteClientsContacts(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

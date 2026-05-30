@@ -20,14 +20,14 @@ import java.util.Map;
 
 @RestController
 @Validated
-@RequestMapping("/EventDetails")
+@RequestMapping("/event-details")
 public class EventDetailsController {
     private static final Logger logger = LoggerFactory.getLogger(EventDetailsController.class);
 
     @Autowired
     private EventDetailsService eventDetailsService;
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> CreateEvent(
             @Validated @RequestBody EventDetailsDTO dto,
             HttpServletRequest request) {
@@ -49,9 +49,8 @@ public class EventDetailsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateEvent(
-            @RequestParam(value = "event") String eventId,
             @Validated @RequestBody EventUpdateDTO dto,
             HttpServletRequest request) {
 
@@ -63,7 +62,7 @@ public class EventDetailsController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
         try {
-            eventDetailsService.UpdateEvent(eventId, dto, staffId);
+            eventDetailsService.UpdateEvent(dto.getEventId(), dto, staffId);
             apiResponse = ApiResponse.success("Event updated successfully.");
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage(), e);
@@ -138,7 +137,7 @@ public class EventDetailsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteEvent(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

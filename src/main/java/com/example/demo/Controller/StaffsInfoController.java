@@ -69,7 +69,34 @@ public class StaffsInfoController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PutMapping(value = "/update")
+    @PostMapping(value = "/")
+    public ResponseEntity<ApiResponse> CreateStaffsInfo(@Validated @RequestBody StaffsInfoDTO staffsInfoDTO,
+                                                        HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long userId = (Long) request.getSession().getAttribute("staffId");
+        if (userId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        if (!staffsLoginService.CheckIsAdmin(userId)) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            StaffsInfoVO created = staffsInfoService.CreateStaffsInfoFromDTO(staffsInfoDTO, request);
+            if (created == null) {
+                apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(), "Email is already in use.");
+            } else {
+                apiResponse = ApiResponse.success(created);
+            }
+        } catch (Exception e) {
+            logger.error("Create staff info error: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), "Error: " + e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+
+    @PutMapping(value = "/")
     public ResponseEntity UpdateStaffsInfo(@Validated @RequestBody StaffsInfoDTO staffsInfoDTO,
                                            HttpServletRequest request) {
         Long userId = (Long) request.getSession().getAttribute("staffId");
@@ -93,7 +120,7 @@ public class StaffsInfoController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteStaffsInfo(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

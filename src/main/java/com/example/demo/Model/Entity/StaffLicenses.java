@@ -14,7 +14,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "staff_licenses")
+@Table(name = "staffs_licenses")
 public class StaffLicenses {
     @Id
     @Column(name = "staff_license_id", nullable = false)

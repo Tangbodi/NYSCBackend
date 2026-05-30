@@ -25,7 +25,7 @@ public class ClientStaffAssignmentsController {
 
     @Autowired
     private ClientStaffAssignmentsService clientStaffAssignmentsService;
-    @PostMapping("/assign")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> NewClientStaffAssignments(@RequestBody ClientStaffAssignmentsDTO clientStaffAssignmentsDTO, HttpServletRequest request){
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
@@ -48,7 +48,7 @@ public class ClientStaffAssignmentsController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<ApiResponse> AllClientStaffAssignments(HttpServletRequest request){
         ApiResponse apiResponse;
         Long userId = (Long) request.getSession().getAttribute("staffId");
@@ -69,7 +69,7 @@ public class ClientStaffAssignmentsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/unassign")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> RemoveClientStaffAssignment(
             @Validated @RequestBody ClientStaffAssignmentsDTO dto,
             HttpServletRequest request) {

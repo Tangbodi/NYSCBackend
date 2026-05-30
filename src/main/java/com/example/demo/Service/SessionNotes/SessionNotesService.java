@@ -29,7 +29,7 @@ public class SessionNotesService {
         logger.info("Creating session note.");
         try {
             SessionNotes note = new SessionNotes();
-            note.setId(dto.getSessionId());
+            note.setId(Long.valueOf(dto.getSessionId()));
             note.setTemplate(dto.getTemplate());
             note.setPurposeOfSession(dto.getPurposeOfSession());
             note.setClientStatus(dto.getClientStatus());

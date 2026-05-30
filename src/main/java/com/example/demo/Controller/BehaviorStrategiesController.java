@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @Validated
-@RequestMapping("/BehaviorStrategies")
+@RequestMapping("/behavior-strategies")
 public class BehaviorStrategiesController {
     private static final Logger logger = LoggerFactory.getLogger(BehaviorStrategiesController.class);
 
@@ -28,7 +28,7 @@ public class BehaviorStrategiesController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> CreateStrategy(
             @Validated @RequestBody BehaviorStrategiesDTO dto,
             HttpServletRequest request) {
@@ -52,7 +52,7 @@ public class BehaviorStrategiesController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<ApiResponse> GetAllStrategies(HttpServletRequest request) {
         ApiResponse apiResponse;
         Long staffId = (Long) request.getSession().getAttribute("staffId");
@@ -71,7 +71,7 @@ public class BehaviorStrategiesController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateStrategy(
             @RequestParam(value = "strategy") String strategyId,
             @Validated @RequestBody BehaviorStrategiesDTO dto,
@@ -96,7 +96,7 @@ public class BehaviorStrategiesController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteStrategy(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import java.io.Serializable;
 @Data
 public class StaffsPayrollDTO implements Serializable {
-    private Long staffId;
+    private String staffId;
     @NotBlank
     private String hourlyRate;
     @NotBlank

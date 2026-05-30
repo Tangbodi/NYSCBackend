@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @Validated
-@RequestMapping("/staffs")
+@RequestMapping("/staffs/payroll")
 public class StaffsPayrollController {
     private static final Logger logger = LoggerFactory.getLogger(StaffsPayrollController.class);
     @Autowired
@@ -26,19 +26,20 @@ public class StaffsPayrollController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
-    @GetMapping("/payroll")
-    public ResponseEntity<ApiResponse> GetStaffsPayroll(HttpServletRequest request) {
+    @GetMapping("/")
+    public ResponseEntity<ApiResponse> GetStaffsPayroll(@RequestParam(value = "staff") String staffId,
+                                                        HttpServletRequest request) {
         ApiResponse apiResponse;
 
-        Long staffId = (Long) request.getSession().getAttribute("staffId");
-        if (staffId == null) {
+        Long sessionStaffId = (Long) request.getSession().getAttribute("staffId");
+        if (sessionStaffId == null) {
             logger.info("No staffId in session. Access denied.");
             apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
 
         try {
-            StaffsPayrollVO staffsPayrollVO = staffsPayrollService.GetStaffsPayroll(staffId);
+            StaffsPayrollVO staffsPayrollVO = staffsPayrollService.GetStaffsPayroll(Long.valueOf(staffId));
 
             if (staffsPayrollVO == null) {
                 logger.info("No existing payroll found for staffId: {}", staffId);
@@ -54,28 +55,65 @@ public class StaffsPayrollController {
 
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
-        @PostMapping("/payroll/update")
-    public ResponseEntity UpdateStaffsPayroll(@RequestBody StaffsPayrollDTO staffsPayrollDTO, HttpServletRequest request) {
+    @PostMapping("/")
+    public ResponseEntity<ApiResponse> CreateStaffsPayroll(@Validated @RequestBody StaffsPayrollDTO staffsPayrollDTO,
+                                                           HttpServletRequest request) {
         ApiResponse apiResponse;
-        Long staffId = (Long) request.getSession().getAttribute("staffId");
-        if (staffId == null) {
-            logger.info("No staffId in session. Access denied.");
+        Long sessionStaffId = (Long) request.getSession().getAttribute("staffId");
+        if (sessionStaffId == null) {
             apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        }else{
-            try{
-                staffsPayrollDTO.setStaffId(staffId);
-                staffsPayrollService.UpdateStaffsPayroll(staffsPayrollDTO);
-                apiResponse = ApiResponse.success("Staffs Payroll updated successfully.");
-            }catch (Exception e) {
-                logger.error("Failed to update StaffsPayroll", e.getMessage(), e);
-                apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+        }
+        if (!staffsLoginService.CheckIsAdmin(sessionStaffId)) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        if (staffsPayrollDTO.getStaffId() == null || staffsPayrollDTO.getStaffId().isBlank()) {
+            apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "staffId is required.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            boolean created = staffsPayrollService.CreateStaffsPayrollFromDTO(staffsPayrollDTO);
+            if (created) {
+                apiResponse = ApiResponse.success("Payroll created successfully.");
+            } else {
+                apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(), "Payroll already exists for this staff.");
             }
+        } catch (Exception e) {
+            logger.error("Failed to create StaffsPayroll: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/payroll/delete")
+    @PutMapping("/")
+    public ResponseEntity<ApiResponse> UpdateStaffsPayroll(@Validated @RequestBody StaffsPayrollDTO staffsPayrollDTO,
+                                                           HttpServletRequest request) {
+        ApiResponse apiResponse;
+        Long sessionStaffId = (Long) request.getSession().getAttribute("staffId");
+        if (sessionStaffId == null) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        if (!staffsLoginService.CheckIsAdmin(sessionStaffId)) {
+            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        if (staffsPayrollDTO.getStaffId() == null || staffsPayrollDTO.getStaffId().isBlank()) {
+            apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "staffId is required.");
+            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+        }
+        try {
+            staffsPayrollService.UpdateStaffsPayroll(staffsPayrollDTO);
+            apiResponse = ApiResponse.success("Payroll updated successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to update StaffsPayroll: {}", e.getMessage(), e);
+            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
+        }
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteStaffsPayroll(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

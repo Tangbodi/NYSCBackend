@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/FileCabinet")
+@RequestMapping("/file-cabinet")
 public class FileCabinetController {
     private static final Logger logger = LoggerFactory.getLogger(FileCabinetController.class);
     private static final int MAX_FILES = 9;
@@ -25,7 +25,7 @@ public class FileCabinetController {
     @Autowired
     private FileCabinetService fileCabinetService;
 
-    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> UploadFiles(
             @RequestParam("clientId") String clientId,
             @RequestParam(value = "tag", required = false) String tag,
@@ -55,7 +55,7 @@ public class FileCabinetController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteFile(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @Validated
-@RequestMapping("/SessionNotes")
+@RequestMapping("/session-notes")
 public class SessionNotesController {
     private static final Logger logger = LoggerFactory.getLogger(SessionNotesController.class);
 
@@ -27,7 +27,7 @@ public class SessionNotesController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> CreateSessionNote(
             @Validated @RequestBody SessionNotesDTO dto,
             HttpServletRequest request) {
@@ -49,7 +49,7 @@ public class SessionNotesController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateSessionNote(
             @RequestParam(value = "session") String sessionId,
             @Validated @RequestBody SessionNotesDTO dto,
@@ -98,7 +98,7 @@ public class SessionNotesController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteSessionNote(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

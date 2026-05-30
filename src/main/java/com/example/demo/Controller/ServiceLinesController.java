@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @Validated
-@RequestMapping("/ServiceLines")
+@RequestMapping("/service-lines")
 public class ServiceLinesController {
     private static final Logger logger = LoggerFactory.getLogger(ServiceLinesController.class);
 
@@ -28,7 +28,7 @@ public class ServiceLinesController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> CreateServiceLine(
             @Validated @RequestBody ServiceLinesDTO dto,
             HttpServletRequest request) {
@@ -91,7 +91,7 @@ public class ServiceLinesController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateServiceLine(
             @RequestParam(value = "service") String serviceId,
             @Validated @RequestBody ServiceLinesDTO dto,
@@ -118,7 +118,7 @@ public class ServiceLinesController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteServiceLine(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

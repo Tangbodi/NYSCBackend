@@ -46,7 +46,7 @@ public class BCBAInfoController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateBCBAInfo(
             @Validated @RequestBody BCBAInfoDTO dto,
             HttpServletRequest request) {

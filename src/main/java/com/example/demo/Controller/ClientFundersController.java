@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @Validated
-@RequestMapping("/ClientFunders")
+@RequestMapping("/client-funders")
 public class ClientFundersController {
     private static final Logger logger = LoggerFactory.getLogger(ClientFundersController.class);
 
@@ -28,7 +28,7 @@ public class ClientFundersController {
     private ClientFundersService clientFundersService;
     @Autowired
     private StaffsLoginService staffsLoginService;
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> NewClientsFunders(
             @Validated @RequestBody ClientFundersDTO clientFundersDTO,
             HttpServletRequest request) {
@@ -99,7 +99,7 @@ public class ClientFundersController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateClientsFunders(@Validated @RequestBody ClientFundersDTO clientFundersDTO, HttpServletRequest request) {
 
         ApiResponse apiResponse;
@@ -113,7 +113,7 @@ public class ClientFundersController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteClientsFunders(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {

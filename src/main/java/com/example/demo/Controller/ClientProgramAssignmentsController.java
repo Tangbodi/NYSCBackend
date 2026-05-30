@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Validated
-@RequestMapping("/ClientProgramAssignments")
+@RequestMapping("/client-program-assignments")
 public class ClientProgramAssignmentsController {
     private static final Logger logger = LoggerFactory.getLogger(ClientProgramAssignmentsController.class);
 
     @Autowired
     private ClientProgramAssignmentsService clientProgramAssignmentsService;
 
-    @PostMapping("/assign")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> AssignClientToProgram(
             @Validated @RequestBody ClientProgramAssignmentsDTO dto,
             HttpServletRequest request) {
@@ -66,7 +66,7 @@ public class ClientProgramAssignmentsController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/unassign")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> UnassignProgram(
             @Validated @RequestBody ClientProgramAssignmentsDTO dto,
             HttpServletRequest request) {

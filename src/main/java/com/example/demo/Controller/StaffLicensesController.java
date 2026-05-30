@@ -28,7 +28,7 @@ public class StaffLicensesController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
-    @PostMapping("/new")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> NewStaffsLicenses(@Validated @RequestBody StaffLicensesDTO staffLicensesDTO, HttpServletRequest request) {
         ApiResponse apiResponse;
         try {
@@ -74,7 +74,7 @@ public class StaffLicensesController {
         }
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateStaffsLicenses(@Validated @RequestBody StaffLicensesDTO staffLicensesDTO, HttpServletRequest request) {
 
         ApiResponse apiResponse;
@@ -92,7 +92,7 @@ public class StaffLicensesController {
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<ApiResponse> DeleteStaffLicense(
             @RequestBody Map<String, String> body,
             HttpServletRequest request) {
