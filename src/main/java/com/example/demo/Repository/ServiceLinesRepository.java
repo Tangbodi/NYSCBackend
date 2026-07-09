@@ -21,6 +21,8 @@ public interface ServiceLinesRepository extends JpaRepository<ServiceLines, Inte
             service       = :service,
             description   = :description,
             inactive      = :inactive,
+            start_date    = :startDate,
+            end_date      = :endDate,
             modified_at   = NOW()
         WHERE service_id = :id
         """, nativeQuery = true)
@@ -31,6 +33,8 @@ public interface ServiceLinesRepository extends JpaRepository<ServiceLines, Inte
             @Param("unitType") String unitType,
             @Param("service") String service,
             @Param("description") String description,
-            @Param("inactive") String inactive
+            @Param("inactive") String inactive,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate
     );
 }

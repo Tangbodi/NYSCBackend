@@ -31,4 +31,10 @@ public class ServiceLinesDTO implements Serializable {
 
     @Length(max = 1, message = "Inactive flag length not eligible.")
     private String inactive;
+
+    @Length(max = 15, message = "Start date length not eligible.")
+    private String startDate;
+
+    @Length(max = 15, message = "End date length not eligible.")
+    private String endDate;
 }

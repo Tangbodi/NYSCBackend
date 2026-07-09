@@ -22,6 +22,7 @@ public class StaffsInfoVO {
     private String city;
     private String state;
     private String zipCode;
+    private String nickname;
     private String JSESSIONID;
     private String createdAt;
     private String modifiedAt;

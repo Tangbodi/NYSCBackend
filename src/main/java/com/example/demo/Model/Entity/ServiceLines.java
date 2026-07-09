@@ -53,6 +53,14 @@ public class ServiceLines {
     @Column(name = "inactive", length = 1)
     private String inactive;
 
+    @Size(max = 15)
+    @Column(name = "start_date", length = 15)
+    private String startDate;
+
+    @Size(max = 15)
+    @Column(name = "end_date", length = 15)
+    private String endDate;
+
     @NotNull
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

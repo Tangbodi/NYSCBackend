@@ -50,5 +50,7 @@ public class StaffsInfoDTO implements Serializable {
     private String state;
     @Length(max = 15, message = "Zip code length not eligible.")
     private String zipCode;
+    @Length(max = 31, message = "Nickname length not eligible.")
+    private String nickname;
 
 }

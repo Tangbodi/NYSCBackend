@@ -92,6 +92,7 @@ public class StaffsInfoService {
             staffsInfo.setCity(staffsInfoDTO.getCity());
             staffsInfo.setState(staffsInfoDTO.getState());
             staffsInfo.setZipCode(staffsInfoDTO.getZipCode());
+            staffsInfo.setNickname(staffsInfoDTO.getNickname());
             staffsInfo.setCreatedAt(Instant.now());
             staffsInfo.setModifiedAt(Instant.now());
             staffsInfoRepository.save(staffsInfo);
@@ -209,6 +210,7 @@ public class StaffsInfoService {
                 staffsInfo.setCity(staffsInfoDTO.getCity());
                 staffsInfo.setState(staffsInfoDTO.getState());
                 staffsInfo.setZipCode(staffsInfoDTO.getZipCode());
+                staffsInfo.setNickname(staffsInfoDTO.getNickname());
                 staffsInfo.setModifiedAt(Instant.now());
                 staffsInfoRepository.save(staffsInfo);
                 logger.info("StaffsInfo updated successfully.");
@@ -263,6 +265,7 @@ public class StaffsInfoService {
         staffsInfoVO.setCity(staffsInfo.getCity());
         staffsInfoVO.setState(staffsInfo.getState());
         staffsInfoVO.setZipCode(staffsInfo.getZipCode());
+        staffsInfoVO.setNickname(staffsInfo.getNickname());
         String formattedCreatedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getCreatedAt());
         String formattedModifiedDateTime = DateTimeConverter.DateTimeConvertFromInstant(staffsInfo.getModifiedAt());
         staffsInfoVO.setCreatedAt(formattedCreatedDateTime);

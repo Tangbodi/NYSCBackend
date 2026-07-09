@@ -82,6 +82,10 @@ public class StaffsInfo {
     @Column(name = "zip_code", length = 15)
     private String zipCode;
 
+    @Size(max = 31)
+    @Column(name = "nickname", length = 31)
+    private String nickname;
+
     @NotNull
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

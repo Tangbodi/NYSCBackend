@@ -11,6 +11,8 @@ public class ServiceLinesVO {
     private String service;
     private String description;
     private String inactive;
+    private String startDate;
+    private String endDate;
     private String createdAt;
     private String modifiedAt;
 }
