@@ -37,8 +37,8 @@ public class ClientContactsService {
             clientContacts.setCity(clientContactsDTO.getCity());
             clientContacts.setState(clientContactsDTO.getState());
             clientContacts.setZipCode(clientContactsDTO.getZipCode());
-            clientContacts.setCreatedAt(Instant.now());
-            clientContacts.setModifiedAt(Instant.now());
+            clientContacts.setCreatedAt(DateTimeConverter.nowNyc());
+            clientContacts.setModifiedAt(DateTimeConverter.nowNyc());
             clientContactsRepository.save(clientContacts);
             logger.info("ClientsContacts created successfully.");
 
@@ -67,6 +67,7 @@ public class ClientContactsService {
     public void UpdateClientsContacts(ClientContactsDTO clientContactsDTO){
         logger.info("Updating ClientsContacts: {}", clientContactsDTO.getClientId());
         try{
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             clientContactsRepository.UpdateClientsContacts(
                     Long.valueOf(clientContactsDTO.getClientId()),
                     clientContactsDTO.getFirstName(),
@@ -78,7 +79,9 @@ public class ClientContactsService {
                     clientContactsDTO.getAddress(),
                     clientContactsDTO.getCity(),
                     clientContactsDTO.getState(),
-                    clientContactsDTO.getZipCode()
+                    clientContactsDTO.getZipCode(),
+                    modifiedAt
+
             );
             logger.info("ClientsContacts updated successfully.");
         }catch (Exception e) {

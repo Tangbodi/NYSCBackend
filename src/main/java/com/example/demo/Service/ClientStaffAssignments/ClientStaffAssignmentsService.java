@@ -10,6 +10,7 @@ import com.example.demo.Model.VO.StaffsInfoVO;
 import com.example.demo.Repository.ClientStaffAssignmentsRepository;
 import com.example.demo.Service.ClientsInfo.ClientsInfoService;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
+import com.example.demo.Util.DateTimeConverter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -47,8 +48,8 @@ public class ClientStaffAssignmentsService {
 
             ClientStaffAssignments clientStaffAssignments = new ClientStaffAssignments();
             clientStaffAssignments.setId(clientStaffId);
-            clientStaffAssignments.setCreatedAt(Instant.now());
-            clientStaffAssignments.setModifiedAt(Instant.now());
+            clientStaffAssignments.setCreatedAt(DateTimeConverter.nowNyc());
+            clientStaffAssignments.setModifiedAt(DateTimeConverter.nowNyc());
             clientStaffAssignmentsRepository.save(clientStaffAssignments);
             logger.info("ClientStaffAssignments created successfully.");
             return true;

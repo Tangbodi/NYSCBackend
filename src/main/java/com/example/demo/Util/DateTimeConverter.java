@@ -2,6 +2,7 @@ package com.example.demo.Util;
 
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -18,12 +19,18 @@ public class DateTimeConverter {
         return formattedDateTime;
     }
     public static String DateTimeConvertFromInstant(Instant instant) {
-        //Convert the Instant to a ZonedDateTime with New York time zone
-        ZoneId zoneId = ZoneId.of("America/New_York");
-        ZonedDateTime zonedDateTime = instant.atZone(zoneId);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String formattedDateTime = formatter.format(zonedDateTime);
-        return formattedDateTime;
+        return formatter.format(instant);
     }
 
+    public static Instant nowNyc() {
+        return ZonedDateTime.now(ZoneId.of("America/New_York")).toInstant();
+    }
+
+    public static String DateTimeConvertFromObject(Object obj) {
+        if (obj == null) return null;
+        if (obj instanceof Instant instant) return DateTimeConvertFromInstant(instant);
+        if (obj instanceof Timestamp ts) return DateTimeConvertFromInstant(ts.toInstant());
+        return obj.toString();
+    }
 }

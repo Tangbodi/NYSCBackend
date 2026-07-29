@@ -39,8 +39,8 @@ public class StaffLicensesService {
             staffLicenses.setIssueDate(staffLicensesDTO.getIssueDate());
             staffLicenses.setExpiredDate(staffLicensesDTO.getExpiredDate());
             staffLicenses.setNotes(staffLicensesDTO.getNotes());
-            staffLicenses.setCreatedAt(Instant.now());
-            staffLicenses.setModifiedAt(Instant.now());
+            staffLicenses.setCreatedAt(DateTimeConverter.nowNyc());
+            staffLicenses.setModifiedAt(DateTimeConverter.nowNyc());
             staffLicensesRepository.save(staffLicenses);
             logger.info("StaffsLicenses created successfully.");
         } catch (Exception e) {
@@ -65,8 +65,8 @@ public class StaffLicensesService {
                     staffLicensesVO.setIssueDate(String.valueOf(license.get("issue_date")));
                     staffLicensesVO.setExpiredDate(String.valueOf(license.get("expired_date")));
                     staffLicensesVO.setNotes(String.valueOf(license.get("notes")));
-                    staffLicensesVO.setCreatedAt(String.valueOf(license.get("created_at")));
-                    staffLicensesVO.setModifiedAt(String.valueOf(license.get("modified_at")));
+                    staffLicensesVO.setCreatedAt(DateTimeConverter.DateTimeConvertFromObject(license.get("created_at")));
+                    staffLicensesVO.setModifiedAt(DateTimeConverter.DateTimeConvertFromObject(license.get("modified_at")));
                     clientsFundersVOList.add(staffLicensesVO);
                 }
                 return clientsFundersVOList;
@@ -99,13 +99,15 @@ public class StaffLicensesService {
         logger.info("Updating StaffsLicenses: {}", "License ID:"+ staffLicensesDTO.getLicenseId(),"Staff ID:"+ staffLicensesDTO.getStaffId());
 
         try{
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             staffLicensesRepository.updateStaffLicenseByStaffIdAndLicenseId(Long.valueOf(staffLicensesDTO.getLicenseId()), Long.valueOf(staffLicensesDTO.getStaffId()),
                     staffLicensesDTO.getLicenseName(),
                     staffLicensesDTO.getLicenseNumber(),
                     staffLicensesDTO.getLicenseState(),
                     staffLicensesDTO.getIssueDate(),
                     staffLicensesDTO.getExpiredDate(),
-                    staffLicensesDTO.getNotes()
+                    staffLicensesDTO.getNotes(),
+                    modifiedAt
             );
         }catch (Exception e) {
             logger.error("Failed to update StaffsLicenses: {}", e.getMessage(), e);

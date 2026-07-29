@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+
 @Repository
 public interface CustomProgramsRepository extends JpaRepository<CustomPrograms, Long> {
 
@@ -29,7 +31,7 @@ public interface CustomProgramsRepository extends JpaRepository<CustomPrograms, 
             teaching_strategies  = :teachingStrategies,
             troubleshooting      = :troubleshooting,
             helpful_hints        = :helpfulHints,
-            modified_at          = NOW()
+            modified_at          = :modifiedAt
         WHERE program_id = :id
         """, nativeQuery = true)
     int UpdateCustomProgram(
@@ -47,6 +49,7 @@ public interface CustomProgramsRepository extends JpaRepository<CustomPrograms, 
             @Param("supplies") String supplies,
             @Param("teachingStrategies") String teachingStrategies,
             @Param("troubleshooting") String troubleshooting,
-            @Param("helpfulHints") String helpfulHints
+            @Param("helpfulHints") String helpfulHints,
+            @Param("modifiedAt") Instant modifiedAt
     );
 }

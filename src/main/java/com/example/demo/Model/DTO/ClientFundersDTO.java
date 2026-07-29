@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.Instant;
+
 
 @Data
 public class ClientFundersDTO {

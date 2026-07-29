@@ -73,7 +73,7 @@ public class StaffsPayrollController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
         try {
-            boolean created = staffsPayrollService.CreateStaffsPayrollFromDTO(staffsPayrollDTO);
+            boolean created = staffsPayrollService.CreateStaffsPayroll(staffsPayrollDTO);
             if (created) {
                 apiResponse = ApiResponse.success("Payroll created successfully.");
             } else {

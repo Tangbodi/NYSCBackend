@@ -41,8 +41,8 @@ public class ClientFundersService {
             clientFunders.setFirstName(dto.getFirstName());
             clientFunders.setLastName(dto.getLastName());
             clientFunders.setCoverageType(dto.getCoverageType());
-            clientFunders.setCreatedAt(Instant.now());
-            clientFunders.setModifiedAt(Instant.now());
+            clientFunders.setCreatedAt(DateTimeConverter.nowNyc());
+            clientFunders.setModifiedAt(DateTimeConverter.nowNyc());
             clientFundersRepository.save(clientFunders);
             logger.info("ClientsFunders created successfully.");
         } catch (Exception e) {
@@ -110,9 +110,8 @@ public class ClientFundersService {
                     vo.setEmail(nullSafe(row.get("email")));
                     vo.setFax(nullSafe(row.get("fax")));
                     vo.setDefaultBillingProvider(nullSafe(row.get("default_billing_provider")));
-
-                    vo.setCreatedAt(nullSafe(row.get("created_at")));
-                    vo.setModifiedAt(nullSafe(row.get("modified_at")));
+                    vo.setCreatedAt(DateTimeConverter.DateTimeConvertFromObject(row.get("created_at")));
+                    vo.setModifiedAt(DateTimeConverter.DateTimeConvertFromObject(row.get("modified_at")));
 
                     clientFundersVOList.add(vo);
                 }
@@ -128,19 +127,22 @@ public class ClientFundersService {
     }
 
     @Transactional
-    public void UpdateClientsFunders(ClientFundersDTO dto) {
-        logger.info("Updating ClientsFunders clientId: {}, funderId: {}", dto.getClientId(), dto.getFunderId());
+    public void UpdateClientsFunders(ClientFundersDTO clientFundersDTO) {
+        logger.info("Updating ClientsFunders clientId: {}, funderId: {}", clientFundersDTO.getClientId(), clientFundersDTO.getFunderId());
+
         try {
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             clientFundersRepository.UpdateClientsFunderByClientIdAndFunderId(
-                    Long.valueOf(dto.getClientId()),
-                    Integer.valueOf(dto.getFunderId()),
-                    dto.getInsuranceId(),
-                    dto.getRelationship(),
-                    dto.getStartDate(),
-                    dto.getEndDate(),
-                    dto.getFirstName(),
-                    dto.getLastName(),
-                    dto.getCoverageType()
+                    Long.valueOf(clientFundersDTO.getClientId()),
+                    Integer.valueOf(clientFundersDTO.getFunderId()),
+                    clientFundersDTO.getInsuranceId(),
+                    clientFundersDTO.getRelationship(),
+                    clientFundersDTO.getStartDate(),
+                    clientFundersDTO.getEndDate(),
+                    clientFundersDTO.getFirstName(),
+                    clientFundersDTO.getLastName(),
+                    clientFundersDTO.getCoverageType(),
+                    modifiedAt
             );
             logger.info("ClientsFunders updated successfully.");
         } catch (Exception e) {
@@ -165,8 +167,8 @@ public class ClientFundersService {
                 serviceVO.setService(nullSafe(row.get("service")));
                 serviceVO.setDescription(nullSafe(row.get("description")));
                 serviceVO.setInactive(nullSafe(row.get("inactive")));
-                serviceVO.setCreatedAt(nullSafe(row.get("created_at")));
-                serviceVO.setModifiedAt(nullSafe(row.get("modified_at")));
+                serviceVO.setCreatedAt(DateTimeConverter.DateTimeConvertFromObject(row.get("created_at")));
+                serviceVO.setModifiedAt(DateTimeConverter.DateTimeConvertFromObject(row.get("modified_at")));
                 serviceList.add(serviceVO);
             }
             vo.setServices(serviceList);

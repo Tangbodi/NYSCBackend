@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+
 @Repository
 public interface ClientContactsRepository extends JpaRepository<ClientContacts, Long> {
 
@@ -29,7 +31,7 @@ public interface ClientContactsRepository extends JpaRepository<ClientContacts, 
             city = :city,
             state = :state,
             zip_code = :zipCode,
-            modified_at = NOW()
+            modified_at = :modifiedAt
         WHERE client_id = :id
         """, nativeQuery = true)
     int UpdateClientsContacts(
@@ -43,7 +45,8 @@ public interface ClientContactsRepository extends JpaRepository<ClientContacts, 
             @Param("address") String address,
             @Param("city") String city,
             @Param("state") String state,
-            @Param("zipCode") String zipCode
+            @Param("zipCode") String zipCode,
+            @Param("modifiedAt") Instant modifiedAt
     );
 
 }

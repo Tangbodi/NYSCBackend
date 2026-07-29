@@ -54,8 +54,8 @@ public class StaffsInfoService {
             staffsInfo.setCity(staffsRegisterDTO.getCity());
             staffsInfo.setState(staffsRegisterDTO.getState());
             staffsInfo.setZipCode(staffsRegisterDTO.getZipCode());
-            staffsInfo.setCreatedAt(Instant.now());
-            staffsInfo.setModifiedAt(Instant.now());
+            staffsInfo.setCreatedAt(DateTimeConverter.nowNyc());
+            staffsInfo.setModifiedAt(DateTimeConverter.nowNyc());
             logger.info("Saving StaffsInfo:{}", staffsInfo.getUsername());
             if (staffsInfoRepository.save(staffsInfo) == null) {
                 throw new StaffsLoginController.UserRegistrationException("Failed to save StaffsLogin.");
@@ -67,55 +67,6 @@ public class StaffsInfoService {
             throw e;   // <--- rethrow EXACT exception
         }
     }
-    @Transactional
-    public StaffsInfoVO CreateStaffsInfoFromDTO(StaffsInfoDTO staffsInfoDTO, HttpServletRequest request) {
-        logger.info("Creating StaffsInfo from DTO");
-        try {
-            if (staffsInfoRepository.findByEmail(staffsInfoDTO.getEmail()).isPresent()) {
-                logger.warn("Email already in use: {}", staffsInfoDTO.getEmail());
-                return null;
-            }
-            Long newId = System.currentTimeMillis();
-            StaffsInfo staffsInfo = new StaffsInfo();
-            staffsInfo.setId(newId);
-            staffsInfo.setUsername(staffsInfoDTO.getUsername());
-            staffsInfo.setEmail(staffsInfoDTO.getEmail());
-            staffsInfo.setStaffFirstName(staffsInfoDTO.getFirstName());
-            staffsInfo.setStaffLastName(staffsInfoDTO.getLastName());
-            staffsInfo.setStaffMiddleName(staffsInfoDTO.getMiddleName());
-            staffsInfo.setPhone(staffsInfoDTO.getPhone());
-            staffsInfo.setTitle(staffsInfoDTO.getTitle());
-            staffsInfo.setStatus(staffsInfoDTO.getStatus());
-            staffsInfo.setEmployeeType(staffsInfoDTO.getEmployeeType());
-            staffsInfo.setSupervisor(staffsInfoDTO.getSupervisor());
-            staffsInfo.setAddress(staffsInfoDTO.getAddress());
-            staffsInfo.setCity(staffsInfoDTO.getCity());
-            staffsInfo.setState(staffsInfoDTO.getState());
-            staffsInfo.setZipCode(staffsInfoDTO.getZipCode());
-            staffsInfo.setNickname(staffsInfoDTO.getNickname());
-            staffsInfo.setCreatedAt(Instant.now());
-            staffsInfo.setModifiedAt(Instant.now());
-            staffsInfoRepository.save(staffsInfo);
-            logger.info("StaffsInfo created successfully with id: {}", newId);
-
-            if ("BCBA".equalsIgnoreCase(staffsInfoDTO.getTitle())) {
-                BCBAInfo bcbaInfo = new BCBAInfo();
-                bcbaInfo.setId(newId);
-                bcbaInfo.setNpiNumber("");
-                bcbaInfo.setMedicaidId("");
-                bcbaInfo.setCreatedAt(Instant.now());
-                bcbaInfo.setModifiedAt(Instant.now());
-                bcbaInfoRepository.save(bcbaInfo);
-                logger.info("BCBAInfo created for staffId: {}", newId);
-            }
-
-            return ConvertToStaffsInfoVO(staffsInfo, request);
-        } catch (Exception e) {
-            logger.error("Failed to create StaffsInfo from DTO: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
     public StaffsInfo CheckUsernameExists(String username) {
         logger.info("Checking if username exists: {}", username);
         try {
@@ -211,7 +162,7 @@ public class StaffsInfoService {
                 staffsInfo.setState(staffsInfoDTO.getState());
                 staffsInfo.setZipCode(staffsInfoDTO.getZipCode());
                 staffsInfo.setNickname(staffsInfoDTO.getNickname());
-                staffsInfo.setModifiedAt(Instant.now());
+                staffsInfo.setModifiedAt(DateTimeConverter.nowNyc());
                 staffsInfoRepository.save(staffsInfo);
                 logger.info("StaffsInfo updated successfully.");
                 return GetStaffsInfo(String.valueOf(staffsInfo.getId()), request);

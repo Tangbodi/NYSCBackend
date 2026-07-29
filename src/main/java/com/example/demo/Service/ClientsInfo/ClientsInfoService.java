@@ -63,8 +63,8 @@ public class ClientsInfoService {
             clientsInfo.setState(emptyIfNull(clientsInfoDTO.getState()));
             clientsInfo.setZipCode(emptyIfNull(clientsInfoDTO.getZipCode()));
             clientsInfo.setNotes(emptyIfNull(clientsInfoDTO.getNotes()));
-            clientsInfo.setCreatedAt(Instant.now());
-            clientsInfo.setModifiedAt(Instant.now());
+            clientsInfo.setCreatedAt(DateTimeConverter.nowNyc());
+            clientsInfo.setModifiedAt(DateTimeConverter.nowNyc());
             clientsInfoRepository.save(clientsInfo);
             logger.info("ClientsInfo registered successfully.");
 //            clientsContactsService.CreateClientsContacts(clientsInfoDTO);
@@ -115,6 +115,7 @@ public class ClientsInfoService {
     public void UpdateClientsInfo(ClientsInfoDTO clientsInfoDTO) {
         logger.info("Updating ClientsInfo: {}", clientsInfoDTO.getFirstName() + "." + clientsInfoDTO.getLastName());
         try{
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             clientsInfoRepository.UpdateClientsInfo(
                     Long.valueOf(clientsInfoDTO.getClientId()),
                     clientsInfoDTO.getFirstName(),
@@ -127,7 +128,8 @@ public class ClientsInfoService {
                     clientsInfoDTO.getCity(),
                     clientsInfoDTO.getState(),
                     clientsInfoDTO.getZipCode(),
-                    clientsInfoDTO.getNotes()
+                    clientsInfoDTO.getNotes(),
+                    modifiedAt
             );
             logger.info("ClientsInfo updated successfully.");
         }catch (Exception e) {

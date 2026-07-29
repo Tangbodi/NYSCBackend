@@ -34,8 +34,8 @@ public class DonationService {
             donation.setAmount(new BigDecimal(dto.getAmount()));
             donation.setDonationType(dto.getDonationType());
             donation.setNote(dto.getNote() != null ? dto.getNote() : "");
-            donation.setCreatedAt(Instant.now());
-            donation.setUpdatedAt(Instant.now());
+            donation.setCreatedAt(DateTimeConverter.nowNyc());
+            donation.setUpdatedAt(DateTimeConverter.nowNyc());
             donationRepository.save(donation);
             logger.info("Donation created successfully with id: {}", donation.getId());
             return ConvertToVO(donation);
@@ -75,21 +75,23 @@ public class DonationService {
     }
 
     @Transactional
-    public boolean UpdateDonation(DonationDTO dto) {
-        logger.info("Updating donation: {}", dto.getDonationId());
+    public boolean UpdateDonation(DonationDTO donationDTO) {
+        logger.info("Updating donation: {}", donationDTO.getDonationId());
         try {
-            Long id = Long.valueOf(dto.getDonationId());
+            Long id = Long.valueOf(donationDTO.getDonationId());
             if (!donationRepository.existsById(id)) {
-                logger.warn("Donation not found for id: {}", dto.getDonationId());
+                logger.warn("Donation not found for id: {}", donationDTO.getDonationId());
                 return false;
             }
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             donationRepository.updateDonation(
                     id,
-                    dto.getDonationDate(),
-                    dto.getDonor(),
-                    new BigDecimal(dto.getAmount()),
-                    dto.getDonationType(),
-                    dto.getNote() != null ? dto.getNote() : ""
+                    donationDTO.getDonationDate(),
+                    donationDTO.getDonor(),
+                    new BigDecimal(donationDTO.getAmount()),
+                    donationDTO.getDonationType(),
+                    donationDTO.getNote() != null ? donationDTO.getNote() : "",
+                    modifiedAt
             );
             logger.info("Donation updated successfully.");
             return true;

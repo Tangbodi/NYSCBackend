@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+
 @Repository
 public interface ServiceLinesRepository extends JpaRepository<ServiceLines, Integer> {
 
@@ -23,7 +25,7 @@ public interface ServiceLinesRepository extends JpaRepository<ServiceLines, Inte
             inactive      = :inactive,
             start_date    = :startDate,
             end_date      = :endDate,
-            modified_at   = NOW()
+            modified_at   = :modifiedAt
         WHERE service_id = :id
         """, nativeQuery = true)
     int UpdateServiceLine(
@@ -35,6 +37,8 @@ public interface ServiceLinesRepository extends JpaRepository<ServiceLines, Inte
             @Param("description") String description,
             @Param("inactive") String inactive,
             @Param("startDate") String startDate,
-            @Param("endDate") String endDate
+            @Param("endDate") String endDate,
+            @Param("modifiedAt") Instant modifiedAt
+
     );
 }

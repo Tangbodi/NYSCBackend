@@ -3,11 +3,13 @@ package com.example.demo.Service.StaffsRegister;
 import com.example.demo.Controller.StaffsLoginController;
 import com.example.demo.Model.DTO.StaffsRegisterDTO;
 import com.example.demo.Model.Entity.BCBAInfo;
+import com.example.demo.Model.Entity.StaffsLogin;
 import com.example.demo.Repository.BCBAInfoRepository;
 import com.example.demo.Repository.StaffsLoginRepository;
 import com.example.demo.Service.StaffsInfo.StaffsInfoService;
 import com.example.demo.Service.StaffsPayroll.StaffsPayrollService;
 
+import com.example.demo.Util.DateTimeConverter;
 import jakarta.transaction.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -37,15 +39,15 @@ public class StaffsRegistrationService {
             staffsRegisterDTO.setStaffId(snowflakeId);
 
             logger.info("Creating StaffsLogin:{}", staffsRegisterDTO.getUsername());
-            com.example.demo.Model.Entity.StaffsLogin staffsLogin = new com.example.demo.Model.Entity.StaffsLogin();
+            StaffsLogin staffsLogin = new StaffsLogin();
             staffsLogin.setId(snowflakeId);
             staffsLogin.setUsername(staffsRegisterDTO.getUsername());
 
             String encodedPassword = BCrypt.hashpw(staffsRegisterDTO.getPassword(), BCrypt.gensalt());
             staffsLogin.setPassword(encodedPassword);
             staffsLogin.setIsAdmin("0");
-            staffsLogin.setCreatedAt(Instant.now());
-            staffsLogin.setModifiedAt(Instant.now());
+            staffsLogin.setCreatedAt(DateTimeConverter.nowNyc());
+            staffsLogin.setModifiedAt(DateTimeConverter.nowNyc());
 
             logger.info("Saving StaffsLogin:{}", staffsRegisterDTO.getUsername());
 
@@ -56,7 +58,6 @@ public class StaffsRegistrationService {
             }
 
             staffsInfoService.CreateStaffsInfo(staffsRegisterDTO);
-            staffsPayrollService.CreateStaffsPayroll(snowflakeId);
 
             // If title is BCBA, also register in bcba_info
             if ("BCBA".equalsIgnoreCase(staffsRegisterDTO.getTitle())) {

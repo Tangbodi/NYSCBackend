@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+
 @Repository
 public interface DonationRepository extends JpaRepository<Donation, Long> {
 
@@ -20,7 +22,7 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
             amount        = :amount,
             donation_type = :donationType,
             note          = :note,
-            updated_at    = NOW()
+            updated_at    = :modifiedAt
         WHERE donation_id = :donationId
         """, nativeQuery = true)
     int updateDonation(
@@ -29,6 +31,7 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
             @Param("donor") String donor,
             @Param("amount") java.math.BigDecimal amount,
             @Param("donationType") String donationType,
-            @Param("note") String note
+            @Param("note") String note,
+            @Param("modifiedAt") Instant modifiedAt
     );
 }

@@ -43,6 +43,4 @@ public class ClientsInfoDTO implements Serializable {
     private String zipCode;
     @Length(min = 0, max = 63, message = "Notes length not eligible.")
     private String notes;
-
-
 }

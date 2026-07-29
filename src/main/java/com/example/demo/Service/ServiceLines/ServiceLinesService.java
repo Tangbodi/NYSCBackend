@@ -36,8 +36,8 @@ public class ServiceLinesService {
             serviceLine.setInactive(dto.getInactive() == null ? "0" : dto.getInactive());
             serviceLine.setStartDate(dto.getStartDate());
             serviceLine.setEndDate(dto.getEndDate());
-            serviceLine.setCreatedAt(Instant.now());
-            serviceLine.setModifiedAt(Instant.now());
+            serviceLine.setCreatedAt(DateTimeConverter.nowNyc());
+            serviceLine.setModifiedAt(DateTimeConverter.nowNyc());
             serviceLinesRepository.save(serviceLine);
             logger.info("ServiceLine created successfully.");
         } catch (Exception e) {
@@ -86,6 +86,7 @@ public class ServiceLinesService {
     public void UpdateServiceLine(String serviceId, ServiceLinesDTO dto) {
         logger.info("Updating ServiceLine: {}", serviceId);
         try {
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             serviceLinesRepository.UpdateServiceLine(
                     Integer.valueOf(serviceId),
                     dto.getBillingCode(),
@@ -95,7 +96,8 @@ public class ServiceLinesService {
                     dto.getDescription(),
                     dto.getInactive() == null ? "0" : dto.getInactive(),
                     dto.getStartDate(),
-                    dto.getEndDate()
+                    dto.getEndDate(),
+                    modifiedAt
             );
             logger.info("ServiceLine updated successfully.");
         } catch (Exception e) {

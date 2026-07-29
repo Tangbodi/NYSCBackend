@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+
 @Repository
 public interface FunderSettingsRepository extends JpaRepository<FunderSettings, Integer> {
 
@@ -24,7 +26,7 @@ public interface FunderSettingsRepository extends JpaRepository<FunderSettings, 
             email                    = :email,
             fax                      = :fax,
             default_billing_provider = :defaultBillingProvider,
-            modified_at              = NOW()
+            modified_at              = :modifiedAt
         WHERE funder_id = :id
         """, nativeQuery = true)
     int UpdateFunderSettings(
@@ -37,6 +39,8 @@ public interface FunderSettingsRepository extends JpaRepository<FunderSettings, 
             @Param("phone") String phone,
             @Param("email") String email,
             @Param("fax") String fax,
-            @Param("defaultBillingProvider") String defaultBillingProvider
+            @Param("defaultBillingProvider") String defaultBillingProvider,
+            @Param("modifiedAt") Instant modifiedAt
+
     );
 }

@@ -22,7 +22,7 @@ public interface StaffsPayrollRepository extends JpaRepository<StaffsPayroll, Lo
             pay_code = :payCode,
             effective_start_date = :effectiveStartDate,
             effective_end_date = :effectiveEndDate,
-            modified_at = NOW()
+            modified_at = :modifiedAt
         WHERE staff_id = :staffId
         """, nativeQuery = true)
     int updateStaffsPayroll(
@@ -30,7 +30,8 @@ public interface StaffsPayrollRepository extends JpaRepository<StaffsPayroll, Lo
             @Param("hourlyRate") BigDecimal hourlyRate,
             @Param("payCode") String payCode,
             @Param("effectiveStartDate") String effectiveStartDate,
-            @Param("effectiveEndDate") String effectiveEndDate
+            @Param("effectiveEndDate") String effectiveEndDate,
+            @Param("modifiedAt") Instant modifiedAt
     );
 }
 

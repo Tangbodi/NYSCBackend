@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -29,7 +30,7 @@ public interface ClientReferringProvidersRepository extends JpaRepository<Client
             city = :city,
             state = :state,
             zip_code = :zipCode,
-            modified_at = NOW()
+            modified_at = :modifiedAt
         WHERE client_id = :clientId
           AND npi_number = :npiNumber
         """, nativeQuery = true)
@@ -46,7 +47,8 @@ public interface ClientReferringProvidersRepository extends JpaRepository<Client
             @Param("address") String address,
             @Param("city") String city,
             @Param("state") String state,
-            @Param("zipCode") String zipCode
+            @Param("zipCode") String zipCode,
+            @Param("modifiedAt") Instant modifiedAt
     );
 
     @Query(value = "SELECT * FROM client_referring_providers WHERE client_id = :clientId", nativeQuery = true)

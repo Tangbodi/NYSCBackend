@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 @Data
 public class ClientContactsDTO implements Serializable {

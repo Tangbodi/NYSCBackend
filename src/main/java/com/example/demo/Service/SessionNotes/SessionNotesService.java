@@ -39,8 +39,8 @@ public class SessionNotesService {
             note.setClientResponse(dto.getClientResponse());
             note.setSummaryOfProgress(dto.getSummaryOfProgress());
             note.setLastModifiedBy(resolveStaffName(staffId));
-            note.setCreatedAt(Instant.now());
-            note.setModifiedAt(Instant.now());
+            note.setCreatedAt(DateTimeConverter.nowNyc());
+            note.setModifiedAt(DateTimeConverter.nowNyc());
             SessionNotes saved = sessionNotesRepository.save(note);
             logger.info("Session note created successfully with id: {}", saved.getId());
             return String.valueOf(saved.getId());
@@ -58,6 +58,7 @@ public class SessionNotesService {
             if (!sessionNotesRepository.existsById(id)) {
                 throw new RuntimeException("Session note not found for id: " + sessionId);
             }
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             sessionNotesRepository.UpdateSessionNotes(
                     id,
                     dto.getTemplate(),
@@ -69,7 +70,7 @@ public class SessionNotesService {
                     dto.getClientResponse(),
                     dto.getSummaryOfProgress(),
                     resolveStaffName(staffId),
-                    Instant.now()
+                    modifiedAt
             );
             logger.info("Session note updated successfully.");
         } catch (Exception e) {

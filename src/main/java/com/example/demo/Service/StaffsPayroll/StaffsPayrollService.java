@@ -4,6 +4,7 @@ import com.example.demo.Model.DTO.StaffsPayrollDTO;
 import com.example.demo.Model.Entity.StaffsPayroll;
 import com.example.demo.Model.VO.StaffsPayrollVO;
 import com.example.demo.Repository.StaffsPayrollRepository;
+import com.example.demo.Util.DateTimeConverter;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,28 +21,9 @@ public class StaffsPayrollService {
     @Autowired
     private StaffsPayrollRepository staffsPayrollRepository;
 
-    // Used during staff registration — creates payroll with defaults
-    @Transactional
-    public void CreateStaffsPayroll(Long staffId){
-        logger.info("Creating StaffsPayroll: {}", staffId);
-        try{
-            StaffsPayroll staffsPayroll = new StaffsPayroll();
-            staffsPayroll.setId(staffId);
-            staffsPayroll.setHourlyRate(new BigDecimal("0.00"));
-            staffsPayroll.setPayCode("");
-            staffsPayroll.setCreatedAt(Instant.now());
-            staffsPayroll.setModifiedAt(Instant.now());
-            staffsPayrollRepository.save(staffsPayroll);
-            logger.info("Created StaffsPayroll successfully.");
-        }catch (Exception e) {
-            logger.error("Failed to create StaffsPayroll: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
 
-    // Used by admin API — creates payroll with provided values
     @Transactional
-    public boolean CreateStaffsPayrollFromDTO(StaffsPayrollDTO dto){
+    public boolean CreateStaffsPayroll(StaffsPayrollDTO dto){
         logger.info("Creating StaffsPayroll from DTO for staffId: {}", dto.getStaffId());
         try{
             Long staffId = Long.valueOf(dto.getStaffId());
@@ -55,8 +37,8 @@ public class StaffsPayrollService {
             staffsPayroll.setPayCode(dto.getPayCode());
             staffsPayroll.setEffectiveStartDate(dto.getEffectiveStartDate());
             staffsPayroll.setEffectiveEndDate(dto.getEffectiveEndDate());
-            staffsPayroll.setCreatedAt(Instant.now());
-            staffsPayroll.setModifiedAt(Instant.now());
+            staffsPayroll.setCreatedAt(DateTimeConverter.nowNyc());
+            staffsPayroll.setModifiedAt(DateTimeConverter.nowNyc());
             staffsPayrollRepository.save(staffsPayroll);
             logger.info("Created StaffsPayroll from DTO successfully.");
             return true;
@@ -87,12 +69,14 @@ public class StaffsPayrollService {
         logger.info("Updating StaffsPayroll: {}", staffsPayrollDTO.getStaffId());
         try{
             BigDecimal hourlyRate = new BigDecimal(staffsPayrollDTO.getHourlyRate());
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             staffsPayrollRepository.updateStaffsPayroll(
                     Long.valueOf(staffsPayrollDTO.getStaffId()),
                     hourlyRate,
                     staffsPayrollDTO.getPayCode(),
                     staffsPayrollDTO.getEffectiveStartDate(),
-                    staffsPayrollDTO.getEffectiveEndDate()
+                    staffsPayrollDTO.getEffectiveEndDate(),
+                    modifiedAt
             );
             logger.info("StaffsPayroll updated successfully.");
         }catch (Exception e) {

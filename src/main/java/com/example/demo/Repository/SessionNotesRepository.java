@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+
 @Repository
 public interface SessionNotesRepository extends JpaRepository<SessionNotes, Long> {
 
@@ -35,6 +37,6 @@ public interface SessionNotesRepository extends JpaRepository<SessionNotes, Long
             @Param("clientResponse") String clientResponse,
             @Param("summaryOfProgress") String summaryOfProgress,
             @Param("lastModifiedBy") String lastModifiedBy,
-            @Param("modifiedAt") java.time.Instant modifiedAt
+            @Param("modifiedAt") Instant modifiedAt
     );
 }

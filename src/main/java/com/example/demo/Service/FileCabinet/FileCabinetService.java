@@ -81,8 +81,8 @@ public class FileCabinetService {
             record.setFilePath(filePath);
             record.setFileUrl(fileUrl);
             record.setAddedBy(staffId);
-            record.setCreatedAt(Instant.now());
-            record.setModifiedAt(Instant.now());
+            record.setCreatedAt(DateTimeConverter.nowNyc());
+            record.setModifiedAt(DateTimeConverter.nowNyc());
             fileCabinetRepository.save(record);
             logger.info("File record saved to DB: {}", fileUrl);
 

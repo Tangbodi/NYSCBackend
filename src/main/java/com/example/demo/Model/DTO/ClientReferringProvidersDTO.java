@@ -7,6 +7,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 @Data
 public class ClientReferringProvidersDTO implements Serializable {
@@ -41,5 +42,4 @@ public class ClientReferringProvidersDTO implements Serializable {
     private String state;
     @Length(min = 1, max = 15, message = "Zip code length not eligible.")
     private String zipCode;
-
 }

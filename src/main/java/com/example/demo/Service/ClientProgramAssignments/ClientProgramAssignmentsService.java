@@ -40,8 +40,8 @@ public class ClientProgramAssignmentsService {
 
             ClientProgramAssignments assignment = new ClientProgramAssignments();
             assignment.setId(compositeId);
-            assignment.setCreatedAt(Instant.now());
-            assignment.setModifiedAt(Instant.now());
+            assignment.setCreatedAt(DateTimeConverter.nowNyc());
+            assignment.setModifiedAt(DateTimeConverter.nowNyc());
             clientProgramAssignmentsRepository.save(assignment);
             logger.info("Client {} assigned to program {} successfully.", dto.getClientId(), dto.getProgramId());
         } catch (Exception e) {

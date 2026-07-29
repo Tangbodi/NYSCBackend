@@ -37,8 +37,8 @@ public class FunderSettingsService {
             funder.setEmail(emptyIfNull(dto.getEmail()));
             funder.setFax(emptyIfNull(dto.getFax()));
             funder.setDefaultBillingProvider(emptyIfNull(dto.getDefaultBillingProvider()));
-            funder.setCreatedAt(Instant.now());
-            funder.setModifiedAt(Instant.now());
+            funder.setCreatedAt(DateTimeConverter.nowNyc());
+            funder.setModifiedAt(DateTimeConverter.nowNyc());
             funderSettingsRepository.save(funder);
             logger.info("FunderSettings created successfully.");
         } catch (Exception e) {
@@ -87,6 +87,7 @@ public class FunderSettingsService {
     public void UpdateFunderSettings(String funderId, FunderSettingsDTO dto) {
         logger.info("Updating FunderSettings: {}", funderId);
         try {
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             funderSettingsRepository.UpdateFunderSettings(
                     Integer.valueOf(funderId),
                     dto.getFunderType(),
@@ -97,7 +98,8 @@ public class FunderSettingsService {
                     emptyIfNull(dto.getPhone()),
                     emptyIfNull(dto.getEmail()),
                     emptyIfNull(dto.getFax()),
-                    emptyIfNull(dto.getDefaultBillingProvider())
+                    emptyIfNull(dto.getDefaultBillingProvider()),
+                    modifiedAt
             );
             logger.info("FunderSettings updated successfully.");
         } catch (Exception e) {

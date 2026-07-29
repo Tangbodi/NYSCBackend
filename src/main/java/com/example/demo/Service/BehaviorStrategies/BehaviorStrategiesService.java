@@ -29,8 +29,8 @@ public class BehaviorStrategiesService {
         try {
             BehaviorStrategies entity = new BehaviorStrategies();
             entity.setBehaviorStrategy(dto.getBehaviorStrategy());
-            entity.setCreatedAt(Instant.now());
-            entity.setModifiedAt(Instant.now());
+            entity.setCreatedAt((DateTimeConverter.nowNyc()));
+            entity.setModifiedAt(DateTimeConverter.nowNyc());
             behaviorStrategiesRepository.save(entity);
             logger.info("Behavior strategy created successfully.");
         } catch (Exception e) {
@@ -49,7 +49,7 @@ public class BehaviorStrategiesService {
                 throw new RuntimeException("Behavior strategy not found for id: " + strategyId);
             }
             entity.setBehaviorStrategy(dto.getBehaviorStrategy());
-            entity.setModifiedAt(Instant.now());
+            entity.setModifiedAt(DateTimeConverter.nowNyc());
             behaviorStrategiesRepository.save(entity);
             logger.info("Behavior strategy updated successfully.");
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public class BehaviorStrategiesService {
         BehaviorStrategiesVO vo = new BehaviorStrategiesVO();
         vo.setBehaviorId(String.valueOf(strategy.getId()));
         vo.setBehaviorStrategy(strategy.getBehaviorStrategy());
-        vo.setCreatedAt(DateTimeConverter.DateTimeConvertFromInstant(strategy.getCreatedAt()));
+        vo.setCreatedAt(DateTimeConverter.DateTimeConvertFromInstant((strategy.getCreatedAt())));
         vo.setModifiedAt(DateTimeConverter.DateTimeConvertFromInstant(strategy.getModifiedAt()));
         return vo;
     }

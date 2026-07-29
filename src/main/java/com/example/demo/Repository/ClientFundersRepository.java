@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -79,7 +80,7 @@ public interface ClientFundersRepository extends JpaRepository<ClientFunders, Cl
             first_name = :firstName,
             last_name = :lastName,
             coverage_type = :coverageType,
-            modified_at = NOW()
+            modified_at = :modifiedAt
         WHERE client_id = :clientId
           AND funder_id = :funderId
         """, nativeQuery = true)
@@ -92,7 +93,8 @@ public interface ClientFundersRepository extends JpaRepository<ClientFunders, Cl
             @Param("endDate") String endDate,
             @Param("firstName") String firstName,
             @Param("lastName") String lastName,
-            @Param("coverageType") String coverageType
+            @Param("coverageType") String coverageType,
+            @Param("modifiedAt") Instant modifiedAt
     );
 
     @Modifying

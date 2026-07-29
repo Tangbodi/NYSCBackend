@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public interface StaffLicensesRepository extends JpaRepository<StaffLicenses, Lo
         issue_date = :issueDate,
         expired_date = :expiredDate,
         notes = :notes,
-        modified_at = NOW()
+        modified_at = :modifiedAt
     WHERE staff_license_id = :licenseId
       AND staff_id = :staffId
     """, nativeQuery = true)
@@ -40,7 +41,8 @@ public interface StaffLicensesRepository extends JpaRepository<StaffLicenses, Lo
             @Param("licenseState") String licenseState,
             @Param("issueDate") String issueDate,
             @Param("expiredDate") String expiredDate,
-            @Param("notes") String notes
+            @Param("notes") String notes,
+            @Param("modifiedAt") Instant modifiedAt
     );
 
 

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public interface ClientsInfoRepository extends JpaRepository<ClientsInfo, Long> 
             state = :state,
             zip_code = :zipCode,
             notes = :notes,
-            modified_at = NOW()
+            modified_at = :modifiedAt
         WHERE client_id = :id
         """, nativeQuery = true)
     int UpdateClientsInfo(
@@ -44,8 +45,9 @@ public interface ClientsInfoRepository extends JpaRepository<ClientsInfo, Long> 
             @Param("city") String city,
             @Param("state") String state,
             @Param("zipCode") String zipCode,
-            @Param("notes") String notes
-    );
+            @Param("notes") String notes,
+            @Param("modifiedAt")Instant modifiedAt
+            );
 
 }
 

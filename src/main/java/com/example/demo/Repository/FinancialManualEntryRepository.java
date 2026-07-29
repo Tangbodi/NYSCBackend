@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Repository
 public interface FinancialManualEntryRepository extends JpaRepository<FinancialManualEntry, Long> {
@@ -23,7 +24,7 @@ public interface FinancialManualEntryRepository extends JpaRepository<FinancialM
             category   = :category,
             amount     = :amount,
             note       = :note,
-            updated_at = NOW()
+            updated_at = :modifiedAt
         WHERE entry_id = :entryId
         """, nativeQuery = true)
     int updateEntry(
@@ -33,6 +34,7 @@ public interface FinancialManualEntryRepository extends JpaRepository<FinancialM
             @Param("item") String item,
             @Param("category") String category,
             @Param("amount") BigDecimal amount,
-            @Param("note") String note
+            @Param("note") String note,
+            @Param("modifiedAt") Instant modifiedAt
     );
 }

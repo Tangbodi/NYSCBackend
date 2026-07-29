@@ -70,8 +70,8 @@ public class EventDetailsService {
             event.setStaffReminders(emptyIfNull(dto.getStaffReminders()));
             event.setVerifications(emptyIfNull(dto.getVerifications()));
             event.setCancellations(emptyIfNull(dto.getCancellations()));
-            event.setCreatedAt(Instant.now());
-            event.setModifiedAt(Instant.now());
+            event.setCreatedAt(DateTimeConverter.nowNyc());
+            event.setModifiedAt(DateTimeConverter.nowNyc());
             eventDetailsRepository.save(event);
             logger.info("EventDetails created successfully.");
         } catch (Exception e) {
@@ -91,10 +91,10 @@ public class EventDetailsService {
             }
 
             String modifiedBy = resolveStaffName(staffId);
-            Instant now = Instant.now();
+            Instant modifiedAt =DateTimeConverter.nowNyc();
 
             // Record audit trail for every changed field
-            recordAuditTrail(existing, eventUpdateDTO, id, modifiedBy, now);
+            recordAuditTrail(existing, eventUpdateDTO, id, modifiedBy, modifiedAt);
 
             // Persist the update
             eventDetailsRepository.UpdateEventDetails(
@@ -113,7 +113,7 @@ public class EventDetailsService {
                     emptyIfNull(eventUpdateDTO.getStaffReminders()),
                     emptyIfNull(eventUpdateDTO.getVerifications()),
                     emptyIfNull(eventUpdateDTO.getCancellations()),
-                    now
+                    modifiedAt
             );
             logger.info("EventDetails updated successfully.");
         } catch (Exception e) {

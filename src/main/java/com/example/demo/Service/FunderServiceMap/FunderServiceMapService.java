@@ -40,8 +40,8 @@ public class FunderServiceMapService {
 
             FunderServiceMap map = new FunderServiceMap();
             map.setId(compositeId);
-            map.setCreatedAt(Instant.now());
-            map.setModifiedAt(Instant.now());
+            map.setCreatedAt(DateTimeConverter.nowNyc());
+            map.setModifiedAt(DateTimeConverter.nowNyc());
             funderServiceMapRepository.save(map);
             logger.info("Service {} added to funder {} successfully.", dto.getServiceId(), dto.getFunderId());
         } catch (Exception e) {

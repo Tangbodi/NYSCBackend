@@ -22,7 +22,7 @@ public class FinancialManualEntryService {
     private static final Logger logger = LoggerFactory.getLogger(FinancialManualEntryService.class);
 
     @Autowired
-    private FinancialManualEntryRepository entryRepository;
+    private FinancialManualEntryRepository financialManualEntryRepository;
 
     @Transactional
     public FinancialManualEntryVO CreateEntry(FinancialManualEntryDTO dto) {
@@ -36,9 +36,9 @@ public class FinancialManualEntryService {
             entry.setAmount(dto.getAmount() != null && !dto.getAmount().isBlank()
                     ? new BigDecimal(dto.getAmount()) : null);
             entry.setNote(dto.getNote());
-            entry.setCreatedAt(Instant.now());
-            entry.setUpdatedAt(Instant.now());
-            entryRepository.save(entry);
+            entry.setCreatedAt(DateTimeConverter.nowNyc());
+            entry.setUpdatedAt(DateTimeConverter.nowNyc());
+            financialManualEntryRepository.save(entry);
             logger.info("Financial manual entry created successfully with id: {}", entry.getId());
             return ConvertToVO(entry);
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public class FinancialManualEntryService {
     public FinancialManualEntryVO GetEntry(String entryId) {
         logger.info("Getting financial manual entry: {}", entryId);
         try {
-            FinancialManualEntry entry = entryRepository.findById(Long.valueOf(entryId)).orElse(null);
+            FinancialManualEntry entry = financialManualEntryRepository.findById(Long.valueOf(entryId)).orElse(null);
             if (entry == null) {
                 logger.info("Entry not found for id: {}", entryId);
                 return null;
@@ -65,7 +65,7 @@ public class FinancialManualEntryService {
     public List<FinancialManualEntryVO> GetAllEntries() {
         logger.info("Getting all financial manual entries");
         try {
-            List<FinancialManualEntry> entries = entryRepository.findAll();
+            List<FinancialManualEntry> entries = financialManualEntryRepository.findAll();
             if (entries.isEmpty()) {
                 return Collections.emptyList();
             }
@@ -81,20 +81,22 @@ public class FinancialManualEntryService {
         logger.info("Updating financial manual entry: {}", dto.getEntryId());
         try {
             Long id = Long.valueOf(dto.getEntryId());
-            if (!entryRepository.existsById(id)) {
+            if (!financialManualEntryRepository.existsById(id)) {
                 logger.warn("Entry not found for id: {}", dto.getEntryId());
                 return false;
             }
             BigDecimal amount = dto.getAmount() != null && !dto.getAmount().isBlank()
                     ? new BigDecimal(dto.getAmount()) : null;
-            entryRepository.updateEntry(
+            Instant modifiedAt = DateTimeConverter.nowNyc();
+            financialManualEntryRepository.updateEntry(
                     id,
                     dto.getEntryDate(),
                     dto.getSection(),
                     dto.getItem(),
                     dto.getCategory(),
                     amount,
-                    dto.getNote()
+                    dto.getNote(),
+                    modifiedAt
             );
             logger.info("Financial manual entry updated successfully.");
             return true;
@@ -109,11 +111,11 @@ public class FinancialManualEntryService {
         logger.info("Deleting financial manual entry: {}", entryId);
         try {
             Long id = Long.valueOf(entryId);
-            if (!entryRepository.existsById(id)) {
+            if (!financialManualEntryRepository.existsById(id)) {
                 logger.warn("Entry not found for id: {}", entryId);
                 return false;
             }
-            entryRepository.deleteById(id);
+            financialManualEntryRepository.deleteById(id);
             logger.info("Financial manual entry deleted successfully.");
             return true;
         } catch (Exception e) {

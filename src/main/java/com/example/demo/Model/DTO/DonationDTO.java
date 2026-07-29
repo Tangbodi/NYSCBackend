@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 @Data
 public class DonationDTO implements Serializable {
@@ -28,4 +29,5 @@ public class DonationDTO implements Serializable {
 
     @Length(max = 512, message = "Note length not eligible.")
     private String note;
+
 }

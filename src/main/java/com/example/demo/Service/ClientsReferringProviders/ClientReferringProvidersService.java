@@ -50,8 +50,8 @@ public class ClientReferringProvidersService {
             entity.setZipCode(dto.getZipCode());
             entity.setPhone(dto.getPhone());
             entity.setFax(dto.getFax());
-            entity.setCreatedAt(Instant.now());
-            entity.setModifiedAt(Instant.now());
+            entity.setCreatedAt(DateTimeConverter.nowNyc());
+            entity.setModifiedAt(DateTimeConverter.nowNyc());
             clientReferringProvidersRepository.save(entity);
             logger.info("ClientsReferringProviders created successfully.");
             return true;
@@ -101,23 +101,25 @@ public class ClientReferringProvidersService {
     }
 
     @Transactional
-    public void UpdateClientsReferringProviders(ClientReferringProvidersDTO dto) {
-        logger.info("Updating ClientsReferringProviders for clientId: {}, npiNumber: {}", dto.getClientId(), dto.getNpiNumber());
+    public void UpdateClientsReferringProviders(ClientReferringProvidersDTO clientReferringProvidersDTO) {
+        logger.info("Updating ClientsReferringProviders for clientId: {}, npiNumber: {}", clientReferringProvidersDTO.getClientId(), clientReferringProvidersDTO.getNpiNumber());
         try {
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             clientReferringProvidersRepository.UpdateClientsReferringProvider(
-                    Long.valueOf(dto.getClientId()),
-                    dto.getNpiNumber(),
-                    dto.getFirstName(),
-                    dto.getMiddleName(),
-                    dto.getLastName(),
-                    dto.getIsActive(),
-                    dto.getTaxonomyCode(),
-                    dto.getPhone(),
-                    dto.getFax(),
-                    dto.getAddress(),
-                    dto.getCity(),
-                    dto.getState(),
-                    dto.getZipCode()
+                    Long.valueOf(clientReferringProvidersDTO.getClientId()),
+                    clientReferringProvidersDTO.getNpiNumber(),
+                    clientReferringProvidersDTO.getFirstName(),
+                    clientReferringProvidersDTO.getMiddleName(),
+                    clientReferringProvidersDTO.getLastName(),
+                    clientReferringProvidersDTO.getIsActive(),
+                    clientReferringProvidersDTO.getTaxonomyCode(),
+                    clientReferringProvidersDTO.getPhone(),
+                    clientReferringProvidersDTO.getFax(),
+                    clientReferringProvidersDTO.getAddress(),
+                    clientReferringProvidersDTO.getCity(),
+                    clientReferringProvidersDTO.getState(),
+                    clientReferringProvidersDTO.getZipCode(),
+                    modifiedAt
             );
             logger.info("ClientsReferringProviders updated successfully.");
         } catch (Exception e) {

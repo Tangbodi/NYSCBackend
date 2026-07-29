@@ -48,8 +48,8 @@ public class CustomProgramsService {
             program.setTeachingStrategies(emptyIfNull(dto.getTeachingStrategies()));
             program.setTroubleshooting(emptyIfNull(dto.getTroubleshooting()));
             program.setHelpfulHints(emptyIfNull(dto.getHelpfulHints()));
-            program.setCreatedAt(Instant.now());
-            program.setModifiedAt(Instant.now());
+            program.setCreatedAt(DateTimeConverter.nowNyc());
+            program.setModifiedAt(DateTimeConverter.nowNyc());
 
             // Save program first to get the generated program_id
             CustomPrograms saved = customProgramsRepository.save(program);
@@ -105,33 +105,34 @@ public class CustomProgramsService {
     }
 
     @Transactional
-    public void UpdateCustomProgram(String programId, CustomProgramsDTO dto) {
+    public void UpdateCustomProgram(String programId, CustomProgramsDTO customProgramsDTO) {
         logger.info("Updating CustomProgram: {}", programId);
         try {
             Long id = Long.valueOf(programId);
-
+            Instant modifiedAt = DateTimeConverter.nowNyc();
             // Update scalar fields via native query
             customProgramsRepository.UpdateCustomProgram(
                     id,
-                    dto.getLibrary(),
-                    dto.getDomain(),
-                    dto.getProgramName(),
-                    dto.getProgramGoal(),
-                    emptyIfNull(dto.getObjectiveOne()),
-                    emptyIfNull(dto.getObjectiveTwo()),
-                    emptyIfNull(dto.getObjectiveThree()),
-                    emptyIfNull(dto.getExercise()),
-                    emptyIfNull(dto.getGeneralization()),
-                    emptyIfNull(dto.getErrorCorrection()),
-                    emptyIfNull(dto.getSupplies()),
-                    emptyIfNull(dto.getTeachingStrategies()),
-                    emptyIfNull(dto.getTroubleshooting()),
-                    emptyIfNull(dto.getHelpfulHints())
+                    customProgramsDTO.getLibrary(),
+                    customProgramsDTO.getDomain(),
+                    customProgramsDTO.getProgramName(),
+                    customProgramsDTO.getProgramGoal(),
+                    emptyIfNull(customProgramsDTO.getObjectiveOne()),
+                    emptyIfNull(customProgramsDTO.getObjectiveTwo()),
+                    emptyIfNull(customProgramsDTO.getObjectiveThree()),
+                    emptyIfNull(customProgramsDTO.getExercise()),
+                    emptyIfNull(customProgramsDTO.getGeneralization()),
+                    emptyIfNull(customProgramsDTO.getErrorCorrection()),
+                    emptyIfNull(customProgramsDTO.getSupplies()),
+                    emptyIfNull(customProgramsDTO.getTeachingStrategies()),
+                    emptyIfNull(customProgramsDTO.getTroubleshooting()),
+                    emptyIfNull(customProgramsDTO.getHelpfulHints()),
+                    modifiedAt
             );
 
             // Replace targets: delete old ones, insert new ones
             programTargetRepository.deleteByProgramId(id);
-            saveTargets(id, dto.getTargets());
+            saveTargets(id, customProgramsDTO.getTargets());
 
             logger.info("CustomProgram updated successfully.");
         } catch (Exception e) {
@@ -169,8 +170,8 @@ public class CustomProgramsService {
             target.setStatus(emptyIfNull(dto.getStatus()));
             target.setDateOpened(emptyIfNull(dto.getDateOpened()));
             target.setDateMastered(emptyIfNull(dto.getDateMastered()));
-            target.setCreatedAt(Instant.now());
-            target.setModifiedAt(Instant.now());
+            target.setCreatedAt(DateTimeConverter.nowNyc());
+            target.setModifiedAt(DateTimeConverter.nowNyc());
             programTargetRepository.save(target);
         }
     }
