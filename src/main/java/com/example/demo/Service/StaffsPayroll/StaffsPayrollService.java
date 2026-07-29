@@ -22,6 +22,7 @@ public class StaffsPayrollService {
     private StaffsPayrollRepository staffsPayrollRepository;
 
 
+    // Used by admin API — creates payroll with provided values
     @Transactional
     public boolean CreateStaffsPayroll(StaffsPayrollDTO dto){
         logger.info("Creating StaffsPayroll from DTO for staffId: {}", dto.getStaffId());
