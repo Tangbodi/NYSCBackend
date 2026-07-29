@@ -41,7 +41,31 @@ public class StaffsPayrollService {
     }
 
     // Used by admin API — creates payroll with provided values
-
+    @Transactional
+    public boolean CreateStaffsPayrollFromDTO(StaffsPayrollDTO dto){
+        logger.info("Creating StaffsPayroll from DTO for staffId: {}", dto.getStaffId());
+        try{
+            Long staffId = Long.valueOf(dto.getStaffId());
+            if (staffsPayrollRepository.existsById(staffId)) {
+                logger.warn("Payroll already exists for staffId: {}", dto.getStaffId());
+                return false;
+            }
+            StaffsPayroll staffsPayroll = new StaffsPayroll();
+            staffsPayroll.setId(staffId);
+            staffsPayroll.setHourlyRate(new BigDecimal(dto.getHourlyRate()));
+            staffsPayroll.setPayCode(dto.getPayCode());
+            staffsPayroll.setEffectiveStartDate(dto.getEffectiveStartDate());
+            staffsPayroll.setEffectiveEndDate(dto.getEffectiveEndDate());
+            staffsPayroll.setCreatedAt(DateTimeConverter.nowNyc());
+            staffsPayroll.setModifiedAt(DateTimeConverter.nowNyc());
+            staffsPayrollRepository.save(staffsPayroll);
+            logger.info("Created StaffsPayroll from DTO successfully.");
+            return true;
+        }catch (Exception e) {
+            logger.error("Failed to create StaffsPayroll from DTO: {}", e.getMessage(), e);
+            throw e;
+        }
+    }
 
     @Transactional
     public StaffsPayrollVO GetStaffsPayroll(Long staffId){
