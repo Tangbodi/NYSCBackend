@@ -19,8 +19,15 @@ public class DateTimeConverter {
         return formattedDateTime;
     }
     public static String DateTimeConvertFromInstant(Instant instant) {
+        if (instant == null) return null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return formatter.format(instant);
+        return formatter.format(instant.atZone(ZoneId.of("America/New_York")));
+    }
+
+    public static String InstantToString(Instant instant, String pattern) {
+        if (instant == null) return null;
+        return instant.atZone(ZoneId.of("America/New_York"))
+                .format(DateTimeFormatter.ofPattern(pattern));
     }
 
     public static Instant nowNyc() {
