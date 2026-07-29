@@ -21,33 +21,27 @@ public class StaffsPayrollService {
     @Autowired
     private StaffsPayrollRepository staffsPayrollRepository;
 
-
-    // Used by admin API — creates payroll with provided values
+    // Used during staff registration — creates payroll with defaults
     @Transactional
-    public boolean CreateStaffsPayroll(StaffsPayrollDTO dto){
-        logger.info("Creating StaffsPayroll from DTO for staffId: {}", dto.getStaffId());
+    public void CreateStaffsPayroll(Long staffId){
+        logger.info("Creating StaffsPayroll: {}", staffId);
         try{
-            Long staffId = Long.valueOf(dto.getStaffId());
-            if (staffsPayrollRepository.existsById(staffId)) {
-                logger.warn("Payroll already exists for staffId: {}", dto.getStaffId());
-                return false;
-            }
             StaffsPayroll staffsPayroll = new StaffsPayroll();
             staffsPayroll.setId(staffId);
-            staffsPayroll.setHourlyRate(new BigDecimal(dto.getHourlyRate()));
-            staffsPayroll.setPayCode(dto.getPayCode());
-            staffsPayroll.setEffectiveStartDate(dto.getEffectiveStartDate());
-            staffsPayroll.setEffectiveEndDate(dto.getEffectiveEndDate());
+            staffsPayroll.setHourlyRate(new BigDecimal("0.00"));
+            staffsPayroll.setPayCode("");
             staffsPayroll.setCreatedAt(DateTimeConverter.nowNyc());
             staffsPayroll.setModifiedAt(DateTimeConverter.nowNyc());
             staffsPayrollRepository.save(staffsPayroll);
-            logger.info("Created StaffsPayroll from DTO successfully.");
-            return true;
+            logger.info("Created StaffsPayroll successfully.");
         }catch (Exception e) {
-            logger.error("Failed to create StaffsPayroll from DTO: {}", e.getMessage(), e);
+            logger.error("Failed to create StaffsPayroll: {}", e.getMessage(), e);
             throw e;
         }
     }
+
+    // Used by admin API — creates payroll with provided values
+
 
     @Transactional
     public StaffsPayrollVO GetStaffsPayroll(Long staffId){

@@ -55,36 +55,7 @@ public class StaffsPayrollController {
 
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
-    @PostMapping("/")
-    public ResponseEntity<ApiResponse> CreateStaffsPayroll(@Validated @RequestBody StaffsPayrollDTO staffsPayrollDTO,
-                                                           HttpServletRequest request) {
-        ApiResponse apiResponse;
-        Long sessionStaffId = (Long) request.getSession().getAttribute("staffId");
-        if (sessionStaffId == null) {
-            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "Please login to access this page.");
-            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        }
-        if (!staffsLoginService.CheckIsAdmin(sessionStaffId)) {
-            apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
-            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        }
-        if (staffsPayrollDTO.getStaffId() == null || staffsPayrollDTO.getStaffId().isBlank()) {
-            apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "staffId is required.");
-            return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-        }
-        try {
-            boolean created = staffsPayrollService.CreateStaffsPayroll(staffsPayrollDTO);
-            if (created) {
-                apiResponse = ApiResponse.success("Payroll created successfully.");
-            } else {
-                apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(), "Payroll already exists for this staff.");
-            }
-        } catch (Exception e) {
-            logger.error("Failed to create StaffsPayroll: {}", e.getMessage(), e);
-            apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
-        }
-        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-    }
+
 
     @PutMapping("/")
     public ResponseEntity<ApiResponse> UpdateStaffsPayroll(@Validated @RequestBody StaffsPayrollDTO staffsPayrollDTO,

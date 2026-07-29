@@ -58,6 +58,7 @@ public class StaffsRegistrationService {
             }
 
             staffsInfoService.CreateStaffsInfo(staffsRegisterDTO);
+            staffsPayrollService.CreateStaffsPayroll(snowflakeId);
 
             // If title is BCBA, also register in bcba_info
             if ("BCBA".equalsIgnoreCase(staffsRegisterDTO.getTitle())) {
