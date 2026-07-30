@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -20,69 +21,81 @@ public class MedicaidRemittanceRecord {
     @Column(name = "record_id", nullable = false)
     private Long id;
 
-    @Size(max = 15)
-    @Column(name = "cycle", length = 15)
-    private String cycle;
+    @Size(max = 31)
+    @NotNull
+    @Column(name = "remittance_no", nullable = false, length = 31)
+    private String remittanceNo;
 
-    @Size(max = 15)
-    @Column(name = "week_start", length = 15)
-    private String weekStart;
-
-    @Size(max = 15)
-    @Column(name = "week_end", length = 15)
-    private String weekEnd;
-
-    @Size(max = 15)
-    @Column(name = "remittance_date", length = 15)
-    private String remittanceDate;
+    @NotNull
+    @Column(name = "remittance_date", nullable = false)
+    private LocalDate remittanceDate;
 
     @Size(max = 15)
     @NotNull
-    @Column(name = "date_of_service", nullable = false, length = 15)
-    private String dateOfService;
+    @Column(name = "cycle", nullable = false, length = 15)
+    private String cycle;
 
-    @Size(max = 127)
-    @Column(name = "client_name", length = 127)
-    private String clientName;
+    @Size(max = 7)
+    @NotNull
+    @Column(name = "line_no", nullable = false, length = 7)
+    private String lineNo;
 
     @Size(max = 31)
-    @Column(name = "medicaid_client_id", length = 31)
-    private String medicaidClientId;
-
-    @Size(max = 15)
-    @Column(name = "service_code", length = 15)
-    private String serviceCode;
-
-    @Column(name = "units")
-    private Integer units;
-
-    @Column(name = "charged", precision = 12, scale = 2)
-    private BigDecimal charged;
-
-    @Column(name = "paid", precision = 12, scale = 2)
-    private BigDecimal paid;
-
-    @Size(max = 15)
-    @Column(name = "status", length = 15)
-    private String status;
-
-    @Size(max = 63)
-    @Column(name = "office_account", length = 63)
+    @NotNull
+    @Column(name = "office_account", nullable = false, length = 31)
     private String officeAccount;
 
     @Size(max = 63)
-    @Column(name = "tcn", length = 63)
-    private String tcn;
+    @NotNull
+    @Column(name = "client_last_name_pdf", nullable = false, length = 63)
+    private String clientLastNamePdf;
 
     @Size(max = 15)
-    @Column(name = "line_no", length = 15)
-    private String lineNo;
+    @NotNull
+    @Column(name = "medicaid_client_id", nullable = false, length = 15)
+    private String medicaidClientId;
+
+    @Size(max = 127)
+    @Column(name = "client_full_name", length = 127)
+    private String clientFullName;
+
+    @Size(max = 31)
+    @NotNull
+    @Column(name = "tcn", nullable = false, length = 31)
+    private String tcn;
 
     @NotNull
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    @Column(name = "date_of_service", nullable = false)
+    private LocalDate dateOfService;
+
+    @Size(max = 15)
+    @Column(name = "proc_code", length = 15)
+    private String procCode;
+
+    @Column(name = "units", precision = 9, scale = 3)
+    private BigDecimal units;
 
     @NotNull
-    @Column(name = "modified_at", nullable = false)
-    private Instant modifiedAt;
+    @Column(name = "charged", nullable = false, precision = 10, scale = 2)
+    private BigDecimal charged;
+
+    @NotNull
+    @Column(name = "paid", nullable = false, precision = 10, scale = 2)
+    private BigDecimal paid;
+
+    @Size(max = 31)
+    @NotNull
+    @Column(name = "status", nullable = false, length = 31)
+    private String status;
+
+    @Column(name = "errors_or_notes", columnDefinition = "TEXT")
+    private String errorsOrNotes;
+
+    @NotNull
+    @Column(name = "imported_at", nullable = false)
+    private Instant importedAt;
+
+    @NotNull
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
 }

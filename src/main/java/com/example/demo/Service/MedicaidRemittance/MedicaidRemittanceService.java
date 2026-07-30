@@ -3,6 +3,7 @@ package com.example.demo.Service.MedicaidRemittance;
 import com.example.demo.Model.Entity.MedicaidRemittanceRecord;
 import com.example.demo.Model.VO.MedicaidRemittanceWeeklyPaidVO;
 import com.example.demo.Repository.MedicaidRemittanceRepository;
+import com.example.demo.Util.DateTimeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,6 @@ public class MedicaidRemittanceService {
             List<MedicaidRemittanceRecord> group = entry.getValue();
             MedicaidRemittanceWeeklyPaidVO vo = new MedicaidRemittanceWeeklyPaidVO();
             vo.setCycle(entry.getKey());
-            vo.setWeekStart(group.get(0).getWeekStart());
-            vo.setWeekEnd(group.get(0).getWeekEnd());
 
             BigDecimal totalPaid = group.stream()
                     .map(r -> r.getPaid() != null ? r.getPaid() : BigDecimal.ZERO)
@@ -44,7 +43,7 @@ public class MedicaidRemittanceService {
             vo.setPaidAmount(totalPaid.toPlainString());
 
             List<String> remittanceDates = group.stream()
-                    .map(MedicaidRemittanceRecord::getRemittanceDate)
+                    .map(r -> r.getRemittanceDate() != null ? r.getRemittanceDate().toString() : null)
                     .filter(Objects::nonNull)
                     .distinct()
                     .sorted()
@@ -53,36 +52,22 @@ public class MedicaidRemittanceService {
 
             // Service lines
             List<MedicaidRemittanceWeeklyPaidVO.ServiceLine> serviceLines = group.stream()
-                    .map(r -> {
-                        MedicaidRemittanceWeeklyPaidVO.ServiceLine sl = new MedicaidRemittanceWeeklyPaidVO.ServiceLine();
-                        sl.setDateOfService(r.getDateOfService());
-                        sl.setClientName(r.getClientName());
-                        sl.setMedicaidClientId(r.getMedicaidClientId());
-                        sl.setServiceCode(r.getServiceCode());
-                        sl.setUnits(r.getUnits());
-                        sl.setCharged(r.getCharged() != null ? r.getCharged().toPlainString() : null);
-                        sl.setPaid(r.getPaid() != null ? r.getPaid().toPlainString() : null);
-                        sl.setStatus(r.getStatus());
-                        sl.setOfficeAccount(r.getOfficeAccount());
-                        sl.setTcn(r.getTcn());
-                        sl.setLineNo(r.getLineNo());
-                        return sl;
-                    })
+                    .map(this::toServiceLine)
                     .collect(Collectors.toList());
             vo.setServiceLines(serviceLines);
 
-            // Service breakdown (group by serviceCode)
-            Map<String, List<MedicaidRemittanceRecord>> byService = group.stream()
-                    .collect(Collectors.groupingBy(r -> r.getServiceCode() != null ? r.getServiceCode() : ""));
-            List<MedicaidRemittanceWeeklyPaidVO.BreakdownRow> serviceBreakdown = byService.entrySet().stream()
+            // Service breakdown (group by procCode)
+            Map<String, List<MedicaidRemittanceRecord>> byProc = group.stream()
+                    .collect(Collectors.groupingBy(r -> r.getProcCode() != null ? r.getProcCode() : ""));
+            List<MedicaidRemittanceWeeklyPaidVO.BreakdownRow> serviceBreakdown = byProc.entrySet().stream()
                     .map(e -> buildBreakdown(e.getKey(), e.getValue()))
                     .sorted(Comparator.comparing(MedicaidRemittanceWeeklyPaidVO.BreakdownRow::getLabel))
                     .collect(Collectors.toList());
             vo.setServiceBreakdown(serviceBreakdown);
 
-            // Client breakdown (group by clientName)
+            // Client breakdown (group by clientFullName)
             Map<String, List<MedicaidRemittanceRecord>> byClient = group.stream()
-                    .collect(Collectors.groupingBy(r -> r.getClientName() != null ? r.getClientName() : ""));
+                    .collect(Collectors.groupingBy(r -> r.getClientFullName() != null ? r.getClientFullName() : r.getClientLastNamePdf()));
             List<MedicaidRemittanceWeeklyPaidVO.BreakdownRow> clientBreakdown = byClient.entrySet().stream()
                     .map(e -> buildBreakdown(e.getKey(), e.getValue()))
                     .sorted(Comparator.comparing(MedicaidRemittanceWeeklyPaidVO.BreakdownRow::getLabel))
@@ -94,6 +79,26 @@ public class MedicaidRemittanceService {
         return result;
     }
 
+    private MedicaidRemittanceWeeklyPaidVO.ServiceLine toServiceLine(MedicaidRemittanceRecord r) {
+        MedicaidRemittanceWeeklyPaidVO.ServiceLine sl = new MedicaidRemittanceWeeklyPaidVO.ServiceLine();
+        sl.setRemittanceNo(r.getRemittanceNo());
+        sl.setRemittanceDate(r.getRemittanceDate() != null ? r.getRemittanceDate().toString() : null);
+        sl.setLineNo(r.getLineNo());
+        sl.setOfficeAccount(r.getOfficeAccount());
+        sl.setClientLastNamePdf(r.getClientLastNamePdf());
+        sl.setMedicaidClientId(r.getMedicaidClientId());
+        sl.setClientFullName(r.getClientFullName());
+        sl.setTcn(r.getTcn());
+        sl.setDateOfService(r.getDateOfService() != null ? r.getDateOfService().toString() : null);
+        sl.setProcCode(r.getProcCode());
+        sl.setUnits(r.getUnits() != null ? r.getUnits().toPlainString() : null);
+        sl.setCharged(r.getCharged() != null ? r.getCharged().toPlainString() : null);
+        sl.setPaid(r.getPaid() != null ? r.getPaid().toPlainString() : null);
+        sl.setStatus(r.getStatus());
+        sl.setErrorsOrNotes(r.getErrorsOrNotes());
+        return sl;
+    }
+
     private MedicaidRemittanceWeeklyPaidVO.BreakdownRow buildBreakdown(
             String label, List<MedicaidRemittanceRecord> rows) {
         MedicaidRemittanceWeeklyPaidVO.BreakdownRow row = new MedicaidRemittanceWeeklyPaidVO.BreakdownRow();
@@ -102,8 +107,10 @@ public class MedicaidRemittanceService {
                 .map(r -> r.getPaid() != null ? r.getPaid() : BigDecimal.ZERO)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         row.setPaidAmount(paid.toPlainString());
-        int units = rows.stream().mapToInt(r -> r.getUnits() != null ? r.getUnits() : 0).sum();
-        row.setUnits(units);
+        BigDecimal units = rows.stream()
+                .map(r -> r.getUnits() != null ? r.getUnits() : BigDecimal.ZERO)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        row.setUnits(units.toPlainString());
         row.setLineCount(rows.size());
         return row;
     }
