@@ -103,8 +103,8 @@ public class StaffsInfoService {
                 bcbaInfo.setId(newId);
                 bcbaInfo.setNpiNumber("");
                 bcbaInfo.setMedicaidId("");
-                bcbaInfo.setCreatedAt(Instant.now());
-                bcbaInfo.setModifiedAt(Instant.now());
+                bcbaInfo.setCreatedAt(DateTimeConverter.nowNyc());
+                bcbaInfo.setModifiedAt(DateTimeConverter.nowNyc());
                 bcbaInfoRepository.save(bcbaInfo);
                 logger.info("BCBAInfo created for staffId: {}", newId);
             }

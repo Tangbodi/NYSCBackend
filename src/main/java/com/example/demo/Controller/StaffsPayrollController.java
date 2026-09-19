@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,6 +27,7 @@ public class StaffsPayrollController {
     @Autowired
     private StaffsLoginService staffsLoginService;
 
+    // Returns the full payroll/rate history for the given staff, most recent first.
     @GetMapping("/")
     public ResponseEntity<ApiResponse> GetStaffsPayroll(@RequestParam(value = "staff") String staffId,
                                                         HttpServletRequest request) {
@@ -39,13 +41,13 @@ public class StaffsPayrollController {
         }
 
         try {
-            StaffsPayrollVO staffsPayrollVO = staffsPayrollService.GetStaffsPayroll(Long.valueOf(staffId));
+            List<StaffsPayrollVO> staffsPayrollList = staffsPayrollService.GetStaffsPayroll(Long.valueOf(staffId));
 
-            if (staffsPayrollVO == null) {
+            if (staffsPayrollList == null || staffsPayrollList.isEmpty()) {
                 logger.info("No existing payroll found for staffId: {}", staffId);
                 apiResponse = ApiResponse.error(ReturnCode.RC404.getCode(), "No payroll record found.");
             } else {
-                apiResponse = ApiResponse.success(staffsPayrollVO);
+                apiResponse = ApiResponse.success(staffsPayrollList);
             }
 
         } catch (Exception e) {
@@ -55,6 +57,9 @@ public class StaffsPayrollController {
 
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
+
+    // Adds a new payroll/rate record for a staff member. staff_id is no longer
+    // unique, so this always inserts a new row rather than rejecting a repeat.
     @PostMapping("/")
     public ResponseEntity<ApiResponse> CreateStaffsPayroll(@Validated @RequestBody StaffsPayrollDTO staffsPayrollDTO,
                                                            HttpServletRequest request) {
@@ -73,12 +78,8 @@ public class StaffsPayrollController {
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
         try {
-            boolean created = staffsPayrollService.CreateStaffsPayrollFromDTO(staffsPayrollDTO);
-            if (created) {
-                apiResponse = ApiResponse.success("Payroll created successfully.");
-            } else {
-                apiResponse = ApiResponse.error(ReturnCode.RC409.getCode(), "Payroll already exists for this staff.");
-            }
+            StaffsPayrollVO createdPayroll = staffsPayrollService.CreateStaffsPayrollFromDTO(staffsPayrollDTO);
+            apiResponse = ApiResponse.success(createdPayroll);
         } catch (Exception e) {
             logger.error("Failed to create StaffsPayroll: {}", e.getMessage(), e);
             apiResponse = ApiResponse.error(ReturnCode.RC500.getCode(), e.getMessage());
@@ -99,8 +100,8 @@ public class StaffsPayrollController {
             apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
-        if (staffsPayrollDTO.getStaffId() == null || staffsPayrollDTO.getStaffId().isBlank()) {
-            apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "staffId is required.");
+        if (staffsPayrollDTO.getId() == null || staffsPayrollDTO.getId().isBlank()) {
+            apiResponse = ApiResponse.error(ReturnCode.RC400.getCode(), "id is required.");
             return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
         }
         try {
@@ -127,7 +128,7 @@ public class StaffsPayrollController {
             if (!staffsLoginService.CheckIsAdmin(sessionStaffId)) {
                 apiResponse = ApiResponse.error(ReturnCode.RC401.getCode(), "You aren't admin.");
             } else {
-                staffsPayrollService.DeleteStaffsPayroll(body.get("staffId"));
+                staffsPayrollService.DeleteStaffsPayroll(body.get("id"));
                 apiResponse = ApiResponse.success("Staff payroll deleted successfully.");
             }
         } catch (Exception e) {

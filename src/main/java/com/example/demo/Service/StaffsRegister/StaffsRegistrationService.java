@@ -67,8 +67,8 @@ public class StaffsRegistrationService {
                 bcbaInfo.setId(snowflakeId);
                 bcbaInfo.setNpiNumber("");
                 bcbaInfo.setMedicaidId("");
-                bcbaInfo.setCreatedAt(Instant.now());
-                bcbaInfo.setModifiedAt(Instant.now());
+                bcbaInfo.setCreatedAt(DateTimeConverter.nowNyc());
+                bcbaInfo.setModifiedAt(DateTimeConverter.nowNyc());
                 bcbaInfoRepository.save(bcbaInfo);
                 logger.info("Staff registered in bcba_info successfully.");
             }

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class StaffsPayrollService {
@@ -21,15 +23,14 @@ public class StaffsPayrollService {
     @Autowired
     private StaffsPayrollRepository staffsPayrollRepository;
 
-    // Used during staff registration — creates payroll with defaults
+    // Used during staff registration — creates the first payroll record with defaults
     @Transactional
     public void CreateStaffsPayroll(Long staffId){
         logger.info("Creating StaffsPayroll: {}", staffId);
         try{
             StaffsPayroll staffsPayroll = new StaffsPayroll();
-            staffsPayroll.setId(staffId);
+            staffsPayroll.setStaffId(staffId);
             staffsPayroll.setHourlyRate(new BigDecimal("0.00"));
-            staffsPayroll.setPayCode("");
             staffsPayroll.setCreatedAt(DateTimeConverter.nowNyc());
             staffsPayroll.setModifiedAt(DateTimeConverter.nowNyc());
             staffsPayrollRepository.save(staffsPayroll);
@@ -40,61 +41,63 @@ public class StaffsPayrollService {
         }
     }
 
-    // Used by admin API — creates payroll with provided values
+    // Used by admin API — adds a new payroll/rate record for a staff member.
+    // staff_id is no longer unique: each call inserts a new row (rate history),
+    // distinguished by effective_start_date/effective_end_date.
     @Transactional
-    public boolean CreateStaffsPayrollFromDTO(StaffsPayrollDTO dto){
+    public StaffsPayrollVO CreateStaffsPayrollFromDTO(StaffsPayrollDTO dto){
         logger.info("Creating StaffsPayroll from DTO for staffId: {}", dto.getStaffId());
         try{
             Long staffId = Long.valueOf(dto.getStaffId());
-            if (staffsPayrollRepository.existsById(staffId)) {
-                logger.warn("Payroll already exists for staffId: {}", dto.getStaffId());
-                return false;
-            }
             StaffsPayroll staffsPayroll = new StaffsPayroll();
-            staffsPayroll.setId(staffId);
+            staffsPayroll.setStaffId(staffId);
             staffsPayroll.setHourlyRate(new BigDecimal(dto.getHourlyRate()));
             staffsPayroll.setPayCode(dto.getPayCode());
             staffsPayroll.setEffectiveStartDate(dto.getEffectiveStartDate());
             staffsPayroll.setEffectiveEndDate(dto.getEffectiveEndDate());
+            staffsPayroll.setNotes(dto.getNotes());
             staffsPayroll.setCreatedAt(DateTimeConverter.nowNyc());
             staffsPayroll.setModifiedAt(DateTimeConverter.nowNyc());
-            staffsPayrollRepository.save(staffsPayroll);
+            StaffsPayroll saved = staffsPayrollRepository.save(staffsPayroll);
             logger.info("Created StaffsPayroll from DTO successfully.");
-            return true;
+            return ConvertToStaffsPayrollVO(saved);
         }catch (Exception e) {
             logger.error("Failed to create StaffsPayroll from DTO: {}", e.getMessage(), e);
             throw e;
         }
     }
 
+    // Returns the full payroll/rate history for a staff member (staff_id is no
+    // longer unique — one row per rate period), most recent record first.
     @Transactional
-    public StaffsPayrollVO GetStaffsPayroll(Long staffId){
-        logger.info("Getting StaffsPayroll:{} ", staffId);
+    public List<StaffsPayrollVO> GetStaffsPayroll(Long staffId){
+        logger.info("Getting StaffsPayroll list for staffId: {}", staffId);
         try{
-            StaffsPayroll staffsPayroll = staffsPayrollRepository.findById(staffId).orElse(null);
-            if (staffsPayroll == null) {
-                logger.info("No existing payroll found.");
-            }else{
-                return ConvertToStaffsPayrollVO(staffsPayroll);
+            List<StaffsPayroll> staffsPayrollList = staffsPayrollRepository.findByStaffIdOrderByIdDesc(staffId);
+            List<StaffsPayrollVO> staffsPayrollVOList = new ArrayList<>();
+            for (StaffsPayroll staffsPayroll : staffsPayrollList) {
+                staffsPayrollVOList.add(ConvertToStaffsPayrollVO(staffsPayroll));
             }
+            return staffsPayrollVOList;
         }catch (Exception e) {
-            logger.error("Failed to save StaffsPayroll: {}", e.getMessage(), e);
+            logger.error("Failed to get StaffsPayroll list: {}", e.getMessage(), e);
             throw e;
         }
-        return null;
     }
+    // Updates one specific payroll/rate row, identified by its own id.
     @Transactional
     public void UpdateStaffsPayroll(StaffsPayrollDTO staffsPayrollDTO){
-        logger.info("Updating StaffsPayroll: {}", staffsPayrollDTO.getStaffId());
+        logger.info("Updating StaffsPayroll: {}", staffsPayrollDTO.getId());
         try{
             BigDecimal hourlyRate = new BigDecimal(staffsPayrollDTO.getHourlyRate());
             Instant modifiedAt = DateTimeConverter.nowNyc();
             staffsPayrollRepository.updateStaffsPayroll(
-                    Long.valueOf(staffsPayrollDTO.getStaffId()),
+                    Long.valueOf(staffsPayrollDTO.getId()),
                     hourlyRate,
                     staffsPayrollDTO.getPayCode(),
                     staffsPayrollDTO.getEffectiveStartDate(),
                     staffsPayrollDTO.getEffectiveEndDate(),
+                    staffsPayrollDTO.getNotes(),
                     modifiedAt
             );
             logger.info("StaffsPayroll updated successfully.");
@@ -103,15 +106,17 @@ public class StaffsPayrollService {
             throw e;
         }
     }
+
+    // Deletes one specific payroll/rate row, identified by its own id.
     @Transactional
-    public void DeleteStaffsPayroll(String staffId) {
-        logger.info("Deleting StaffsPayroll: {}", staffId);
+    public void DeleteStaffsPayroll(String id) {
+        logger.info("Deleting StaffsPayroll: {}", id);
         try {
-            Long id = Long.valueOf(staffId);
-            if (!staffsPayrollRepository.existsById(id)) {
-                throw new RuntimeException("Payroll not found for staffId: " + staffId);
+            Long rowId = Long.valueOf(id);
+            if (!staffsPayrollRepository.existsById(rowId)) {
+                throw new RuntimeException("Payroll record not found for id: " + id);
             }
-            staffsPayrollRepository.deleteById(id);
+            staffsPayrollRepository.deleteById(rowId);
             logger.info("StaffsPayroll deleted successfully.");
         } catch (Exception e) {
             logger.error("Failed to delete StaffsPayroll: {}", e.getMessage(), e);
@@ -121,14 +126,18 @@ public class StaffsPayrollService {
 
     @Transactional
     public StaffsPayrollVO ConvertToStaffsPayrollVO(StaffsPayroll savedStaffsPayroll){
-        logger.info("Converting to StaffsPayrollVO: {}");
+        logger.info("Converting to StaffsPayrollVO: {}", savedStaffsPayroll.getId());
         try{
             StaffsPayrollVO staffsPayrollVO = new StaffsPayrollVO();
-            staffsPayrollVO.setStaffId(savedStaffsPayroll.getId().toString());
+            staffsPayrollVO.setId(savedStaffsPayroll.getId().toString());
+            staffsPayrollVO.setStaffId(savedStaffsPayroll.getStaffId().toString());
             staffsPayrollVO.setHourlyRate(savedStaffsPayroll.getHourlyRate().toString());
             staffsPayrollVO.setPayCode(savedStaffsPayroll.getPayCode());
             staffsPayrollVO.setEffectiveStartDate(savedStaffsPayroll.getEffectiveStartDate());
             staffsPayrollVO.setEffectiveEndDate(savedStaffsPayroll.getEffectiveEndDate());
+            staffsPayrollVO.setNotes(savedStaffsPayroll.getNotes());
+            staffsPayrollVO.setCreatedAt(DateTimeConverter.DateTimeConvertFromInstant(savedStaffsPayroll.getCreatedAt()));
+            staffsPayrollVO.setModifiedAt(DateTimeConverter.DateTimeConvertFromInstant(savedStaffsPayroll.getModifiedAt()));
             logger.info("Converted to StaffsPayrollVO successfully.");
             return staffsPayrollVO;
         }catch (Exception e) {

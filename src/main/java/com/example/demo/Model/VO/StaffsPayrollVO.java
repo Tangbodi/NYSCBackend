@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class StaffsPayrollVO {
+    private String id;
     private String staffId;
     private String hourlyRate;
     private String payCode;
